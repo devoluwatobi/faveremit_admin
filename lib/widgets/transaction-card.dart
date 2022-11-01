@@ -30,21 +30,27 @@ class _TransactionItemState extends State<TransactionItem> {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        if (widget.transaction.serviceId.toString() == 1.toString()) {
+        if (widget.transaction.type.toString().toLowerCase().contains("gift")) {
           Navigator.push(
               context,
               CupertinoPageRoute(
                   builder: (context) => GTrxReceiptPage(
                         transaction: widget.transaction,
                       )));
-        } else if (widget.transaction.serviceId.toString() == 2.toString()) {
+        } else if (widget.transaction.type
+            .toString()
+            .toLowerCase()
+            .contains("crypto")) {
           Navigator.push(
               context,
               CupertinoPageRoute(
                   builder: (context) => BTCTrxReceiptPage(
                         transaction: widget.transaction,
                       )));
-        } else if (widget.transaction.serviceId.toString() == 0.toString()) {
+        } else if (widget.transaction.type
+            .toString()
+            .toLowerCase()
+            .contains("wallet")) {
           Navigator.push(
               context,
               CupertinoPageRoute(

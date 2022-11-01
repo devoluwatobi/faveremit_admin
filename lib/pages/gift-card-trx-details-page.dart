@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:faveremit_admin/extensions/show_or_not_extension.dart';
 import 'package:faveremit_admin/select-lists/review-giftcard-trx.dart';
 import 'package:faveremit_admin/services-classes/functions.dart';
 import 'package:flutter/cupertino.dart';
@@ -13,8 +14,6 @@ import 'package:shimmer/shimmer.dart';
 import '../config/dimensions.dart';
 import '../config/styles.dart';
 import '../main.dart';
-import '../models/country-model.dart';
-import '../models/currency-model.dart';
 import '../models/giftcard-trx-info-model.dart';
 import '../models/transactions-object.dart';
 import '../services-classes/app-worker.dart';
@@ -182,7 +181,7 @@ class _GTrxReceiptPageState extends State<GTrxReceiptPage> {
                                 _theTransactionModel!.transactionRef,
                                 style: GoogleFonts.poppins(
                                   fontSize: 13,
-                                  color: kPrimaryColor,
+                                  color: kDarkBG,
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
@@ -214,7 +213,7 @@ class _GTrxReceiptPageState extends State<GTrxReceiptPage> {
                                 _theTransactionModel!.giftcardType,
                                 style: GoogleFonts.poppins(
                                   fontSize: 13,
-                                  color: kPrimaryColor,
+                                  color: kDarkBG,
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
@@ -247,7 +246,7 @@ class _GTrxReceiptPageState extends State<GTrxReceiptPage> {
                                 _theTransactionModel!.country,
                                 style: GoogleFonts.poppins(
                                   fontSize: 13,
-                                  color: kPrimaryColor,
+                                  color: kDarkBG,
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
@@ -276,10 +275,10 @@ class _GTrxReceiptPageState extends State<GTrxReceiptPage> {
                                 width: 20,
                               ),
                               Text(
-                                "${widget.transaction.serviceId == 2 ? "\$" : currencyList.currencies.firstWhere((element) => element.code.toUpperCase() == countryList.countries.country.firstWhere((element) => element.countryCode.toUpperCase() == widget.transaction.iso!.toUpperCase()).currencyCode.toUpperCase()).symbol}${_theTransactionModel!.range.min} - ${widget.transaction.serviceId == 2 ? "\$" : currencyList.currencies.firstWhere((element) => element.code.toUpperCase() == countryList.countries.country.firstWhere((element) => element.countryCode.toUpperCase() == widget.transaction.iso!.toUpperCase()).currencyCode.toUpperCase()).symbol}${_theTransactionModel!.range.max}",
+                                "${_theTransactionModel!.currency}${_theTransactionModel!.range.min} - ${_theTransactionModel!.currency}${_theTransactionModel!.range.max}",
                                 style: GoogleFonts.poppins(
                                   fontSize: 13,
-                                  color: kPrimaryColor,
+                                  color: kDarkBG,
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
@@ -311,7 +310,7 @@ class _GTrxReceiptPageState extends State<GTrxReceiptPage> {
                                 _theTransactionModel!.receiptAvailability,
                                 style: GoogleFonts.poppins(
                                   fontSize: 13,
-                                  color: kPrimaryColor,
+                                  color: kDarkBG,
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
@@ -340,10 +339,10 @@ class _GTrxReceiptPageState extends State<GTrxReceiptPage> {
                                 width: 20,
                               ),
                               Text(
-                                '${widget.transaction.serviceId == 2 ? "\$" : currencyList.currencies.firstWhere((element) => element.code.toUpperCase() == countryList.countries.country.firstWhere((element) => element.countryCode.toUpperCase() == widget.transaction.iso!.toUpperCase()).currencyCode.toUpperCase()).symbol}${_theTransactionModel!.cardValue}',
+                                '${_theTransactionModel!.currency}${_theTransactionModel!.cardValue}',
                                 style: GoogleFonts.poppins(
                                   fontSize: 13,
-                                  color: kPrimaryColor,
+                                  color: kDarkBG,
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
@@ -372,10 +371,10 @@ class _GTrxReceiptPageState extends State<GTrxReceiptPage> {
                                 width: 20,
                               ),
                               Text(
-                                "₦${_theTransactionModel!.usdRate}/${widget.transaction.serviceId == 2 ? "\$" : currencyList.currencies.firstWhere((element) => element.code.toUpperCase() == countryList.countries.country.firstWhere((element) => element.countryCode.toUpperCase() == widget.transaction.iso!.toUpperCase()).currencyCode.toUpperCase()).symbol}",
+                                "₦${_theTransactionModel!.usdRate}/${_theTransactionModel!.currency}",
                                 style: GoogleFonts.poppins(
                                   fontSize: 13,
-                                  color: kPrimaryColor,
+                                  color: kDarkBG,
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
@@ -404,10 +403,10 @@ class _GTrxReceiptPageState extends State<GTrxReceiptPage> {
                                 width: 20,
                               ),
                               Text(
-                                "₦${_theTransactionModel!.ngnAmount}",
+                                "₦${addCommas(_theTransactionModel!.ngnAmount.toString())}",
                                 style: GoogleFonts.poppins(
                                   fontSize: 13,
-                                  color: kPrimaryColor,
+                                  color: kDarkBG,
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
@@ -453,7 +452,7 @@ class _GTrxReceiptPageState extends State<GTrxReceiptPage> {
                                                         .toLowerCase()
                                                         .contains("fail")
                                                     ? kRed
-                                                    : kPrimaryColor,
+                                                    : kDarkBG,
                                     borderRadius: BorderRadius.circular(20)),
                                 padding: const EdgeInsets.symmetric(
                                     horizontal: 10, vertical: 4),
@@ -499,7 +498,7 @@ class _GTrxReceiptPageState extends State<GTrxReceiptPage> {
                                           "${getHumanDate(_theTransactionModel!.updatedAt)}",
                                           style: GoogleFonts.poppins(
                                             fontSize: 13,
-                                            color: kPrimaryColor,
+                                            color: kDarkBG,
                                             fontWeight: FontWeight.bold,
                                           ),
                                         ),
@@ -551,7 +550,7 @@ class _GTrxReceiptPageState extends State<GTrxReceiptPage> {
                                                   .inTitleCase,
                                           style: GoogleFonts.poppins(
                                             fontSize: 13,
-                                            color: kPrimaryColor,
+                                            color: kDarkBG,
                                             fontWeight: FontWeight.bold,
                                           ),
                                         ),
@@ -591,7 +590,7 @@ class _GTrxReceiptPageState extends State<GTrxReceiptPage> {
                                     style: GoogleFonts.poppins(
                                         fontWeight: FontWeight.w600,
                                         fontSize: 15,
-                                        color: kPrimaryColor),
+                                        color: kDarkBG),
                                   ),
                                   const SizedBox(
                                     height: 10,
@@ -599,7 +598,7 @@ class _GTrxReceiptPageState extends State<GTrxReceiptPage> {
                                   Container(
                                     decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(5),
-                                      color: kPrimaryColor.withOpacity(0.1),
+                                      color: kDarkBG.withOpacity(0.1),
                                     ),
                                     width: double.infinity,
                                     child: CachedNetworkImage(
@@ -614,6 +613,85 @@ class _GTrxReceiptPageState extends State<GTrxReceiptPage> {
                       ),
                     ],
                   ),
+                  Column(
+                    children: [
+                      const SizedBox(height: 10),
+                      GestureDetector(
+                        onTap: () {},
+                        child: Container(
+                          width: double.infinity,
+                          padding: const EdgeInsets.all(10),
+                          decoration: BoxDecoration(
+                            border: Border.all(
+                                color: const Color(0xFFE8EBF3),
+                                width: 1,
+                                style: BorderStyle.solid),
+                            borderRadius: BorderRadius.circular(4),
+                            color: kGeneralWhite,
+                          ),
+                          child: Column(
+                            children: [
+                              Column(
+                                children: [
+                                  Container(
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(5),
+                                      color: kDarkBG.withOpacity(0.1),
+                                    ),
+                                    width: double.infinity,
+                                    child: CachedNetworkImage(
+                                      imageUrl: _theTransactionModel!
+                                          .secondProof
+                                          .toString(),
+                                    ),
+                                  ),
+                                ],
+                              )
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
+                  ).showOrHide(_theTransactionModel!.secondProof != null),
+                  Column(
+                    children: [
+                      const SizedBox(height: 10),
+                      GestureDetector(
+                        onTap: () {},
+                        child: Container(
+                          width: double.infinity,
+                          padding: const EdgeInsets.all(10),
+                          decoration: BoxDecoration(
+                            border: Border.all(
+                                color: const Color(0xFFE8EBF3),
+                                width: 1,
+                                style: BorderStyle.solid),
+                            borderRadius: BorderRadius.circular(4),
+                            color: kGeneralWhite,
+                          ),
+                          child: Column(
+                            children: [
+                              Column(
+                                children: [
+                                  Container(
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(5),
+                                      color: kDarkBG.withOpacity(0.1),
+                                    ),
+                                    width: double.infinity,
+                                    child: CachedNetworkImage(
+                                      imageUrl: _theTransactionModel!.thirdProof
+                                          .toString(),
+                                    ),
+                                  ),
+                                ],
+                              )
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
+                  ).showOrHide(_theTransactionModel!.thirdProof != null),
                   const SizedBox(
                     height: 20,
                   ),
@@ -737,7 +815,7 @@ class _PageShimmer extends StatelessWidget {
                         "Transaction ID",
                         style: GoogleFonts.poppins(
                             fontSize: 13,
-                            color: kPrimaryColor,
+                            color: kDarkBG,
                             fontWeight: FontWeight.normal),
                       ),
                       const SizedBox(
@@ -747,7 +825,7 @@ class _PageShimmer extends StatelessWidget {
                         "665784836UY4",
                         style: GoogleFonts.poppins(
                           fontSize: 13,
-                          color: kPrimaryColor,
+                          color: kDarkBG,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
@@ -769,7 +847,7 @@ class _PageShimmer extends StatelessWidget {
                         "Amount",
                         style: GoogleFonts.poppins(
                             fontSize: 13,
-                            color: kPrimaryColor,
+                            color: kDarkBG,
                             fontWeight: FontWeight.normal),
                       ),
                       const SizedBox(
@@ -779,7 +857,7 @@ class _PageShimmer extends StatelessWidget {
                         "₦70,000,000",
                         style: GoogleFonts.poppins(
                           fontSize: 13,
-                          color: kPrimaryColor,
+                          color: kDarkBG,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
@@ -801,7 +879,7 @@ class _PageShimmer extends StatelessWidget {
                         "Transaction Rate",
                         style: GoogleFonts.poppins(
                             fontSize: 13,
-                            color: kPrimaryColor,
+                            color: kDarkBG,
                             fontWeight: FontWeight.normal),
                       ),
                       const SizedBox(
@@ -811,7 +889,7 @@ class _PageShimmer extends StatelessWidget {
                         "570/\$",
                         style: GoogleFonts.poppins(
                           fontSize: 13,
-                          color: kPrimaryColor,
+                          color: kDarkBG,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
@@ -833,7 +911,7 @@ class _PageShimmer extends StatelessWidget {
                         "Type",
                         style: GoogleFonts.poppins(
                             fontSize: 13,
-                            color: kPrimaryColor,
+                            color: kDarkBG,
                             fontWeight: FontWeight.normal),
                       ),
                       const SizedBox(
@@ -843,7 +921,7 @@ class _PageShimmer extends StatelessWidget {
                         "Gift Card",
                         style: GoogleFonts.poppins(
                           fontSize: 13,
-                          color: kPrimaryColor,
+                          color: kDarkBG,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
@@ -865,7 +943,7 @@ class _PageShimmer extends StatelessWidget {
                         "Status",
                         style: GoogleFonts.poppins(
                             fontSize: 13,
-                            color: kPrimaryColor,
+                            color: kDarkBG,
                             fontWeight: FontWeight.normal),
                       ),
                       const SizedBox(
@@ -875,7 +953,7 @@ class _PageShimmer extends StatelessWidget {
                         "In Progress",
                         style: GoogleFonts.poppins(
                           fontSize: 13,
-                          color: kPrimaryColor,
+                          color: kDarkBG,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
@@ -912,7 +990,7 @@ class _PageShimmer extends StatelessWidget {
                       style: GoogleFonts.poppins(
                           fontWeight: FontWeight.w600,
                           fontSize: 15,
-                          color: kPrimaryColor),
+                          color: kDarkBG),
                     )
                   ],
                 ),

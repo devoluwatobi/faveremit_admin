@@ -44,8 +44,12 @@ class GTransaction {
     required this.status,
     required this.giftcardType,
     required this.proof,
+    required this.secondProof,
+    required this.thirdProof,
     required this.receiptAvailability,
+    required this.currency,
     required this.note,
+    required this.category,
     required this.rejectedReason,
     required this.approvedBy,
     required this.rejectedBy,
@@ -67,6 +71,10 @@ class GTransaction {
   String status;
   String giftcardType;
   String proof;
+  String? secondProof;
+  String? thirdProof;
+  String currency;
+  String category;
   String receiptAvailability;
   String? note;
   dynamic rejectedReason;
@@ -90,8 +98,15 @@ class GTransaction {
         status: json["status"].toString(),
         giftcardType: json["giftcard_type"].toString(),
         proof: json["proof"],
+        secondProof: json["second_proof"] == null
+            ? json["second_proof"]
+            : json["second_proof"].toString(),
+        thirdProof: json["third_proof"] == null
+            ? json["third_proof"]
+            : json["third_proof"].toString(),
         receiptAvailability: json["receipt_availability"].toString(),
         note: json["note"],
+        category: json["category"].toString(),
         rejectedReason: json["rejected_reason"],
         approvedBy: json["approved_by"],
         rejectedBy: json["rejected_by"],
@@ -100,6 +115,7 @@ class GTransaction {
         iso: json["iso"],
         createdAt: DateTime.parse(json["created_at"]),
         updatedAt: DateTime.parse(json["updated_at"]),
+        currency: json["currency"].toString(),
       );
 
   Map<String, dynamic> toJson() => {
