@@ -26,15 +26,15 @@ class TransactionsListModel {
   factory TransactionsListModel.fromJson(Map<String, dynamic> json) =>
       TransactionsListModel(
         // giftCards: json["gift_cards"] == null ? null : List<dynamic>.from(json["gift_cards"].map((x) => x)),
-        giftCards: List<DXTransaction>.from(
-            json["gift_cards"].map((x) => DXTransaction.fromJson(x))),
+        giftCards: List<FavTransaction>.from(
+            json["gift_cards"].map((x) => FavTransaction.fromJson(x))),
 
         // bitcoins: json["bitcoins"] == null ? null : List<dynamic>.from(json["bitcoins"].map((x) => x)),
-        bitcoins: List<DXTransaction>.from(
-            json["bitcoins"].map((x) => DXTransaction.fromJson(x))),
+        bitcoins: List<FavTransaction>.from(
+            json["bitcoins"].map((x) => FavTransaction.fromJson(x))),
 
         withdrawals: List<dynamic>.from(
-            json["withdrawals"].map((x) => DXTransaction.fromJson(x))),
+            json["withdrawals"].map((x) => FavTransaction.fromJson(x))),
         // utility: List<DXTransaction>.from(
         //     json["utility"].map((x) => DXTransaction.fromJson(x))),
       );
@@ -51,8 +51,8 @@ class TransactionsListModel {
       };
 }
 
-class DXTransaction {
-  DXTransaction({
+class FavTransaction {
+  FavTransaction({
     required this.id,
     required this.userId,
     this.icon,
@@ -88,7 +88,7 @@ class DXTransaction {
   DateTime createdAt;
   int status;
 
-  factory DXTransaction.fromJson(Map<String, dynamic> json) => DXTransaction(
+  factory FavTransaction.fromJson(Map<String, dynamic> json) => FavTransaction(
         id: int.parse(json["id"].toString()),
         userId: int.parse(json["user_id"].toString()),
         icon: json["icon"],

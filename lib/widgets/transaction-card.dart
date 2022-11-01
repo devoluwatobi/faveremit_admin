@@ -13,7 +13,7 @@ import '../pages/gift-card-trx-details-page.dart';
 import '../services-classes/functions.dart';
 
 class TransactionItem extends StatefulWidget {
-  final DXTransaction transaction;
+  final FavTransaction transaction;
   const TransactionItem({
     Key? key,
     required this.transaction,

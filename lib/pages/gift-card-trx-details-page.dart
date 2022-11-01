@@ -27,7 +27,7 @@ bool _gottenTrx = false;
 GTransaction? _theTransactionModel;
 
 class GTrxReceiptPage extends StatefulWidget {
-  final DXTransaction transaction;
+  final FavTransaction transaction;
   const GTrxReceiptPage({
     Key? key,
     required this.transaction,

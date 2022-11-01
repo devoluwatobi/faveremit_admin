@@ -25,7 +25,7 @@ bool _gottenTrx = false;
 BTCTransaction? _theTransactionModel;
 
 class BTCTrxReceiptPage extends StatefulWidget {
-  final DXTransaction transaction;
+  final FavTransaction transaction;
   const BTCTrxReceiptPage({
     Key? key,
     required this.transaction,

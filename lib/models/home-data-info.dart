@@ -19,14 +19,14 @@ class HomeData {
 
   BtcRate btcRate;
   List<GiftCard> giftCards;
-  List<DXTransaction> transaction;
+  List<FavTransaction> transaction;
 
   factory HomeData.fromJson(Map<String, dynamic> json) => HomeData(
         btcRate: BtcRate.fromJson(json["btc_rate"]),
         giftCards: List<GiftCard>.from(
             json["gift_cards"].map((x) => GiftCard.fromJson(x))),
-        transaction: List<DXTransaction>.from(
-            json["transaction"].map((x) => DXTransaction.fromJson(x))),
+        transaction: List<FavTransaction>.from(
+            json["transaction"].map((x) => FavTransaction.fromJson(x))),
       );
 
   Map<String, dynamic> toJson() => {
