@@ -1,0 +1,118 @@
+{
+  "project_info": {
+    "project_number": "268185982030",
+    "project_id": "faveremit-dev",
+    "storage_bucket": "faveremit-dev.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:268185982030:android:9ddb8525726af03f2e1f1f",
+        "android_client_info": {
+          "package_name": "com.faveremit.admin.faveremit_admin"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "268185982030-4aaoqakm1fl08o8jguu9bfgee3arumig.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAY3DanIzKFDdnmhu-AV3HKT641A93g8E8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "268185982030-4aaoqakm1fl08o8jguu9bfgee3arumig.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "268185982030-elusa7fk5ljrapmvuqsm1uq9q8ahqqs4.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.faveremit"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:268185982030:android:1ccc2967be3476de2e1f1f",
+        "android_client_info": {
+          "package_name": "com.faveremit.app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "268185982030-4aaoqakm1fl08o8jguu9bfgee3arumig.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAY3DanIzKFDdnmhu-AV3HKT641A93g8E8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "268185982030-4aaoqakm1fl08o8jguu9bfgee3arumig.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "268185982030-elusa7fk5ljrapmvuqsm1uq9q8ahqqs4.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.faveremit"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:268185982030:android:a8e22ab4ca331df32e1f1f",
+        "android_client_info": {
+          "package_name": "com.faveremit.faveremit_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "268185982030-4aaoqakm1fl08o8jguu9bfgee3arumig.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAY3DanIzKFDdnmhu-AV3HKT641A93g8E8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "268185982030-4aaoqakm1fl08o8jguu9bfgee3arumig.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "268185982030-elusa7fk5ljrapmvuqsm1uq9q8ahqqs4.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.faveremit"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
