@@ -84,7 +84,7 @@ class _WithdrawalReceiptPageState extends State<WithdrawalReceiptPage> {
         leading: IconButton(
           icon: Icon(
             FlutterRemix.arrow_left_line,
-            color: kTextPrimary,
+            color: kDarkBG,
           ),
           onPressed: () {
             Navigator.pop(context);
@@ -92,8 +92,8 @@ class _WithdrawalReceiptPageState extends State<WithdrawalReceiptPage> {
         ),
         title: Text(
           "",
-          style: GoogleFonts.poppins(
-              color: kTextPrimary, fontWeight: FontWeight.bold),
+          style:
+              GoogleFonts.poppins(color: kDarkBG, fontWeight: FontWeight.bold),
         ),
         actions: [
           IconButton(
@@ -105,7 +105,7 @@ class _WithdrawalReceiptPageState extends State<WithdrawalReceiptPage> {
               },
               icon: Icon(
                 FlutterRemix.customer_service_2_fill,
-                color: kTextPrimary,
+                color: kDarkBG,
               ))
         ],
       ),
@@ -130,7 +130,7 @@ class _WithdrawalReceiptPageState extends State<WithdrawalReceiptPage> {
                             "The user withdrew the sum of",
                             style: GoogleFonts.poppins(
                                 fontSize: 13,
-                                color: kTextPrimary,
+                                color: kDarkBG,
                                 fontWeight: FontWeight.normal),
                           ),
                           const SizedBox(
@@ -151,7 +151,7 @@ class _WithdrawalReceiptPageState extends State<WithdrawalReceiptPage> {
                                 text: "to ",
                                 style: GoogleFonts.poppins(
                                     fontSize: 13,
-                                    color: kTextPrimary,
+                                    color: kDarkBG,
                                     fontWeight: FontWeight.normal),
                                 children: [
                                   // TextSpan(
@@ -159,7 +159,7 @@ class _WithdrawalReceiptPageState extends State<WithdrawalReceiptPage> {
                                   //       _theTransactionModel!.bank.accountName,
                                   //   style: GoogleFonts.poppins(
                                   //       fontSize: 14,
-                                  //       color: kTextPrimary,
+                                  //       color: kDarkBG,
                                   //       fontWeight: FontWeight.w600),
                                   // ),
                                   TextSpan(
@@ -168,7 +168,7 @@ class _WithdrawalReceiptPageState extends State<WithdrawalReceiptPage> {
                                         " ~ ${_theTransactionModel!.bank.bankName}).",
                                     style: GoogleFonts.poppins(
                                         fontSize: 14,
-                                        color: kTextPrimary,
+                                        color: kDarkBG,
                                         fontWeight: FontWeight.w600),
                                   ),
                                 ]),
@@ -183,7 +183,7 @@ class _WithdrawalReceiptPageState extends State<WithdrawalReceiptPage> {
                   ),
                   Container(
                     decoration: BoxDecoration(
-                      color: kTextPrimary.withOpacity(0.02),
+                      color: kDarkBG.withOpacity(0.02),
                       borderRadius: BorderRadius.circular(8),
                       border: Border.all(
                           color: const Color(0xFFE8EBF3),
@@ -202,7 +202,7 @@ class _WithdrawalReceiptPageState extends State<WithdrawalReceiptPage> {
                                 "Transaction ID",
                                 style: GoogleFonts.poppins(
                                     fontSize: 13,
-                                    color: kTextPrimary,
+                                    color: kDarkBG,
                                     fontWeight: FontWeight.normal),
                               ),
                               const SizedBox(
@@ -212,7 +212,7 @@ class _WithdrawalReceiptPageState extends State<WithdrawalReceiptPage> {
                                 _theTransactionModel!.transactionRef,
                                 style: GoogleFonts.poppins(
                                   fontSize: 13,
-                                  color: kPrimaryColor,
+                                  color: kDarkBG,
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
@@ -234,7 +234,7 @@ class _WithdrawalReceiptPageState extends State<WithdrawalReceiptPage> {
                                 "Account Number",
                                 style: GoogleFonts.poppins(
                                     fontSize: 13,
-                                    color: kTextPrimary,
+                                    color: kDarkBG,
                                     fontWeight: FontWeight.normal),
                               ),
                               const SizedBox(
@@ -245,7 +245,7 @@ class _WithdrawalReceiptPageState extends State<WithdrawalReceiptPage> {
                                 "${_theTransactionModel!.bank.accountNumber.length < 10 ? "0000000000000".substring(0, 10 - _theTransactionModel!.bank.accountNumber.length) : ""}${_theTransactionModel!.bank.accountNumber}",
                                 style: GoogleFonts.poppins(
                                   fontSize: 13,
-                                  color: kPrimaryColor,
+                                  color: kDarkBG,
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
@@ -267,7 +267,7 @@ class _WithdrawalReceiptPageState extends State<WithdrawalReceiptPage> {
                                 "Account Name",
                                 style: GoogleFonts.poppins(
                                     fontSize: 13,
-                                    color: kTextPrimary,
+                                    color: kDarkBG,
                                     fontWeight: FontWeight.normal),
                               ),
                               const SizedBox(
@@ -277,7 +277,7 @@ class _WithdrawalReceiptPageState extends State<WithdrawalReceiptPage> {
                                 _theTransactionModel!.bank.accountName,
                                 style: GoogleFonts.poppins(
                                   fontSize: 13,
-                                  color: kPrimaryColor,
+                                  color: kDarkBG,
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
@@ -299,7 +299,7 @@ class _WithdrawalReceiptPageState extends State<WithdrawalReceiptPage> {
                                 "Bank",
                                 style: GoogleFonts.poppins(
                                     fontSize: 13,
-                                    color: kTextPrimary,
+                                    color: kDarkBG,
                                     fontWeight: FontWeight.normal),
                               ),
                               const SizedBox(
@@ -309,7 +309,7 @@ class _WithdrawalReceiptPageState extends State<WithdrawalReceiptPage> {
                                 _theTransactionModel!.bank.bankName,
                                 style: GoogleFonts.poppins(
                                   fontSize: 13,
-                                  color: kPrimaryColor,
+                                  color: kDarkBG,
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
@@ -331,7 +331,7 @@ class _WithdrawalReceiptPageState extends State<WithdrawalReceiptPage> {
                                 "Amount",
                                 style: GoogleFonts.poppins(
                                     fontSize: 13,
-                                    color: kTextPrimary,
+                                    color: kDarkBG,
                                     fontWeight: FontWeight.normal),
                               ),
                               const SizedBox(
@@ -341,7 +341,7 @@ class _WithdrawalReceiptPageState extends State<WithdrawalReceiptPage> {
                                 "₦" + _theTransactionModel!.amount,
                                 style: GoogleFonts.poppins(
                                   fontSize: 13,
-                                  color: kPrimaryColor,
+                                  color: kDarkBG,
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
@@ -363,7 +363,7 @@ class _WithdrawalReceiptPageState extends State<WithdrawalReceiptPage> {
                                 "Date",
                                 style: GoogleFonts.poppins(
                                     fontSize: 13,
-                                    color: kTextPrimary,
+                                    color: kDarkBG,
                                     fontWeight: FontWeight.normal),
                               ),
                               const SizedBox(
@@ -374,7 +374,7 @@ class _WithdrawalReceiptPageState extends State<WithdrawalReceiptPage> {
                                     .inTitleCase,
                                 style: GoogleFonts.poppins(
                                   fontSize: 13,
-                                  color: kPrimaryColor,
+                                  color: kDarkBG,
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
@@ -396,7 +396,7 @@ class _WithdrawalReceiptPageState extends State<WithdrawalReceiptPage> {
                                 "Status",
                                 style: GoogleFonts.poppins(
                                     fontSize: 13,
-                                    color: kTextPrimary,
+                                    color: kDarkBG,
                                     fontWeight: FontWeight.normal),
                               ),
                               const SizedBox(
@@ -420,7 +420,7 @@ class _WithdrawalReceiptPageState extends State<WithdrawalReceiptPage> {
                                                         .toLowerCase()
                                                         .contains("fail")
                                                     ? kRed
-                                                    : kPrimaryColor,
+                                                    : kDarkBG,
                                     borderRadius: BorderRadius.circular(20)),
                                 padding: const EdgeInsets.symmetric(
                                     horizontal: 10, vertical: 4),
@@ -456,7 +456,7 @@ class _WithdrawalReceiptPageState extends State<WithdrawalReceiptPage> {
                                           "Reviewed at",
                                           style: GoogleFonts.poppins(
                                               fontSize: 13,
-                                              color: kTextPrimary,
+                                              color: kDarkBG,
                                               fontWeight: FontWeight.normal),
                                         ),
                                         const SizedBox(
@@ -466,7 +466,7 @@ class _WithdrawalReceiptPageState extends State<WithdrawalReceiptPage> {
                                           "${getHumanDate(_theTransactionModel!.updatedAt)}",
                                           style: GoogleFonts.poppins(
                                             fontSize: 13,
-                                            color: kPrimaryColor,
+                                            color: kDarkBG,
                                             fontWeight: FontWeight.bold,
                                           ),
                                         ),
@@ -489,7 +489,7 @@ class _WithdrawalReceiptPageState extends State<WithdrawalReceiptPage> {
                                           "${_theTransactionModel!.approvedBy != null ? "Approved" : "Rejected"} By",
                                           style: GoogleFonts.poppins(
                                               fontSize: 13,
-                                              color: kTextPrimary,
+                                              color: kDarkBG,
                                               fontWeight: FontWeight.normal),
                                         ),
                                         const SizedBox(
@@ -518,7 +518,7 @@ class _WithdrawalReceiptPageState extends State<WithdrawalReceiptPage> {
                                                   .inTitleCase,
                                           style: GoogleFonts.poppins(
                                             fontSize: 13,
-                                            color: kPrimaryColor,
+                                            color: kDarkBG,
                                             fontWeight: FontWeight.bold,
                                           ),
                                         ),
@@ -638,7 +638,7 @@ class _PageShimmer extends StatelessWidget {
           ),
           Container(
             decoration: BoxDecoration(
-              color: kTextPrimary.withOpacity(0.02),
+              color: kDarkBG.withOpacity(0.02),
               borderRadius: BorderRadius.circular(8),
               border: Border.all(
                   color: const Color(0xFFE8EBF3),
@@ -657,7 +657,7 @@ class _PageShimmer extends StatelessWidget {
                         "Transaction ID",
                         style: GoogleFonts.poppins(
                             fontSize: 13,
-                            color: kPrimaryColor,
+                            color: kDarkBG,
                             fontWeight: FontWeight.normal),
                       ),
                       const SizedBox(
@@ -667,7 +667,7 @@ class _PageShimmer extends StatelessWidget {
                         "665784836UY4",
                         style: GoogleFonts.poppins(
                           fontSize: 13,
-                          color: kPrimaryColor,
+                          color: kDarkBG,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
@@ -689,7 +689,7 @@ class _PageShimmer extends StatelessWidget {
                         "Amount",
                         style: GoogleFonts.poppins(
                             fontSize: 13,
-                            color: kPrimaryColor,
+                            color: kDarkBG,
                             fontWeight: FontWeight.normal),
                       ),
                       const SizedBox(
@@ -699,7 +699,7 @@ class _PageShimmer extends StatelessWidget {
                         "₦70,000,000",
                         style: GoogleFonts.poppins(
                           fontSize: 13,
-                          color: kPrimaryColor,
+                          color: kDarkBG,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
@@ -721,7 +721,7 @@ class _PageShimmer extends StatelessWidget {
                         "Transaction Rate",
                         style: GoogleFonts.poppins(
                             fontSize: 13,
-                            color: kPrimaryColor,
+                            color: kDarkBG,
                             fontWeight: FontWeight.normal),
                       ),
                       const SizedBox(
@@ -731,7 +731,7 @@ class _PageShimmer extends StatelessWidget {
                         "570/\$",
                         style: GoogleFonts.poppins(
                           fontSize: 13,
-                          color: kPrimaryColor,
+                          color: kDarkBG,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
@@ -753,7 +753,7 @@ class _PageShimmer extends StatelessWidget {
                         "Type",
                         style: GoogleFonts.poppins(
                             fontSize: 13,
-                            color: kPrimaryColor,
+                            color: kDarkBG,
                             fontWeight: FontWeight.normal),
                       ),
                       const SizedBox(
@@ -763,7 +763,7 @@ class _PageShimmer extends StatelessWidget {
                         "Gift Card",
                         style: GoogleFonts.poppins(
                           fontSize: 13,
-                          color: kPrimaryColor,
+                          color: kDarkBG,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
@@ -785,7 +785,7 @@ class _PageShimmer extends StatelessWidget {
                         "Status",
                         style: GoogleFonts.poppins(
                             fontSize: 13,
-                            color: kPrimaryColor,
+                            color: kDarkBG,
                             fontWeight: FontWeight.normal),
                       ),
                       const SizedBox(
@@ -795,7 +795,7 @@ class _PageShimmer extends StatelessWidget {
                         "In Progress",
                         style: GoogleFonts.poppins(
                           fontSize: 13,
-                          color: kPrimaryColor,
+                          color: kDarkBG,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
@@ -832,7 +832,7 @@ class _PageShimmer extends StatelessWidget {
                       style: GoogleFonts.poppins(
                           fontWeight: FontWeight.w600,
                           fontSize: 15,
-                          color: kPrimaryColor),
+                          color: kDarkBG),
                     )
                   ],
                 ),

@@ -105,7 +105,7 @@ class _TransactionItemState extends State<TransactionItem> {
                             ? const Color(0xFFF6E9D8)
                             : widget.transaction.serviceId.toString() ==
                                     1.toString()
-                                ? const Color(0xFFF5E1FD)
+                                ? kPrimaryColor.withOpacity(.4)
                                 : widget.transaction.status == 1
                                     ? kGreenLight
                                     : widget.transaction.status == 3

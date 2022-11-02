@@ -168,7 +168,7 @@ class _FailedGiftcardTrxReasonState extends State<FailedGiftcardTrxReason> {
                                     ? "Giftcard Used"
                                     : _reasonID == 1
                                         ? "Giftcard Image not Clear"
-                                        : _reasonID == 0
+                                        : _reasonID == 2
                                             ? "Giftcard Invalid"
                                             : _reasonController.text.trim());
                         Navigator.pop(context);
@@ -181,7 +181,7 @@ class _FailedGiftcardTrxReasonState extends State<FailedGiftcardTrxReason> {
                               context: context,
                               title: "Success",
                               content:
-                                  "Transaction Status has been updated sucessfully");
+                                  "Transaction Status has been updated successfully");
                         }
                       } else {
                         if (kDebugMode) print("bad form");
