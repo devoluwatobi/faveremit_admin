@@ -22,6 +22,7 @@ class _CategoriesListPageState extends State<CategoriesListPage> {
     return Material(
       child: Scaffold(
         appBar: AppBar(
+          centerTitle: true,
           elevation: 0,
           backgroundColor: kFormBG,
           foregroundColor: kFormBG,

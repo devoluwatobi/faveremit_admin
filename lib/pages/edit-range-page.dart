@@ -112,7 +112,7 @@ class _RangeRateDetailsPageState extends State<RangeRateDetailsPage> {
                   height: 10,
                 ),
                 Text(
-                  "${widget.cardCountry}",
+                  widget.cardCountry,
                   style: GoogleFonts.poppins(
                       color: kPrimaryColor, fontWeight: FontWeight.w600),
                 ),
@@ -206,7 +206,7 @@ class _RangeRateDetailsPageState extends State<RangeRateDetailsPage> {
               decoration: BoxDecoration(
                   color: Color(0xFF6E41EE).withOpacity(0.1),
                   borderRadius: BorderRadius.circular(6),
-                  border: Border.all(color: kPrimaryColor, width: 0)),
+                  border: Border.all(color: kDarkBG, width: 0)),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -215,7 +215,7 @@ class _RangeRateDetailsPageState extends State<RangeRateDetailsPage> {
                         text: _range.updatedAt == _range.createdAt
                             ? "Created At: "
                             : "Last Updated: ",
-                        style: TextStyle(color: kPrimaryColor, fontSize: 12),
+                        style: TextStyle(color: kDarkBG, fontSize: 12),
                         children: [
                           TextSpan(
                             text: "${_range.updatedAt.toDateTimeString()}"
@@ -233,7 +233,7 @@ class _RangeRateDetailsPageState extends State<RangeRateDetailsPage> {
                         text: _range.updatedAt == _range.createdAt
                             ? "Created By: "
                             : "Updated By: ",
-                        style: TextStyle(color: kPrimaryColor, fontSize: 12),
+                        style: TextStyle(color: kDarkBG, fontSize: 12),
                         children: [
                           TextSpan(
                             text: _range.updatedBy == 0 ||
@@ -300,7 +300,7 @@ class _RangeRateDetailsPageState extends State<RangeRateDetailsPage> {
                     }
                   }
                 },
-                title: "Update Rate"),
+                title: "Update Range"),
             const SizedBox(height: 16),
             SecondaryTextButton(
                 onPressed: () async {

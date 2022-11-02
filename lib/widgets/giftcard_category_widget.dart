@@ -2,9 +2,11 @@ import 'package:faveremit_admin/extensions/time_string.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_remix/flutter_remix.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 import '../config/styles.dart';
 import '../models/giftcard-country-model.dart';
+import '../pages/edit_category_page.dart';
 import '../services-classes/functions.dart';
 
 class SingleGiftCardCategory extends StatelessWidget {
@@ -20,14 +22,14 @@ class SingleGiftCardCategory extends StatelessWidget {
       margin: const EdgeInsets.symmetric(vertical: 5),
       child: GestureDetector(
         onTap: () async {
-          // await showCupertinoModalBottomSheet(
-          //   context: context,
-          //   expand: false,
-          //   barrierColor: const Color(0xFF000000).withOpacity(0.6),
-          //   builder: (context) {
-          //
-          //   },
-          // );
+          await showCupertinoModalBottomSheet(
+            context: context,
+            expand: false,
+            barrierColor: const Color(0xFF000000).withOpacity(0.6),
+            builder: (context) {
+              return EditCategoryPage(category: category);
+            },
+          );
         },
         child: Container(
           padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
@@ -69,7 +71,7 @@ class SingleGiftCardCategory extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      "${category.title}",
+                      category.title,
                       style: GoogleFonts.poppins(
                           color: kTextPrimary,
                           fontSize: 14.5,

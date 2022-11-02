@@ -115,6 +115,7 @@ class ReceiptCategory {
     required this.updatedBy,
     required this.status,
     required this.updatedAt,
+    required this.createdAt,
     required this.giftCardCountryId,
   });
 
@@ -125,6 +126,7 @@ class ReceiptCategory {
   int status;
   int updatedBy;
   DateTime updatedAt;
+  DateTime createdAt;
   int giftCardCountryId;
 
   factory ReceiptCategory.fromJson(Map<String, dynamic> json) =>
@@ -135,6 +137,7 @@ class ReceiptCategory {
         updatedBy: int.parse(json["updated_by"].toString()),
         status: int.parse(json["status"].toString()),
         updatedAt: DateTime.parse(json["updated_at"]),
+        createdAt: DateTime.parse(json["created_at"]),
         giftCardId: int.parse(json["gift_card_id"].toString()),
         giftCardCountryId: int.parse(json["gift_card_country_id"].toString()),
       );
