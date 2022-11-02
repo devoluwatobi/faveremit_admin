@@ -164,7 +164,7 @@ class SingleGiftCardRange extends StatelessWidget {
                   width: 10,
                 ),
                 Text(
-                  "₦${range.ecodeRate} | ₦${range.physicalRate}",
+                  "₦300 | ₦400",
                   style: GoogleFonts.poppins(
                       fontSize: 16,
                       fontWeight: FontWeight.w600,

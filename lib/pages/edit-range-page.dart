@@ -50,8 +50,6 @@ class _RangeRateDetailsPageState extends State<RangeRateDetailsPage> {
     _range = widget.range;
     _minController.text = _range.min.toString();
     _maxController.text = _range.max.toString();
-    _ecodeController.text = _range.ecodeRate.toString();
-    _physicalController.text = _range.physicalRate.toString();
 
     super.initState();
   }

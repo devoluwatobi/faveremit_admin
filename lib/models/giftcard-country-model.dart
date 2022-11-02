@@ -13,39 +13,41 @@ String giftCardCountryToJson(GiftCardCountry data) =>
 class GiftCardCountry {
   GiftCardCountry({
     required this.id,
-    required this.status,
-    required this.country,
     required this.cardTitle,
+    required this.country,
     required this.image,
     required this.iso,
+    required this.status,
     required this.ranges,
   });
 
   int id;
-  int status;
-  String country;
   String cardTitle;
+  String country;
   String image;
   String iso;
+  String status;
   List<GiftCardRange> ranges;
 
   factory GiftCardCountry.fromJson(Map<String, dynamic> json) =>
       GiftCardCountry(
         id: json["id"],
-        status: int.parse(json["status"].toString()),
-        country: json["country"],
-        cardTitle: json["card_title"],
-        image: json["image"],
-        iso: json["iso"],
+        cardTitle: json["card_title"].toString(),
+        country: json["country"].toString(),
+        image: json["image"].toString(),
+        iso: json["iso"].toString(),
+        status: json["status"].toString(),
         ranges: List<GiftCardRange>.from(
             json["ranges"].map((x) => GiftCardRange.fromJson(x))),
       );
 
   Map<String, dynamic> toJson() => {
         "id": id,
+        "card_title": cardTitle,
         "country": country,
         "image": image,
         "iso": iso,
+        "status": status,
         "ranges": List<dynamic>.from(ranges.map((x) => x.toJson())),
       };
 }
@@ -58,11 +60,10 @@ class GiftCardRange {
     required this.min,
     required this.max,
     required this.status,
-    required this.ecodeRate,
-    required this.physicalRate,
+    required this.updatedBy,
     required this.createdAt,
     required this.updatedAt,
-    required this.updatedBy,
+    required this.receiptCategories,
   });
 
   int id;
@@ -71,11 +72,10 @@ class GiftCardRange {
   int min;
   int max;
   String status;
-  int ecodeRate;
-  int physicalRate;
-  int? updatedBy;
+  int updatedBy;
   DateTime createdAt;
   DateTime updatedAt;
+  List<ReceiptCategory> receiptCategories;
 
   factory GiftCardRange.fromJson(Map<String, dynamic> json) => GiftCardRange(
         id: json["id"],
@@ -84,11 +84,11 @@ class GiftCardRange {
         min: int.parse(json["min"].toString()),
         max: int.parse(json["max"].toString()),
         status: json["status"].toString(),
-        ecodeRate: int.parse(json["ecode_rate"].toString()),
-        physicalRate: int.parse(json["physical_rate"].toString()),
+        updatedBy: json["updated_by"],
         createdAt: DateTime.parse(json["created_at"]),
         updatedAt: DateTime.parse(json["updated_at"]),
-        updatedBy: int.parse(json["updated_by"].toString()),
+        receiptCategories: List<ReceiptCategory>.from(
+            json["receipt_categories"].map((x) => ReceiptCategory.fromJson(x))),
       );
 
   Map<String, dynamic> toJson() => {
@@ -97,9 +97,44 @@ class GiftCardRange {
         "gift_card_country_id": giftCardCountryId,
         "min": min,
         "max": max,
-        "ecode_rate": ecodeRate,
-        "physical_rate": physicalRate,
+        "status": status,
+        "updated_by": updatedBy,
         "created_at": createdAt.toIso8601String(),
         "updated_at": updatedAt.toIso8601String(),
+        "receipt_categories":
+            List<dynamic>.from(receiptCategories.map((x) => x.toJson())),
+      };
+}
+
+class ReceiptCategory {
+  ReceiptCategory({
+    required this.id,
+    required this.title,
+    required this.amount,
+    required this.giftCardId,
+    required this.giftCardCountryId,
+  });
+
+  int id;
+  String title;
+  String amount;
+  int giftCardId;
+  int giftCardCountryId;
+
+  factory ReceiptCategory.fromJson(Map<String, dynamic> json) =>
+      ReceiptCategory(
+        id: json["id"],
+        title: json["title"].toString(),
+        amount: json["amount"].toString(),
+        giftCardId: int.parse(json["gift_card_id"].toString()),
+        giftCardCountryId: int.parse(json["gift_card_country_id"].toString()),
+      );
+
+  Map<String, dynamic> toJson() => {
+        "id": id,
+        "title": title,
+        "amount": amount,
+        "gift_card_id": giftCardId,
+        "gift_card_country_id": giftCardCountryId,
       };
 }
