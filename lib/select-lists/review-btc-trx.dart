@@ -201,7 +201,7 @@ void _acceptBTCTransaction({
   if (_proceed != null && _proceed) {
     showLoadingModal(context: context, title: "Updating Transaction Status");
     ProcessError _error =
-        await adminWorker.acceptBTCTransaction(context: context, id: trxID);
+        await adminWorker.acceptCryptoTransaction(context: context, id: trxID);
     Navigator.pop(context);
     if (_error.any) {
       Navigator.pop(context);

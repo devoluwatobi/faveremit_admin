@@ -1446,13 +1446,13 @@ class AppWorker {
     }
   }
 
-  Future<ProcessError> acceptBTCTransaction(
+  Future<ProcessError> acceptCryptoTransaction(
       {required int id, required BuildContext context}) async {
     late http.Response _response;
     try {
       _response = await http
           .post(
-        Uri.parse('$_apiBaseUrl/approve-btc-transaction'),
+        Uri.parse('$_apiBaseUrl/approve-crypto-transaction'),
         headers: {
           'Content-Type': 'application/json',
           'Authorization':
@@ -1644,7 +1644,7 @@ class AppWorker {
     }
   }
 
-  Future<ProcessError> rejectBTCTransaction(
+  Future<ProcessError> rejectCryptoTransaction(
       {required int id,
       required String reason,
       required BuildContext context}) async {
@@ -1652,7 +1652,7 @@ class AppWorker {
     try {
       _response = await http
           .post(
-        Uri.parse('$_apiBaseUrl/reject-btc-transaction'),
+        Uri.parse('$_apiBaseUrl/reject-crypto-transaction'),
         headers: {
           'Content-Type': 'application/json',
           'Authorization':

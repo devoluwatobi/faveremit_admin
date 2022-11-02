@@ -160,7 +160,7 @@ class _FailedBitcoinTrxReasonState extends State<FailedBitcoinTrxReason> {
                             context: context,
                             title: "Updating Withdrawal Status");
                         ProcessError error =
-                            await adminWorker.rejectBTCTransaction(
+                            await adminWorker.rejectCryptoTransaction(
                                 context: context,
                                 id: widget.trxID,
                                 reason: _reasonID == 0
