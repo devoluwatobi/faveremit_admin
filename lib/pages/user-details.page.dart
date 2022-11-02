@@ -47,7 +47,7 @@ class _UserDetailsPageState extends State<UserDetailsPage> {
             children: [
               Text(
                 "cancel",
-                style: GoogleFonts.poppins(color: kPrimaryColor),
+                style: GoogleFonts.poppins(color: kDarkBG),
               )
             ],
           ),
@@ -85,7 +85,7 @@ class _UserDetailsPageState extends State<UserDetailsPage> {
                         alignment: Alignment.center,
                         height: 100,
                         width: 100,
-                        color: kPrimaryColor,
+                        color: kDarkBG,
                         child: Text(
                           getInitials(widget.user.name).toUpperCase(),
                           textAlign: TextAlign.center,
@@ -105,7 +105,7 @@ class _UserDetailsPageState extends State<UserDetailsPage> {
                         alignment: Alignment.center,
                         height: 100,
                         width: 100,
-                        color: kPrimaryColor,
+                        color: kDarkBG,
                         child: Text(
                           getInitials(widget.user.name).toUpperCase(),
                           textAlign: TextAlign.center,
@@ -127,7 +127,7 @@ class _UserDetailsPageState extends State<UserDetailsPage> {
                     "${widget.user.name}".inTitleCase,
                     style: GoogleFonts.poppins(
                         fontSize: 18,
-                        color: kPrimaryColor,
+                        color: kDarkBG,
                         fontWeight: FontWeight.w600),
                     textAlign: TextAlign.center,
                   ),
@@ -201,7 +201,7 @@ class _UserDetailsPageState extends State<UserDetailsPage> {
                             widget.user.name,
                             style: GoogleFonts.poppins(
                               fontSize: 13,
-                              color: kPrimaryColor,
+                              color: kDarkBG,
                               fontWeight: FontWeight.w600,
                             ),
                             textAlign: TextAlign.end,
@@ -236,7 +236,7 @@ class _UserDetailsPageState extends State<UserDetailsPage> {
                             widget.user.email,
                             style: GoogleFonts.poppins(
                               fontSize: 13,
-                              color: kPrimaryColor,
+                              color: kDarkBG,
                               fontWeight: FontWeight.w600,
                             ),
                             textAlign: TextAlign.end,
@@ -271,7 +271,7 @@ class _UserDetailsPageState extends State<UserDetailsPage> {
                             widget.user.phone,
                             style: GoogleFonts.poppins(
                               fontSize: 13,
-                              color: kPrimaryColor,
+                              color: kDarkBG,
                               fontWeight: FontWeight.w600,
                             ),
                             textAlign: TextAlign.end,
@@ -306,7 +306,7 @@ class _UserDetailsPageState extends State<UserDetailsPage> {
                             widget.user.role == 0 ? "User" : "Admin",
                             style: GoogleFonts.poppins(
                               fontSize: 13,
-                              color: kPrimaryColor,
+                              color: kDarkBG,
                               fontWeight: FontWeight.w600,
                             ),
                             textAlign: TextAlign.end,
@@ -342,7 +342,7 @@ class _UserDetailsPageState extends State<UserDetailsPage> {
                                 .inTitleCase,
                             style: GoogleFonts.poppins(
                               fontSize: 13,
-                              color: kPrimaryColor,
+                              color: kDarkBG,
                               fontWeight: FontWeight.w600,
                             ),
                             textAlign: TextAlign.end,
