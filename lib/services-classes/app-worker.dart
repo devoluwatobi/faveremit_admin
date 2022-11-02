@@ -1260,84 +1260,6 @@ class AppWorker {
     }
   }
 
-  // Future<ProcessError> registerBTCTransaction({
-  //   required io.File paymentProof,
-  //   required int walletTypeID,
-  //   required double usdAmount,
-  //   required double ngnAmount,
-  //   required int btcAddressID,
-  //   required BuildContext context,
-  // }) async {
-  //   var dio = Dio();
-  //   dio.options.baseUrl = _baseUrl;
-  //   dio.options.connectTimeout = 20000; //5s
-  //   dio.options.receiveTimeout = 20000;
-  //   dio.options.headers = {
-  //     'Content-Type': 'multipart/form-data',
-  //     'Authorization':
-  //         'Bearer ${Provider.of<UserData>(context, listen: false).userModel!.token}'
-  //   };
-  //   late Response response;
-  //   var formData = FormData.fromMap({
-  //     "wallet_type_id": walletTypeID,
-  //     "usd_amount": usdAmount,
-  //     "ngn_amount": ngnAmount,
-  //     "btc_address_id": btcAddressID,
-  //     "proof": await MultipartFile.fromFile(paymentProof.path,
-  //         filename:
-  //             "User_${Provider.of<UserData>(context, listen: false).userModel!.user.id}_photoImage.jpg"),
-  //   });
-  //   try {
-  //     response =
-  //         await dio.post('$_baseUrl/make-btc-transaction', data: formData);
-  //   } catch (e) {
-  //     print(e);
-  //     return ProcessError(
-  //       details: false,
-  //       network: true,
-  //       other: false,
-  //       any: true,
-  //     );
-  //   }
-  //
-  //   if (kDebugMode) {
-  //     print("Response status: ${response.statusCode}");
-  //     print("Response data: ${response.data}");
-  //   }
-  //
-  //   if (response.statusCode != null) {
-  //     if (response.statusCode! >= 200 && response.statusCode! < 300) {
-  //       return ProcessError(
-  //         details: false,
-  //         network: false,
-  //         other: false,
-  //         any: false,
-  //       );
-  //     } else if (response.statusCode! >= 400 && response.statusCode! < 500) {
-  //       return ProcessError(
-  //         details: true,
-  //         network: false,
-  //         other: false,
-  //         any: true,
-  //       );
-  //     } else {
-  //       return ProcessError(
-  //         details: false,
-  //         network: false,
-  //         other: true,
-  //         any: true,
-  //       );
-  //     }
-  //   } else {
-  //     return ProcessError(
-  //       details: false,
-  //       network: false,
-  //       other: true,
-  //       any: true,
-  //     );
-  //   }
-  // }
-
   Future<ProcessError> getGiftCardTransaction(
       {required BuildContext context, required int id}) async {
     late http.Response _response;
@@ -1400,12 +1322,12 @@ class AppWorker {
     }
   }
 
-  Future<ProcessError> getBTCTransaction(
+  Future<ProcessError> getCryptoTransaction(
       {required BuildContext context, required int id}) async {
     late http.Response _response;
     try {
       _response = await http.get(
-        Uri.parse('$_apiBaseUrl/get-btc-transaction/$id'),
+        Uri.parse('$_apiBaseUrl/get-crypto-transaction/$id'),
         headers: {
           'Content-Type': 'application/json',
           'Authorization':

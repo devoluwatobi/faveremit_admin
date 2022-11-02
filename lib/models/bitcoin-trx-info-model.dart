@@ -17,12 +17,12 @@ class BitcoinTrxModel {
   });
 
   String message;
-  BTCTransaction transaction;
+  CryptoTransaction transaction;
 
   factory BitcoinTrxModel.fromJson(Map<String, dynamic> json) =>
       BitcoinTrxModel(
         message: json["message"],
-        transaction: BTCTransaction.fromJson(json["transaction"]),
+        transaction: CryptoTransaction.fromJson(json["transaction"]),
       );
 
   Map<String, dynamic> toJson() => {
@@ -31,16 +31,18 @@ class BitcoinTrxModel {
       };
 }
 
-class BTCTransaction {
-  BTCTransaction({
+class CryptoTransaction {
+  CryptoTransaction({
     required this.id,
     required this.userId,
     required this.icon,
     required this.serviceId,
     required this.walletType,
-    required this.btcAddress,
+    required this.cryptoName,
+    required this.walletAddress,
     required this.usdAmount,
-    required this.btcAmount,
+    required this.cryptoAmount,
+    required this.cryptoShortCode,
     required this.usdRate,
     required this.ngnAmount,
     required this.transactionRef,
@@ -59,9 +61,11 @@ class BTCTransaction {
   String icon;
   int serviceId;
   String walletType;
-  String btcAddress;
+  String cryptoName;
+  String walletAddress;
   String usdAmount;
-  String btcAmount;
+  String cryptoAmount;
+  String cryptoShortCode;
   String usdRate;
   String ngnAmount;
   String transactionRef;
@@ -74,15 +78,18 @@ class BTCTransaction {
   DateTime createdAt;
   String iso;
 
-  factory BTCTransaction.fromJson(Map<String, dynamic> json) => BTCTransaction(
+  factory CryptoTransaction.fromJson(Map<String, dynamic> json) =>
+      CryptoTransaction(
         id: json["id"],
         userId: int.parse(json["user_id"].toString()),
         icon: json["icon"],
+        cryptoName: json["crypto_name"].toString(),
         serviceId: int.parse(json["service_id"].toString()),
         walletType: json["wallet_type"].toString(),
-        btcAddress: json["btc_address"].toString(),
+        walletAddress: json["wallet_address"].toString(),
         usdAmount: json["usd_amount".toString()],
-        btcAmount: json["btc_amount"].toString(),
+        cryptoAmount: json["crypto_amount"].toString(),
+        cryptoShortCode: json["crypto_short_code"].toString(),
         usdRate: json["usd_rate"].toString(),
         ngnAmount: json["ngn_amount"].toString(),
         transactionRef: json["transaction_ref"].toString(),
@@ -102,9 +109,8 @@ class BTCTransaction {
         "icon": icon,
         "service_id": serviceId,
         "wallet_type": walletType,
-        "btc_address": btcAddress,
         "usd_amount": usdAmount,
-        "btc_amount": btcAmount,
+        "btc_amount": cryptoAmount,
         "usd_rate": usdRate,
         "ngn_amount": ngnAmount,
         "transaction_ref": transactionRef,

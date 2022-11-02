@@ -8,7 +8,7 @@ import 'package:intl/intl.dart';
 import '../config/dimensions.dart';
 import '../config/styles.dart';
 import '../models/transactions-object.dart';
-import '../pages/bitcoin-trx-details.dart';
+import '../pages/crypto-trx-details.dart';
 import '../pages/gift-card-trx-details-page.dart';
 import '../services-classes/functions.dart';
 

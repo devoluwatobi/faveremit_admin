@@ -22,7 +22,7 @@ import '../widgets/show-option-modal.dart';
 import 'helpdesk-page.dart';
 
 bool _gottenTrx = false;
-BTCTransaction? _theTransactionModel;
+CryptoTransaction? _theTransactionModel;
 
 class BTCTrxReceiptPage extends StatefulWidget {
   final FavTransaction transaction;
@@ -37,7 +37,7 @@ class BTCTrxReceiptPage extends StatefulWidget {
 
 class _BTCTrxReceiptPageState extends State<BTCTrxReceiptPage> {
   _fetchTransaction() async {
-    ProcessError error = await adminWorker.getBTCTransaction(
+    ProcessError error = await adminWorker.getCryptoTransaction(
         context: context, id: widget.transaction.id);
     if (error.any) {
       bool? temp = await showSingleOptionPopup(
@@ -125,7 +125,7 @@ class _BTCTrxReceiptPageState extends State<BTCTrxReceiptPage> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        "Bitcoin Transaction Details",
+                        "Crypto Transaction Details",
                         style: kSubTitleStyle,
                         textAlign: TextAlign.left,
                       ),
@@ -138,7 +138,7 @@ class _BTCTrxReceiptPageState extends State<BTCTrxReceiptPage> {
                         _theTransactionModel!.status
                                 .toLowerCase()
                                 .contains("pend")
-                            ? "Transaction is pending while we confirm your bitcoin tradedetails."
+                            ? "Transaction is pending while we confirm your bitcoin trade details."
                             : "Transaction details for a previous bitcoin trade.",
                         style: kSubTextStyle,
                       ),
@@ -180,7 +180,39 @@ class _BTCTrxReceiptPageState extends State<BTCTrxReceiptPage> {
                                 _theTransactionModel!.transactionRef,
                                 style: GoogleFonts.poppins(
                                   fontSize: 13,
-                                  color: kPrimaryColor,
+                                  color: kDarkBG,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        const Divider(
+                          thickness: 1,
+                          color: Color(0xFFE8EBF3),
+                          height: 1,
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 14, vertical: 20),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                "Crypto",
+                                style: GoogleFonts.poppins(
+                                    fontSize: 13,
+                                    color: kTextPrimary,
+                                    fontWeight: FontWeight.normal),
+                              ),
+                              const SizedBox(
+                                width: 20,
+                              ),
+                              Text(
+                                _theTransactionModel!.cryptoName,
+                                style: GoogleFonts.poppins(
+                                  fontSize: 13,
+                                  color: kDarkBG,
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
@@ -212,7 +244,7 @@ class _BTCTrxReceiptPageState extends State<BTCTrxReceiptPage> {
                                 _theTransactionModel!.walletType,
                                 style: GoogleFonts.poppins(
                                   fontSize: 13,
-                                  color: kPrimaryColor,
+                                  color: kDarkBG,
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
@@ -231,7 +263,7 @@ class _BTCTrxReceiptPageState extends State<BTCTrxReceiptPage> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Text(
-                                "BTC Value",
+                                "Crypto Value",
                                 style: GoogleFonts.poppins(
                                     fontSize: 13,
                                     color: kTextPrimary,
@@ -241,11 +273,10 @@ class _BTCTrxReceiptPageState extends State<BTCTrxReceiptPage> {
                                 width: 20,
                               ),
                               Text(
-                                // "₦${addCommas(_theTransactionModel!.ngnAmount)}",
-                                _theTransactionModel!.btcAmount,
+                                "${_theTransactionModel!.cryptoAmount}${_theTransactionModel!.cryptoShortCode}",
                                 style: GoogleFonts.poppins(
                                   fontSize: 13,
-                                  color: kPrimaryColor,
+                                  color: kDarkBG,
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
@@ -277,10 +308,10 @@ class _BTCTrxReceiptPageState extends State<BTCTrxReceiptPage> {
                                 child: Container(
                                   alignment: Alignment.centerRight,
                                   child: Text(
-                                    _theTransactionModel!.btcAddress,
+                                    _theTransactionModel!.walletAddress,
                                     style: GoogleFonts.poppins(
                                       fontSize: 13,
-                                      color: kPrimaryColor,
+                                      color: kDarkBG,
                                       fontWeight: FontWeight.bold,
                                     ),
                                     textAlign: TextAlign.end,
@@ -290,38 +321,6 @@ class _BTCTrxReceiptPageState extends State<BTCTrxReceiptPage> {
                             ],
                           ),
                         ),
-                        // const Divider(
-                        //   thickness: 1,
-                        //   color: Color(0xFFE8EBF3),
-                        //   height: 1,
-                        // ),
-                        // Padding(
-                        //   padding: const EdgeInsets.symmetric(
-                        //       horizontal: 14, vertical: 20),
-                        //   child: Row(
-                        //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        //     children: [
-                        //       Text(
-                        //         "Receipt Type",
-                        //         style: GoogleFonts.poppins(
-                        //             fontSize: 13,
-                        //             color: kTextPrimary,
-                        //             fontWeight: FontWeight.normal),
-                        //       ),
-                        //       const SizedBox(
-                        //         width: 20,
-                        //       ),
-                        //       Text(
-                        //         _theTransactionModel!.receiptAvailability,
-                        //         style: GoogleFonts.poppins(
-                        //           fontSize: 13,
-                        //           color: kPrimaryColor,
-                        //           fontWeight: FontWeight.bold,
-                        //         ),
-                        //       ),
-                        //     ],
-                        //   ),
-                        // ),
                         const Divider(
                           thickness: 1,
                           color: Color(0xFFE8EBF3),
@@ -347,7 +346,7 @@ class _BTCTrxReceiptPageState extends State<BTCTrxReceiptPage> {
                                 "\$${_theTransactionModel!.usdAmount}",
                                 style: GoogleFonts.poppins(
                                   fontSize: 13,
-                                  color: kPrimaryColor,
+                                  color: kDarkBG,
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
@@ -379,7 +378,7 @@ class _BTCTrxReceiptPageState extends State<BTCTrxReceiptPage> {
                                 "\$${_theTransactionModel!.usdRate}",
                                 style: GoogleFonts.poppins(
                                   fontSize: 13,
-                                  color: kPrimaryColor,
+                                  color: kDarkBG,
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
@@ -408,10 +407,10 @@ class _BTCTrxReceiptPageState extends State<BTCTrxReceiptPage> {
                                 width: 20,
                               ),
                               Text(
-                                "₦${_theTransactionModel!.ngnAmount}",
+                                "₦${addCommas(_theTransactionModel!.ngnAmount)}",
                                 style: GoogleFonts.poppins(
                                   fontSize: 13,
-                                  color: kPrimaryColor,
+                                  color: kDarkBG,
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
@@ -457,7 +456,7 @@ class _BTCTrxReceiptPageState extends State<BTCTrxReceiptPage> {
                                                         .toLowerCase()
                                                         .contains("fail")
                                                     ? kRed
-                                                    : kPrimaryColor,
+                                                    : kDarkBG,
                                     borderRadius: BorderRadius.circular(20)),
                                 padding: const EdgeInsets.symmetric(
                                     horizontal: 10, vertical: 4),
@@ -503,7 +502,7 @@ class _BTCTrxReceiptPageState extends State<BTCTrxReceiptPage> {
                                           "${getHumanDate(_theTransactionModel!.updatedAt)}",
                                           style: GoogleFonts.poppins(
                                             fontSize: 13,
-                                            color: kPrimaryColor,
+                                            color: kDarkBG,
                                             fontWeight: FontWeight.bold,
                                           ),
                                         ),
@@ -555,7 +554,7 @@ class _BTCTrxReceiptPageState extends State<BTCTrxReceiptPage> {
                                                   .inTitleCase,
                                           style: GoogleFonts.poppins(
                                             fontSize: 13,
-                                            color: kPrimaryColor,
+                                            color: kDarkBG,
                                             fontWeight: FontWeight.bold,
                                           ),
                                         ),
@@ -595,7 +594,7 @@ class _BTCTrxReceiptPageState extends State<BTCTrxReceiptPage> {
                                     style: GoogleFonts.poppins(
                                         fontWeight: FontWeight.w600,
                                         fontSize: 15,
-                                        color: kPrimaryColor),
+                                        color: kDarkBG),
                                   ),
                                   const SizedBox(
                                     height: 10,
@@ -603,7 +602,7 @@ class _BTCTrxReceiptPageState extends State<BTCTrxReceiptPage> {
                                   Container(
                                     decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(5),
-                                      color: kPrimaryColor.withOpacity(0.1),
+                                      color: kDarkBG.withOpacity(0.1),
                                     ),
                                     width: double.infinity,
                                     child: CachedNetworkImage(
@@ -741,7 +740,7 @@ class _PageShimmer extends StatelessWidget {
                         "Transaction ID",
                         style: GoogleFonts.poppins(
                             fontSize: 13,
-                            color: kPrimaryColor,
+                            color: kDarkBG,
                             fontWeight: FontWeight.normal),
                       ),
                       const SizedBox(
@@ -751,7 +750,7 @@ class _PageShimmer extends StatelessWidget {
                         "665784836UY4",
                         style: GoogleFonts.poppins(
                           fontSize: 13,
-                          color: kPrimaryColor,
+                          color: kDarkBG,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
@@ -773,7 +772,7 @@ class _PageShimmer extends StatelessWidget {
                         "Amount",
                         style: GoogleFonts.poppins(
                             fontSize: 13,
-                            color: kPrimaryColor,
+                            color: kDarkBG,
                             fontWeight: FontWeight.normal),
                       ),
                       const SizedBox(
@@ -783,7 +782,7 @@ class _PageShimmer extends StatelessWidget {
                         "₦70,000,000",
                         style: GoogleFonts.poppins(
                           fontSize: 13,
-                          color: kPrimaryColor,
+                          color: kDarkBG,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
@@ -805,7 +804,7 @@ class _PageShimmer extends StatelessWidget {
                         "Transaction Rate",
                         style: GoogleFonts.poppins(
                             fontSize: 13,
-                            color: kPrimaryColor,
+                            color: kDarkBG,
                             fontWeight: FontWeight.normal),
                       ),
                       const SizedBox(
@@ -815,7 +814,7 @@ class _PageShimmer extends StatelessWidget {
                         "570/\$",
                         style: GoogleFonts.poppins(
                           fontSize: 13,
-                          color: kPrimaryColor,
+                          color: kDarkBG,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
@@ -837,7 +836,7 @@ class _PageShimmer extends StatelessWidget {
                         "Type",
                         style: GoogleFonts.poppins(
                             fontSize: 13,
-                            color: kPrimaryColor,
+                            color: kDarkBG,
                             fontWeight: FontWeight.normal),
                       ),
                       const SizedBox(
@@ -847,7 +846,7 @@ class _PageShimmer extends StatelessWidget {
                         "Gift Card",
                         style: GoogleFonts.poppins(
                           fontSize: 13,
-                          color: kPrimaryColor,
+                          color: kDarkBG,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
@@ -869,7 +868,7 @@ class _PageShimmer extends StatelessWidget {
                         "Status",
                         style: GoogleFonts.poppins(
                             fontSize: 13,
-                            color: kPrimaryColor,
+                            color: kDarkBG,
                             fontWeight: FontWeight.normal),
                       ),
                       const SizedBox(
@@ -879,7 +878,7 @@ class _PageShimmer extends StatelessWidget {
                         "In Progress",
                         style: GoogleFonts.poppins(
                           fontSize: 13,
-                          color: kPrimaryColor,
+                          color: kDarkBG,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
@@ -916,7 +915,7 @@ class _PageShimmer extends StatelessWidget {
                       style: GoogleFonts.poppins(
                           fontWeight: FontWeight.w600,
                           fontSize: 15,
-                          color: kPrimaryColor),
+                          color: kDarkBG),
                     )
                   ],
                 ),
