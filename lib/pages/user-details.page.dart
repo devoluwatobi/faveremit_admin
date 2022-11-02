@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:faveremit_admin/extensions/time_string.dart';
 import 'package:faveremit_admin/models/dx-user-model.dart';
 import 'package:faveremit_admin/services-classes/functions.dart';
 import 'package:flutter/material.dart';
@@ -338,7 +339,7 @@ class _UserDetailsPageState extends State<UserDetailsPage> {
                         ),
                         Expanded(
                           child: Text(
-                            "${DateFormat.jm().format(widget.user.createdAt)}, ${humanDate(widget.user.createdAt)}"
+                            "${DateFormat.jm().format(widget.user.createdAt)}, ${widget.user.createdAt.toDateTimeString()}"
                                 .inTitleCase,
                             style: GoogleFonts.poppins(
                               fontSize: 13,

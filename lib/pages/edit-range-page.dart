@@ -1,10 +1,11 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:faveremit_admin/extensions/time_string.dart';
 import 'package:faveremit_admin/main.dart';
-import 'package:faveremit_admin/models/country-model.dart';
-import 'package:faveremit_admin/models/currency-model.dart';
+import 'package:faveremit_admin/pages/receipt_categories_list.dart';
 import 'package:faveremit_admin/services-classes/functions.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:provider/provider.dart';
 
 import '../config/dimensions.dart';
@@ -15,6 +16,7 @@ import '../services-classes/info-modal.dart';
 import '../widgets/form-field.dart';
 import '../widgets/loading-modal.dart';
 import '../widgets/primary-button.dart';
+import '../widgets/secondary-button.dart';
 import '../widgets/show-option-modal.dart';
 
 final _formKey = GlobalKey<FormState>();
@@ -76,7 +78,7 @@ class _RangeRateDetailsPageState extends State<RangeRateDetailsPage> {
           ),
         ),
         title: Text(
-          "Rate Details",
+          "Range Details",
           style: GoogleFonts.poppins(
               color: kTextPrimary, fontWeight: FontWeight.w500),
         ),
@@ -120,7 +122,7 @@ class _RangeRateDetailsPageState extends State<RangeRateDetailsPage> {
               key: _formKey,
               child: Column(
                 children: [
-                  SizedBox(
+                  const SizedBox(
                     height: 40,
                   ),
                   Row(
@@ -196,64 +198,6 @@ class _RangeRateDetailsPageState extends State<RangeRateDetailsPage> {
                       ),
                     ],
                   ),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        "E-Code Rate (₦/${currencyList.currencies.firstWhere((element) => element.code.toLowerCase() == countryList.countries.country.firstWhere((element) => element.countryCode.toLowerCase() == widget.iso.toLowerCase()).currencyCode.toLowerCase()).symbol})",
-                        style: GoogleFonts.poppins(
-                            color: kTextSecondary,
-                            fontWeight: FontWeight.w600,
-                            fontSize:
-                                screenSize.width < tabletBreakPoint ? 12 : 15),
-                      ),
-                      const SizedBox(
-                        height: 5,
-                      ),
-                      TextFormField(
-                        controller: _ecodeController,
-                        keyboardType:
-                            getKeyboardType(inputType: AppInputType.number),
-                        style: kFormTextStyle,
-                        validator: amountValidator(minimum: 1),
-                        decoration: appInputDecoration(
-                            inputType: AppInputType.number,
-                            hint: "Please enter amount"),
-                      ),
-                      SizedBox(
-                        height: screenSize.width < tabletBreakPoint ? 24 : 30,
-                      )
-                    ],
-                  ),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        "Physical Rate (₦/${currencyList.currencies.firstWhere((element) => element.code.toLowerCase() == countryList.countries.country.firstWhere((element) => element.countryCode.toLowerCase() == widget.iso.toLowerCase()).currencyCode.toLowerCase()).symbol})",
-                        style: GoogleFonts.poppins(
-                            color: kTextSecondary,
-                            fontWeight: FontWeight.w600,
-                            fontSize:
-                                screenSize.width < tabletBreakPoint ? 12 : 15),
-                      ),
-                      const SizedBox(
-                        height: 5,
-                      ),
-                      TextFormField(
-                        controller: _physicalController,
-                        keyboardType:
-                            getKeyboardType(inputType: AppInputType.number),
-                        style: kFormTextStyle,
-                        validator: amountValidator(minimum: 1),
-                        decoration: appInputDecoration(
-                            inputType: AppInputType.number,
-                            hint: "Please enter amount"),
-                      ),
-                      SizedBox(
-                        height: screenSize.width < tabletBreakPoint ? 24 : 30,
-                      )
-                    ],
-                  ),
                 ],
               ),
             ),
@@ -274,8 +218,8 @@ class _RangeRateDetailsPageState extends State<RangeRateDetailsPage> {
                         style: TextStyle(color: kPrimaryColor, fontSize: 12),
                         children: [
                           TextSpan(
-                            text:
-                                "${getHumanDate(_range.updatedAt)}".inTitleCase,
+                            text: "${_range.updatedAt.toDateTimeString()}"
+                                .inTitleCase,
                             style: TextStyle(
                                 fontWeight: FontWeight.w600, fontSize: 13),
                           )
@@ -357,6 +301,15 @@ class _RangeRateDetailsPageState extends State<RangeRateDetailsPage> {
                   }
                 },
                 title: "Update Rate"),
+            const SizedBox(height: 16),
+            SecondaryTextButton(
+                onPressed: () async {
+                  showCupertinoModalBottomSheet(
+                      context: context,
+                      builder: (context) => CategoriesListPage(
+                          categories: _range.receiptCategories));
+                },
+                title: "Receipt Categories"),
             const SizedBox(
               height: 20,
             ),

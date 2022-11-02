@@ -1,3 +1,4 @@
+import 'package:faveremit_admin/extensions/time_string.dart';
 import 'package:faveremit_admin/services-classes/app-worker.dart';
 import 'package:faveremit_admin/services-classes/functions.dart';
 import 'package:faveremit_admin/services-classes/info-modal.dart';
@@ -296,7 +297,7 @@ class _BitcoinRatePageState extends State<BitcoinRatePage> {
                                 height: 10,
                               ),
                               Text(
-                                "Updated At: ${getHumanDate(Provider.of<AppData>(context).homeDataModel!.btcRate.updatedAt)}"
+                                "Updated At: ${Provider.of<AppData>(context).homeDataModel!.btcRate.updatedAt.toDateTimeString()}"
                                     .inTitleCase,
                                 style: GoogleFonts.poppins(
                                     color: kYellow,

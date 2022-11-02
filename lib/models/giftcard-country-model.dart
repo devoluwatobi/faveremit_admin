@@ -112,6 +112,9 @@ class ReceiptCategory {
     required this.title,
     required this.amount,
     required this.giftCardId,
+    required this.updatedBy,
+    required this.status,
+    required this.updatedAt,
     required this.giftCardCountryId,
   });
 
@@ -119,6 +122,9 @@ class ReceiptCategory {
   String title;
   String amount;
   int giftCardId;
+  int status;
+  int updatedBy;
+  DateTime updatedAt;
   int giftCardCountryId;
 
   factory ReceiptCategory.fromJson(Map<String, dynamic> json) =>
@@ -126,6 +132,9 @@ class ReceiptCategory {
         id: json["id"],
         title: json["title"].toString(),
         amount: json["amount"].toString(),
+        updatedBy: int.parse(json["updated_by"].toString()),
+        status: int.parse(json["status"].toString()),
+        updatedAt: DateTime.parse(json["updated_at"]),
         giftCardId: int.parse(json["gift_card_id"].toString()),
         giftCardCountryId: int.parse(json["gift_card_country_id"].toString()),
       );

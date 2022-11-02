@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:faveremit_admin/extensions/time_string.dart';
 import 'package:faveremit_admin/pages/withdrawal-request-info-page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_remix/flutter_remix.dart';
@@ -225,7 +226,7 @@ class _TransactionItemState extends State<TransactionItem> {
                   widget.transaction.serviceId.toString() == 0.toString()
                       ? SizedBox()
                       : Text(
-                          "${DateFormat.jm().format(widget.transaction.createdAt)} ${humanDate(widget.transaction.createdAt)}"
+                          "${widget.transaction.createdAt.toDateTimeString()}"
                               .inTitleCase,
                           // "03:42 PM Today",
                           style: widget.transaction.serviceId.toString() ==
@@ -258,7 +259,8 @@ class _TransactionItemState extends State<TransactionItem> {
                 ),
                 widget.transaction.serviceId.toString() == 0.toString()
                     ? Text(
-                        "${DateFormat.jm().format(widget.transaction.createdAt)} ${humanDate(widget.transaction.createdAt)}"
+                        widget.transaction.createdAt
+                            .toDateTimeString()
                             .inTitleCase,
                         // "03:42 PM Today",
                         style: widget.transaction.serviceId.toString() ==

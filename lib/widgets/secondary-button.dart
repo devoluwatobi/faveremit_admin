@@ -27,9 +27,7 @@ class _SecondaryTextButtonState extends State<SecondaryTextButton> {
       child: Container(
         alignment: Alignment.center,
         decoration: BoxDecoration(
-          color: widget.isActive
-              ? const Color(0xFF6E41EE).withOpacity(0.1)
-              : kFormBG,
+          color: widget.isActive ? kPrimaryColor.withOpacity(0.1) : kFormBG,
           borderRadius: BorderRadius.circular(5),
         ),
         padding: EdgeInsets.symmetric(

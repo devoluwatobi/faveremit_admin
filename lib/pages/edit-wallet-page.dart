@@ -1,5 +1,6 @@
 import 'dart:io' as io;
 
+import 'package:faveremit_admin/extensions/time_string.dart';
 import 'package:faveremit_admin/main.dart';
 import 'package:faveremit_admin/services-classes/app-worker.dart';
 import 'package:faveremit_admin/services-classes/info-modal.dart';
@@ -222,10 +223,10 @@ class _EditWalletPageState extends State<EditWalletPage> {
                                           color: kPrimaryColor, fontSize: 12),
                                       children: [
                                         TextSpan(
-                                          text:
-                                              "${getHumanDate(_wallet.updatedAt)}"
-                                                  .inTitleCase,
-                                          style: TextStyle(
+                                          text: _wallet.updatedAt
+                                              .toDateTimeString()
+                                              .inTitleCase,
+                                          style: const TextStyle(
                                               fontWeight: FontWeight.w600,
                                               fontSize: 13),
                                         )

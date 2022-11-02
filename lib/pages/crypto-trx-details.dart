@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:faveremit_admin/extensions/time_string.dart';
 import 'package:faveremit_admin/select-lists/review-btc-trx.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -499,7 +500,8 @@ class _BTCTrxReceiptPageState extends State<BTCTrxReceiptPage> {
                                           width: 20,
                                         ),
                                         Text(
-                                          "${getHumanDate(_theTransactionModel!.updatedAt)}",
+                                          _theTransactionModel!.updatedAt
+                                              .toDateTimeString(),
                                           style: GoogleFonts.poppins(
                                             fontSize: 13,
                                             color: kDarkBG,
