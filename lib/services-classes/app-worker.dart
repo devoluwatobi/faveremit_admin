@@ -2599,6 +2599,83 @@ class AppWorker {
     }
   }
 
+  Future<ProcessError> updateGiftcardCategory(
+      {required int id,
+      required int giftCardsId,
+      required int giftCardCountryId,
+      required int rangeID,
+      required int amount,
+      required String title,
+      required BuildContext context}) async {
+    late http.Response _response;
+    try {
+      _response = await http
+          .post(
+        Uri.parse('$_apiBaseUrl/update-giftcard-category'),
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization':
+              'Bearer ${Provider.of<UserData>(context, listen: false).userModel!.token}'
+        },
+        body: jsonEncode({
+          "id": id,
+          'gift_card_id': giftCardsId,
+          'gift_card_country_id': giftCardCountryId,
+          'amount': amount,
+          'range_id': rangeID,
+          'title': title,
+        }),
+      )
+          .timeout(const Duration(seconds: 20), onTimeout: () {
+        throw ('Timeout Exception');
+      });
+    } catch (e) {
+      if (kDebugMode) {
+        print(e);
+      }
+      return ProcessError(
+        details: false,
+        network: true,
+        other: false,
+        any: true,
+      );
+    }
+    if (_response.statusCode >= 200 && _response.statusCode < 300) {
+      if (kDebugMode) {
+        print("Status Code: ${_response.statusCode}");
+      }
+
+      return ProcessError(
+        details: false,
+        network: false,
+        other: false,
+        any: false,
+      );
+    } else if (_response.statusCode >= 400 && _response.statusCode < 500) {
+      if (kDebugMode) {
+        print("Status Code: ${_response.statusCode}");
+        print("Status Body: ${_response.body}");
+      }
+      return ProcessError(
+        details: true,
+        network: false,
+        other: false,
+        any: true,
+      );
+    } else {
+      if (kDebugMode) {
+        print("Status Code: ${_response.statusCode}");
+        print("Status Body: ${_response.body}");
+      }
+      return ProcessError(
+        details: false,
+        network: false,
+        other: true,
+        any: true,
+      );
+    }
+  }
+
   Future<ProcessError> createGiftcardRange(
       {required int gift_cards_id,
       required int gift_cards_country_id,

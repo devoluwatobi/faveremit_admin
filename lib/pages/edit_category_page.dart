@@ -9,6 +9,8 @@ import 'package:provider/provider.dart';
 import '../config/dimensions.dart';
 import '../main.dart';
 import '../models/giftcard-country-model.dart';
+import '../services-classes/app-worker.dart';
+import '../services-classes/info-modal.dart';
 import '../widgets/form-field.dart';
 import '../widgets/loading-modal.dart';
 import '../widgets/primary-button.dart';
@@ -203,23 +205,32 @@ class _EditCategoryPageState extends State<EditCategoryPage> {
                           if (_proceed != null && _proceed) {
                             showLoadingModal(
                                 context: context, title: "Updating Wallet");
-                            // ProcessError _error =
-                            // await adminWorker.updateGiftcardCategory(
-                            //
-                            //     context: context);
+                            ProcessError _error =
+                                await adminWorker.updateGiftcardCategory(
+                                    context: context,
+                                    id: widget.category.id,
+                                    giftCardsId: widget.category.giftCardId,
+                                    giftCardCountryId:
+                                        widget.category.giftCardCountryId,
+                                    rangeID: widget.category.id,
+                                    amount: double.parse(
+                                            _amountController.text.trim())
+                                        .toInt(),
+                                    title: _titleController.text.trim());
                             Navigator.pop(context);
-                            // if (_error.any) {
-                            //   showErrorResponse(context: context, error: _error);
-                            // } else {
-                            //   setState(() {
-                            //     // widget.category = _error.data;
-                            //   });
-                            //   showInfoModal(
-                            //       context: context,
-                            //       title: "Success",
-                            //       content:
-                            //       "Giftcard Category updated successfully");
-                            // }
+                            if (_error.any) {
+                              showErrorResponse(
+                                  context: context, error: _error);
+                            } else {
+                              setState(() {
+                                // widget.category = _error.data;
+                              });
+                              showInfoModal(
+                                  context: context,
+                                  title: "Success",
+                                  content:
+                                      "Giftcard Category updated successfully");
+                            }
                           }
                         }
                       },
