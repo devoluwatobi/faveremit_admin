@@ -272,30 +272,25 @@ class _RangeRateDetailsPageState extends State<RangeRateDetailsPage> {
                     if (_proceed != null && _proceed) {
                       showLoadingModal(
                           context: context, title: "Updating Wallet");
-                      ProcessError _error =
+                      ProcessError error =
                           await adminWorker.updateGiftcardRange(
                               id: _range.id,
                               min: int.parse(_minController.text.trim()),
                               max: int.parse(_maxController.text.trim()),
-                              ecode_rate:
-                                  int.parse(_ecodeController.text.trim()),
-                              physical_rate:
-                                  int.parse(_physicalController.text.trim()),
                               gift_cards_country_id: _range.giftCardCountryId,
                               gift_cards_id: _range.giftCardId,
                               context: context);
                       Navigator.pop(context);
-                      if (_error.any) {
-                        showErrorResponse(context: context, error: _error);
+                      if (error.any) {
+                        showErrorResponse(context: context, error: error);
                       } else {
                         setState(() {
-                          _range = _error.data;
+                          _range = error.data;
                         });
                         showInfoModal(
                             context: context,
                             title: "Success",
-                            content:
-                                "Bitcoin wallet address updated successfully");
+                            content: "Gift card Range updated successfully");
                       }
                     }
                   }

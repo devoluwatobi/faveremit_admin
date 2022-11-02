@@ -2529,8 +2529,6 @@ class AppWorker {
       required int gift_cards_country_id,
       required int min,
       required int max,
-      required int ecode_rate,
-      required int physical_rate,
       required BuildContext context}) async {
     late http.Response _response;
     try {
@@ -2548,8 +2546,6 @@ class AppWorker {
           'gift_card_country_id': gift_cards_country_id,
           'min': min,
           'max': max,
-          'ecode_rate': ecode_rate,
-          'physical_rate': physical_rate,
         }),
       )
           .timeout(const Duration(seconds: 20), onTimeout: () {
@@ -2608,8 +2604,6 @@ class AppWorker {
       required int gift_cards_country_id,
       required int min,
       required int max,
-      required int ecode_rate,
-      required int physical_rate,
       required BuildContext context}) async {
     late http.Response _response;
     try {
@@ -2626,8 +2620,6 @@ class AppWorker {
           'gift_card_country_id': gift_cards_country_id,
           'min': min,
           'max': max,
-          'ecode_rate': ecode_rate,
-          'physical_rate': physical_rate,
         }),
       )
           .timeout(const Duration(seconds: 20), onTimeout: () {

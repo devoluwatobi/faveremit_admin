@@ -1,7 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:faveremit_admin/main.dart';
-import 'package:faveremit_admin/models/country-model.dart';
-import 'package:faveremit_admin/models/currency-model.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
@@ -186,7 +184,7 @@ class _CreateRangeRatePageState extends State<CreateRangeRatePage> {
                               validator: amountValidator(minimum: 1),
                               decoration: appInputDecoration(
                                   inputType: AppInputType.number,
-                                  hint: "minimum card value"),
+                                  hint: "maximum card value"),
                             ),
                             SizedBox(
                               height:
@@ -195,64 +193,6 @@ class _CreateRangeRatePageState extends State<CreateRangeRatePage> {
                           ],
                         ),
                       ),
-                    ],
-                  ),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        "E-Code Rate (₦/${currencyList.currencies.firstWhere((element) => element.code.toLowerCase() == countryList.countries.country.firstWhere((element) => element.countryCode.toLowerCase() == widget.iso.toLowerCase()).currencyCode.toLowerCase()).symbol})",
-                        style: GoogleFonts.poppins(
-                            color: kTextSecondary,
-                            fontWeight: FontWeight.w600,
-                            fontSize:
-                                screenSize.width < tabletBreakPoint ? 12 : 15),
-                      ),
-                      const SizedBox(
-                        height: 5,
-                      ),
-                      TextFormField(
-                        controller: _ecodeController,
-                        keyboardType:
-                            getKeyboardType(inputType: AppInputType.number),
-                        style: kFormTextStyle,
-                        validator: amountValidator(minimum: 1),
-                        decoration: appInputDecoration(
-                            inputType: AppInputType.number,
-                            hint: "Please enter amount"),
-                      ),
-                      SizedBox(
-                        height: screenSize.width < tabletBreakPoint ? 24 : 30,
-                      )
-                    ],
-                  ),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        "Physical Rate (₦/${currencyList.currencies.firstWhere((element) => element.code.toLowerCase() == countryList.countries.country.firstWhere((element) => element.countryCode.toLowerCase() == widget.iso.toLowerCase()).currencyCode.toLowerCase()).symbol})",
-                        style: GoogleFonts.poppins(
-                            color: kTextSecondary,
-                            fontWeight: FontWeight.w600,
-                            fontSize:
-                                screenSize.width < tabletBreakPoint ? 12 : 15),
-                      ),
-                      const SizedBox(
-                        height: 5,
-                      ),
-                      TextFormField(
-                        controller: _physicalController,
-                        keyboardType:
-                            getKeyboardType(inputType: AppInputType.number),
-                        style: kFormTextStyle,
-                        validator: amountValidator(minimum: 1),
-                        decoration: appInputDecoration(
-                            inputType: AppInputType.number,
-                            hint: "Please enter amount"),
-                      ),
-                      SizedBox(
-                        height: screenSize.width < tabletBreakPoint ? 24 : 30,
-                      )
                     ],
                   ),
                 ],
@@ -279,10 +219,6 @@ class _CreateRangeRatePageState extends State<CreateRangeRatePage> {
                           await adminWorker.createGiftcardRange(
                               min: int.parse(_minController.text.trim()),
                               max: int.parse(_maxController.text.trim()),
-                              ecode_rate:
-                                  int.parse(_ecodeController.text.trim()),
-                              physical_rate:
-                                  int.parse(_physicalController.text.trim()),
                               gift_cards_country_id:
                                   widget.gift_cards_country_id,
                               gift_cards_id: widget.gift_cards_id,
