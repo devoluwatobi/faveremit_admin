@@ -1,4 +1,5 @@
 import 'package:faveremit_admin/main.dart';
+import 'package:faveremit_admin/models/crypto_wallet_address.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_remix/flutter_remix.dart';
@@ -8,7 +9,6 @@ import 'package:provider/provider.dart';
 
 import '../config/dimensions.dart';
 import '../config/styles.dart';
-import '../models/bitcoin-wallet-model.dart';
 import 'edit-wallet-page.dart';
 
 bool dxg = true;
@@ -40,8 +40,8 @@ class _WalletsPageState extends State<WalletsPage> {
           ),
           Column(
             children: Provider.of<AppData>(context)
-                .bitcoinWallets!
-                .map((e) => BitCoinWalletCard(
+                .cryptoWallets!
+                .map((e) => CryptoWalletCard(
                       wallet: e,
                     ))
                 .toList(),
@@ -52,9 +52,9 @@ class _WalletsPageState extends State<WalletsPage> {
   }
 }
 
-class BitCoinWalletCard extends StatelessWidget {
-  final BtcWalletModel wallet;
-  const BitCoinWalletCard({
+class CryptoWalletCard extends StatelessWidget {
+  final CryptoWalletAddress wallet;
+  const CryptoWalletCard({
     Key? key,
     required this.wallet,
   }) : super(key: key);
@@ -71,15 +71,15 @@ class BitCoinWalletCard extends StatelessWidget {
                 ));
       },
       child: Container(
-        padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-        margin: EdgeInsets.symmetric(vertical: 5),
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+        margin: const EdgeInsets.symmetric(vertical: 5),
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(10),
             color: kGeneralWhite,
             boxShadow: [
               BoxShadow(
                 color: Colors.black.withOpacity(0.1),
-                offset: Offset(0, 5),
+                offset: const Offset(0, 5),
                 spreadRadius: 0,
                 blurRadius: 20,
               )
@@ -116,12 +116,33 @@ class BitCoinWalletCard extends StatelessWidget {
                   const SizedBox(
                     height: 2,
                   ),
-                  Text(
-                    wallet.status == 0 ? "Disabled" : "Active",
-                    style: GoogleFonts.poppins(
-                        color: wallet.status == 0 ? kYellow : kGreen,
-                        fontSize: 12,
-                        fontWeight: FontWeight.w600),
+                  Row(
+                    children: [
+                      Text(
+                        wallet.crypto.name,
+                        style: GoogleFonts.poppins(
+                            color: kPrimaryColor,
+                            fontSize: 12,
+                            fontWeight: FontWeight.w600),
+                      ),
+                      const SizedBox(width: 10),
+                      SizedBox(
+                        height: 10,
+                        child: VerticalDivider(
+                          width: 5,
+                          color: kTextGray.withOpacity(.5),
+                          thickness: 1,
+                        ),
+                      ),
+                      const SizedBox(width: 10),
+                      Text(
+                        wallet.status == 0 ? "Disabled" : "Active",
+                        style: GoogleFonts.poppins(
+                            color: wallet.status == 0 ? kYellow : kGreen,
+                            fontSize: 12,
+                            fontWeight: FontWeight.w600),
+                      ),
+                    ],
                   ),
                 ],
               ),

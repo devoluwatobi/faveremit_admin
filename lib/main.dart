@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:faveremit_admin/models/crypto_wallet_address.dart';
 import 'package:faveremit_admin/models/dx-user-model.dart';
 import 'package:faveremit_admin/models/home-data-info.dart';
 import 'package:faveremit_admin/models/transactions-object.dart';
@@ -31,7 +32,6 @@ import 'config/dimensions.dart';
 import 'config/styles.dart';
 import 'firebase_options.dart';
 import 'models/bank-list.dart';
-import 'models/bitcoin-wallet-model.dart';
 import 'models/btc-trade-data.dart';
 import 'models/dx-country-model.dart';
 import 'models/gift-card-mode.dart';
@@ -348,10 +348,10 @@ class AppData with ChangeNotifier, DiagnosticableTreeMixin {
     notifyListeners();
   }
 
-  List<BtcWalletModel>? bitcoinWallets;
+  List<CryptoWalletAddress>? cryptoWallets;
 
-  updateBitcoinWallets(List<BtcWalletModel> newList) {
-    bitcoinWallets = newList;
+  updateBitcoinWallets(List<CryptoWalletAddress> newList) {
+    cryptoWallets = newList;
     notifyListeners();
   }
 

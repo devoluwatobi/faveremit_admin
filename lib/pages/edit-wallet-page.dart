@@ -2,6 +2,7 @@ import 'dart:io' as io;
 
 import 'package:faveremit_admin/extensions/time_string.dart';
 import 'package:faveremit_admin/main.dart';
+import 'package:faveremit_admin/models/crypto_wallet_address.dart';
 import 'package:faveremit_admin/services-classes/app-worker.dart';
 import 'package:faveremit_admin/services-classes/info-modal.dart';
 import 'package:faveremit_admin/widgets/loading-modal.dart';
@@ -20,7 +21,6 @@ import 'package:shimmer/shimmer.dart';
 
 import '../config/dimensions.dart';
 import '../config/styles.dart';
-import '../models/bitcoin-wallet-model.dart';
 import '../services-classes/functions.dart';
 import '../widgets/form-field.dart';
 import '../widgets/primary-button.dart';
@@ -29,12 +29,12 @@ bool _fetchedAddress = false;
 Map? _btcAddress;
 io.File? _paymentProofFile;
 Widget? _paymentProof;
-late BtcWalletModel _wallet;
+late CryptoWalletAddress _wallet;
 
 TextEditingController _btcController = TextEditingController();
 
 class EditWalletPage extends StatefulWidget {
-  final BtcWalletModel wallet;
+  final CryptoWalletAddress wallet;
 
   const EditWalletPage({
     Key? key,
@@ -208,8 +208,7 @@ class _EditWalletPageState extends State<EditWalletPage> {
                             decoration: BoxDecoration(
                                 color: Color(0xFF6E41EE).withOpacity(0.1),
                                 borderRadius: BorderRadius.circular(6),
-                                border:
-                                    Border.all(color: kPrimaryColor, width: 0)),
+                                border: Border.all(color: kDarkBG, width: 0)),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
@@ -220,7 +219,7 @@ class _EditWalletPageState extends State<EditWalletPage> {
                                               ? "Created At: "
                                               : "Last Updated: ",
                                       style: TextStyle(
-                                          color: kPrimaryColor, fontSize: 12),
+                                          color: kDarkBG, fontSize: 12),
                                       children: [
                                         TextSpan(
                                           text: _wallet.updatedAt
@@ -242,7 +241,7 @@ class _EditWalletPageState extends State<EditWalletPage> {
                                               ? "Created By: "
                                               : "Updated By: ",
                                       style: TextStyle(
-                                          color: kPrimaryColor, fontSize: 12),
+                                          color: kDarkBG, fontSize: 12),
                                       children: [
                                         TextSpan(
                                           text: _wallet.updatedBy == 0
@@ -275,7 +274,7 @@ class _EditWalletPageState extends State<EditWalletPage> {
                             ),
                             onPressed: () async {
                               if (_formKey.currentState!.validate()) {
-                                bool? _proceed = await showOptionPopup(
+                                bool? proceed = await showOptionPopup(
                                     context: context,
                                     title: "Please Confirm",
                                     body:
@@ -283,7 +282,7 @@ class _EditWalletPageState extends State<EditWalletPage> {
                                     actionTitle: "I'm Sure",
                                     isDestructive: true);
 
-                                if (_proceed != null && _proceed) {
+                                if (proceed != null && proceed) {
                                   showLoadingModal(
                                       context: context,
                                       title: "Updating Wallet");

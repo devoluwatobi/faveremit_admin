@@ -44,7 +44,7 @@ class _AppBodyState extends State<AppBody> {
     adminWorker.getTransactionsList(context: context);
     adminWorker.getPrevTransactionsList(context: context);
     adminWorker.getUserList(context: context);
-    adminWorker.getBitCoinWallets(context: context);
+    adminWorker.getCryptoWallets(context: context);
     adminWorker.getGiftCards(context: context);
     if (!Provider.of<UserData>(context, listen: false).fcmUpdated) {
       adminWorker.updateFCM(
@@ -111,7 +111,7 @@ class _AppBodyState extends State<AppBody> {
                           ? "Transactions"
                           : pageIndex == 2
                               ? "Rates"
-                              : "Bitcoin Wallets",
+                              : "Crypto Wallets",
                       style: GoogleFonts.poppins(
                           color: kTextPrimary, fontWeight: FontWeight.w500),
                     ),

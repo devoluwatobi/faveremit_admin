@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io' as io;
 
 import 'package:dio/dio.dart';
+import 'package:faveremit_admin/models/crypto_wallet_address.dart';
 import 'package:faveremit_admin/models/user.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
@@ -753,12 +754,11 @@ class AppWorker {
     }
   }
 
-  Future<ProcessError> getBitCoinWallets(
-      {required BuildContext context}) async {
+  Future<ProcessError> getCryptoWallets({required BuildContext context}) async {
     late http.Response _response;
     try {
       _response = await http.get(
-        Uri.parse('$_apiBaseUrl/get-btc-addresses'),
+        Uri.parse('$_apiBaseUrl/get-crypto-addresses'),
         headers: {
           'Content-Type': 'application/json',
           'Authorization':
@@ -780,7 +780,7 @@ class AppWorker {
     }
     if (_response.statusCode >= 200 && _response.statusCode < 300) {
       Provider.of<AppData>(context, listen: false)
-          .updateBitcoinWallets(btcWalletModelFromJson(_response.body));
+          .updateBitcoinWallets(cryptoWalletAddressFromJson(_response.body));
       if (kDebugMode) {
         print("Status Code: ${_response.statusCode}");
       }
