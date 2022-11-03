@@ -33,6 +33,7 @@ import 'config/styles.dart';
 import 'firebase_options.dart';
 import 'models/bank-list.dart';
 import 'models/btc-trade-data.dart';
+import 'models/cryptos.dart';
 import 'models/dx-country-model.dart';
 import 'models/gift-card-mode.dart';
 
@@ -352,6 +353,13 @@ class AppData with ChangeNotifier, DiagnosticableTreeMixin {
 
   updateBitcoinWallets(List<CryptoWalletAddress> newList) {
     cryptoWallets = newList;
+    notifyListeners();
+  }
+
+  List<CryptoModel>? cryptos;
+
+  updateCryptos(List<CryptoModel> newList) {
+    cryptos = newList;
     notifyListeners();
   }
 

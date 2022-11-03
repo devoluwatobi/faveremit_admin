@@ -93,7 +93,7 @@ class CryptoWalletCard extends StatelessWidget {
                   color: kPrimaryColor.withOpacity(0.15),
                   borderRadius: BorderRadius.circular(5)),
               child: Icon(
-                FlutterRemix.bit_coin_fill,
+                FlutterRemix.coin_fill,
                 color: kPrimaryColor,
               ),
             ),

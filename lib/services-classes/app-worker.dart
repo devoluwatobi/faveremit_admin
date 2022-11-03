@@ -16,6 +16,7 @@ import '../models/bank-list.dart';
 import '../models/bitcoin-trx-info-model.dart';
 import '../models/bitcoin-wallet-model.dart';
 import '../models/btc-trade-data.dart';
+import '../models/cryptos.dart';
 import '../models/dx-country-model.dart';
 import '../models/dx-user-model.dart';
 import '../models/gift-card-mode.dart';
@@ -940,6 +941,74 @@ class AppWorker {
     }
   }
 
+  Future<ProcessError> getCryptos({required BuildContext context}) async {
+    late http.Response response;
+    try {
+      response = await http.get(
+        Uri.parse('$_apiBaseUrl/get-cryptos'),
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization':
+              'Bearer ${Provider.of<UserData>(context, listen: false).userModel!.token}'
+        },
+      ).timeout(const Duration(seconds: 20), onTimeout: () {
+        throw ('Timeout Exception');
+      });
+    } catch (e) {
+      if (kDebugMode) {
+        print(e);
+      }
+
+      return ProcessError(
+        details: false,
+        network: true,
+        other: false,
+        any: true,
+      );
+    }
+    if (response.statusCode >= 200 && response.statusCode < 300) {
+      if (kDebugMode) {
+        print("Status Code: ${response.statusCode}");
+      }
+      if (kDebugMode) {
+        print(response.body);
+      }
+
+      Provider.of<AppData>(context, listen: false)
+          .updateCryptos(cryptoModelFromJson(response.body));
+      return ProcessError(
+        details: false,
+        network: false,
+        other: false,
+        any: false,
+        data: cryptoModelFromJson(response.body),
+      );
+    } else if (response.statusCode >= 400 && response.statusCode < 500) {
+      if (kDebugMode) {
+        print("Status Code: ${response.statusCode}");
+        print("Crypto Status Body: ${response.body}");
+      }
+      return ProcessError(
+        details: true,
+        network: false,
+        other: false,
+        any: true,
+      );
+    } else {
+      if (kDebugMode) {
+        print("Status Code: ${response.statusCode}");
+        print("Status Body: ${response.body}");
+      }
+
+      return ProcessError(
+        details: false,
+        network: false,
+        other: true,
+        any: true,
+      );
+    }
+  }
+
   Future<ProcessError> getBTCAddress({required BuildContext context}) async {
     late http.Response _response;
     try {
@@ -1851,15 +1920,16 @@ class AppWorker {
     }
   }
 
-  Future<ProcessError> updateBitcoinWallet(
+  Future<ProcessError> updateCryptoWallet(
       {required int id,
+      required int cryptoId,
       required String newAddress,
       required BuildContext context}) async {
     late http.Response _response;
     try {
       _response = await http
           .post(
-        Uri.parse('$_apiBaseUrl/update-btc-address'),
+        Uri.parse('$_apiBaseUrl/update-crypto-address'),
         headers: {
           'Content-Type': 'application/json',
           'Authorization':
@@ -1867,6 +1937,7 @@ class AppWorker {
         },
         body: jsonEncode({
           "id": id,
+          "crypto_id": cryptoId,
           "address": newAddress,
         }),
       )

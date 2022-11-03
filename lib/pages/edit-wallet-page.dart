@@ -30,8 +30,9 @@ Map? _btcAddress;
 io.File? _paymentProofFile;
 Widget? _paymentProof;
 late CryptoWalletAddress _wallet;
+String _selectedCrypto = "0";
 
-TextEditingController _btcController = TextEditingController();
+TextEditingController _cryptoController = TextEditingController();
 
 class EditWalletPage extends StatefulWidget {
   final CryptoWalletAddress wallet;
@@ -49,330 +50,432 @@ class _EditWalletPageState extends State<EditWalletPage> {
   @override
   void initState() {
     _wallet = widget.wallet;
-    _btcController.text = _wallet.address;
+    _cryptoController.text = _wallet.address;
+    _selectedCrypto = widget.wallet.crypto.id.toString();
     super.initState();
   }
 
   final _formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
-    return AnnotatedRegion<SystemUiOverlayStyle>(
-      value: appSystemLightTheme,
-      child: Scaffold(
-        backgroundColor: kGeneralWhite,
-        appBar: AppBar(
-          leading: GestureDetector(
-            onTap: () {
-              Navigator.pop(context);
-            },
-            child: Icon(
-              FlutterRemix.arrow_left_line,
-              color: kTextPrimary,
-            ),
-          ),
-          centerTitle: true,
-          title: Text(
-            "Wallet Details",
-            style: GoogleFonts.poppins(color: kTextPrimary),
-          ),
-          backgroundColor: kBackground,
-          elevation: 0,
-          iconTheme: IconTheme.of(context).copyWith(color: kTextPrimary),
-          foregroundColor: kBackground,
-        ),
-        body: SafeArea(
-          child: ListView(
-            physics: BouncingScrollPhysics(),
-            children: [
-              const SizedBox(
-                height: 40,
+    return Consumer<AppData>(
+      builder: (context, appData, child) =>
+          AnnotatedRegion<SystemUiOverlayStyle>(
+        value: appSystemLightTheme,
+        child: Scaffold(
+          backgroundColor: kGeneralWhite,
+          appBar: AppBar(
+            leading: GestureDetector(
+              onTap: () {
+                Navigator.pop(context);
+              },
+              child: Icon(
+                FlutterRemix.arrow_left_line,
+                color: kTextPrimary,
               ),
-              Padding(
-                padding: EdgeInsets.symmetric(
-                    horizontal: screenSize.width < tabletBreakPoint
-                        ? 20
-                        : screenSize.width * 0.04),
-                child: Form(
-                  key: _formKey,
-                  child: Column(
-                    children: [
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          SizedBox(
-                            height: screenSize.width < tabletBreakPoint
-                                ? 40
-                                : screenSize.width * 0.1,
-                          ),
-                        ],
-                      ),
-                      Column(
-                        children: [
-                          GestureDetector(
-                            onTap: () {
-                              // showCupertinoModalBottomSheet(
-                              //     barrierColor:
-                              //     Colors.black.withOpacity(0.8),
-                              //     context: context,
-                              //     builder: (context) => BarcodePage());
-                            },
-                            child: Container(
-                              margin: EdgeInsets.only(bottom: 40),
-                              width: screenSize.width * 0.7,
-                              height: screenSize.width * 0.7,
-                              decoration: BoxDecoration(
-                                border: Border.all(
-                                  color: kPrimaryColor,
-                                  width: 2,
-                                  style: BorderStyle.solid,
+            ),
+            centerTitle: true,
+            title: Text(
+              "Wallet Details",
+              style: GoogleFonts.poppins(color: kTextPrimary),
+            ),
+            backgroundColor: kBackground,
+            elevation: 0,
+            iconTheme: IconTheme.of(context).copyWith(color: kTextPrimary),
+            foregroundColor: kBackground,
+          ),
+          body: SafeArea(
+            child: ListView(
+              physics: BouncingScrollPhysics(),
+              children: [
+                const SizedBox(
+                  height: 40,
+                ),
+                Padding(
+                  padding: EdgeInsets.symmetric(
+                      horizontal: screenSize.width < tabletBreakPoint
+                          ? 20
+                          : screenSize.width * 0.04),
+                  child: Form(
+                    key: _formKey,
+                    child: Column(
+                      children: [
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            SizedBox(
+                              height: screenSize.width < tabletBreakPoint
+                                  ? 40
+                                  : screenSize.width * 0.1,
+                            ),
+                          ],
+                        ),
+                        Column(
+                          children: [
+                            GestureDetector(
+                              onTap: () {
+                                // showCupertinoModalBottomSheet(
+                                //     barrierColor:
+                                //     Colors.black.withOpacity(0.8),
+                                //     context: context,
+                                //     builder: (context) => BarcodePage());
+                              },
+                              child: Container(
+                                margin: EdgeInsets.only(bottom: 40),
+                                width: screenSize.width * 0.7,
+                                height: screenSize.width * 0.7,
+                                decoration: BoxDecoration(
+                                  border: Border.all(
+                                    color: kPrimaryColor,
+                                    width: 2,
+                                    style: BorderStyle.solid,
+                                  ),
+                                  borderRadius: BorderRadius.circular(10),
                                 ),
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                              child: QrImage(
-                                data: _btcController.text,
-                                version: QrVersions.auto,
-                                size: 110.0,
+                                child: QrImage(
+                                  data: _cryptoController.text,
+                                  version: QrVersions.auto,
+                                  size: 110.0,
+                                ),
                               ),
                             ),
-                          ),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              TextFormField(
-                                readOnly: false,
-                                keyboardType: getKeyboardType(
-                                    inputType: AppInputType.number),
-                                style: kFormTextStyle,
-                                validator: textValidator,
-                                controller: _btcController,
-                                onChanged: (x) {
-                                  setState(() {});
-                                },
-                                decoration: InputDecoration(
-                                  hintMaxLines: 3,
-                                  fillColor: kFormBG,
-                                  filled: true,
-                                  errorBorder: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(8),
-                                    borderSide: BorderSide(
-                                        color: kRed,
-                                        width: 1,
-                                        style: BorderStyle.solid),
-                                  ),
-                                  focusedErrorBorder: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(8),
-                                    borderSide: BorderSide(
-                                        color: kRed,
-                                        width: 1,
-                                        style: BorderStyle.solid),
-                                  ),
-                                  focusedBorder: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(8),
-                                    borderSide: BorderSide.none,
-                                  ),
-                                  contentPadding: EdgeInsets.symmetric(
-                                      horizontal:
-                                          screenSize.width < tabletBreakPoint
-                                              ? 16
-                                              : 24,
-                                      vertical:
-                                          screenSize.width < tabletBreakPoint
-                                              ? 16
-                                              : 24),
-                                  border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(8),
-                                    borderSide: BorderSide.none,
-                                  ),
-                                  hintStyle: GoogleFonts.poppins(
-                                    fontSize:
-                                        screenSize.width < tabletBreakPoint
-                                            ? 16
-                                            : 18,
-                                    fontWeight: FontWeight.w600,
-                                    color: kInactive,
-                                  ),
-                                ),
-                                maxLines: 3,
-                              ),
-                              SizedBox(
-                                height: screenSize.width < tabletBreakPoint
-                                    ? 24
-                                    : 30,
-                              )
-                            ],
-                          ),
-                          Container(
-                            width: double.infinity,
-                            padding: EdgeInsets.symmetric(
-                                horizontal: 10, vertical: 10),
-                            decoration: BoxDecoration(
-                                color: Color(0xFF6E41EE).withOpacity(0.1),
-                                borderRadius: BorderRadius.circular(6),
-                                border: Border.all(color: kDarkBG, width: 0)),
-                            child: Column(
+                            Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                RichText(
-                                  text: TextSpan(
-                                      text:
-                                          _wallet.createdAt == _wallet.updatedAt
-                                              ? "Created At: "
-                                              : "Last Updated: ",
-                                      style: TextStyle(
-                                          color: kDarkBG, fontSize: 12),
-                                      children: [
-                                        TextSpan(
-                                          text: _wallet.updatedAt
-                                              .toDateTimeString()
-                                              .inTitleCase,
-                                          style: const TextStyle(
-                                              fontWeight: FontWeight.w600,
-                                              fontSize: 13),
-                                        )
-                                      ]),
+                                TextFormField(
+                                  readOnly: false,
+                                  keyboardType: getKeyboardType(
+                                      inputType: AppInputType.number),
+                                  style: kFormTextStyle,
+                                  validator: textValidator,
+                                  controller: _cryptoController,
+                                  onChanged: (x) {
+                                    setState(() {});
+                                  },
+                                  decoration: InputDecoration(
+                                    hintMaxLines: 3,
+                                    fillColor: kFormBG,
+                                    filled: true,
+                                    errorBorder: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(8),
+                                      borderSide: BorderSide(
+                                          color: kRed,
+                                          width: 1,
+                                          style: BorderStyle.solid),
+                                    ),
+                                    focusedErrorBorder: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(8),
+                                      borderSide: BorderSide(
+                                          color: kRed,
+                                          width: 1,
+                                          style: BorderStyle.solid),
+                                    ),
+                                    focusedBorder: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(8),
+                                      borderSide: BorderSide.none,
+                                    ),
+                                    contentPadding: EdgeInsets.symmetric(
+                                        horizontal:
+                                            screenSize.width < tabletBreakPoint
+                                                ? 16
+                                                : 24,
+                                        vertical:
+                                            screenSize.width < tabletBreakPoint
+                                                ? 16
+                                                : 24),
+                                    border: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(8),
+                                      borderSide: BorderSide.none,
+                                    ),
+                                    hintStyle: GoogleFonts.poppins(
+                                      fontSize:
+                                          screenSize.width < tabletBreakPoint
+                                              ? 16
+                                              : 18,
+                                      fontWeight: FontWeight.w600,
+                                      color: kInactive,
+                                    ),
+                                  ),
+                                  maxLines: 3,
                                 ),
-                                const SizedBox(
-                                  height: 10,
-                                ),
-                                RichText(
-                                  text: TextSpan(
-                                      text:
-                                          _wallet.createdAt == _wallet.updatedAt
-                                              ? "Created By: "
-                                              : "Updated By: ",
-                                      style: TextStyle(
-                                          color: kDarkBG, fontSize: 12),
-                                      children: [
-                                        TextSpan(
-                                          text: _wallet.updatedBy == 0
-                                              ? "User ~ ${_wallet.updatedBy.toString()}"
-                                              : Provider.of<AppData>(context)
-                                                  .users!
-                                                  .firstWhere((element) =>
-                                                      element.id ==
-                                                      int.parse(_wallet
-                                                          .updatedBy
-                                                          .toString()))
-                                                  .name
-                                                  .inTitleCase,
-                                          style: const TextStyle(
-                                              fontWeight: FontWeight.w600,
-                                              fontSize: 13),
-                                        )
-                                      ]),
-                                ),
+                                SizedBox(
+                                  height: screenSize.width < tabletBreakPoint
+                                      ? 24
+                                      : 30,
+                                )
                               ],
                             ),
-                          ),
-                          const SizedBox(
-                            height: 80,
-                          ),
-                          PrimaryButton(
-                            title: Text(
-                              "Update Wallet",
-                              style: kPrimaryButtonTextStyle,
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  "Crypto Type",
+                                  style: kFormTitleTextStyle,
+                                ),
+                                const SizedBox(
+                                  height: 5,
+                                ),
+                                appData.cryptos == null
+                                    ? const SizedBox()
+                                    : Container(
+                                        width: double.infinity,
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 0, vertical: 0),
+                                        decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                          border: Border.all(
+                                              color: const Color(0xFFC9CCD3),
+                                              width: 0,
+                                              style: BorderStyle.none),
+                                          color: kFormBG,
+                                        ),
+                                        child: Row(
+                                          children: [
+                                            Expanded(
+                                              child: InputDecorator(
+                                                decoration: appInputDecoration(
+                                                  inputType:
+                                                      AppInputType.number,
+                                                  hint: "select wallet type",
+                                                ),
+                                                isEmpty:
+                                                    appData.cryptos == null ||
+                                                        _selectedCrypto == '' ||
+                                                        _selectedCrypto == '0',
+                                                child:
+                                                    DropdownButtonHideUnderline(
+                                                  child: DropdownButton<String>(
+                                                    icon: const Icon(
+                                                        FlutterRemix
+                                                            .arrow_down_s_line),
+                                                    iconSize: 16,
+                                                    elevation: 16,
+                                                    value: _selectedCrypto,
+                                                    isDense: true,
+                                                    onChanged:
+                                                        (String? newValue) {
+                                                      setState(() {
+                                                        _selectedCrypto =
+                                                            newValue!;
+                                                      });
+                                                    },
+                                                    items: appData.cryptos ==
+                                                            null
+                                                        ? [
+                                                            DropdownMenuItem<
+                                                                String>(
+                                                              value: "1",
+                                                              child: Text(
+                                                                "select",
+                                                                style:
+                                                                    kFormTextStyle,
+                                                              ),
+                                                            )
+                                                          ]
+                                                        : appData.cryptos!
+                                                            .map((value) {
+                                                            return DropdownMenuItem<
+                                                                String>(
+                                                              value: value.id
+                                                                  .toString(),
+                                                              child: Text(
+                                                                value.name,
+                                                                style:
+                                                                    kFormTextStyle,
+                                                              ),
+                                                            );
+                                                          }).toList(),
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                            const SizedBox(
+                                              width: 20,
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                const SizedBox(
+                                  height: 24,
+                                )
+                              ],
                             ),
-                            onPressed: () async {
-                              if (_formKey.currentState!.validate()) {
-                                bool? proceed = await showOptionPopup(
-                                    context: context,
-                                    title: "Please Confirm",
-                                    body:
-                                        "Are you sure you want to update this bitcoin wallet address ?",
-                                    actionTitle: "I'm Sure",
-                                    isDestructive: true);
-
-                                if (proceed != null && proceed) {
-                                  showLoadingModal(
+                            Container(
+                              width: double.infinity,
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: 10, vertical: 10),
+                              decoration: BoxDecoration(
+                                  color: Color(0xFF6E41EE).withOpacity(0.1),
+                                  borderRadius: BorderRadius.circular(6),
+                                  border: Border.all(color: kDarkBG, width: 0)),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  RichText(
+                                    text: TextSpan(
+                                        text: _wallet.createdAt ==
+                                                _wallet.updatedAt
+                                            ? "Created At: "
+                                            : "Last Updated: ",
+                                        style: TextStyle(
+                                            color: kDarkBG, fontSize: 12),
+                                        children: [
+                                          TextSpan(
+                                            text: _wallet.updatedAt
+                                                .toDateTimeString()
+                                                .inTitleCase,
+                                            style: const TextStyle(
+                                                fontWeight: FontWeight.w600,
+                                                fontSize: 13),
+                                          )
+                                        ]),
+                                  ),
+                                  const SizedBox(
+                                    height: 10,
+                                  ),
+                                  RichText(
+                                    text: TextSpan(
+                                        text: _wallet.createdAt ==
+                                                _wallet.updatedAt
+                                            ? "Created By: "
+                                            : "Updated By: ",
+                                        style: TextStyle(
+                                            color: kDarkBG, fontSize: 12),
+                                        children: [
+                                          TextSpan(
+                                            text: _wallet.updatedBy == 0
+                                                ? "User ~ ${_wallet.updatedBy.toString()}"
+                                                : Provider.of<AppData>(context)
+                                                    .users!
+                                                    .firstWhere((element) =>
+                                                        element.id ==
+                                                        int.parse(_wallet
+                                                            .updatedBy
+                                                            .toString()))
+                                                    .name
+                                                    .inTitleCase,
+                                            style: const TextStyle(
+                                                fontWeight: FontWeight.w600,
+                                                fontSize: 13),
+                                          )
+                                        ]),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 80,
+                            ),
+                            PrimaryButton(
+                              title: Text(
+                                "Update Wallet",
+                                style: kPrimaryButtonTextStyle,
+                              ),
+                              onPressed: () async {
+                                if (_formKey.currentState!.validate()) {
+                                  bool? proceed = await showOptionPopup(
                                       context: context,
-                                      title: "Updating Wallet");
-                                  ProcessError _error =
-                                      await adminWorker.updateBitcoinWallet(
-                                          id: _wallet.id,
-                                          newAddress:
-                                              _btcController.text.trim(),
-                                          context: context);
-                                  Navigator.pop(context);
-                                  if (_error.any) {
-                                    showErrorResponse(
-                                        context: context, error: _error);
-                                  } else {
-                                    setState(() {
-                                      _wallet = _error.data;
-                                    });
-                                    showInfoModal(
+                                      title: "Please Confirm",
+                                      body:
+                                          "Are you sure you want to update this bitcoin wallet address ?",
+                                      actionTitle: "I'm Sure",
+                                      isDestructive: true);
+
+                                  if (proceed != null && proceed) {
+                                    showLoadingModal(
                                         context: context,
-                                        title: "Success",
-                                        content:
-                                            "Bitcoin wallet address updated successfully");
+                                        title: "Updating Wallet");
+                                    ProcessError error =
+                                        await adminWorker.updateCryptoWallet(
+                                            id: _wallet.id,
+                                            cryptoId:
+                                                int.parse(_selectedCrypto),
+                                            newAddress:
+                                                _cryptoController.text.trim(),
+                                            context: context);
+                                    Navigator.pop(context);
+                                    if (error.any) {
+                                      showErrorResponse(
+                                          context: context, error: error);
+                                    } else {
+                                      setState(() {
+                                        _wallet = error.data;
+                                      });
+                                      showInfoModal(
+                                          context: context,
+                                          title: "Success",
+                                          content:
+                                              "Bitcoin wallet address updated successfully");
+                                    }
                                   }
                                 }
-                              }
-                            },
-                          ),
-                          SizedBox(
-                            height: 24,
-                          ),
-                          SecondaryTextButton(
-                            onPressed: () async {
-                              if (_formKey.currentState!.validate()) {
-                                bool? _proceed = await showOptionPopup(
-                                    context: context,
-                                    title: "Please Confirm",
-                                    body:
-                                        "Are you sure you want to ${_wallet.status == 0 ? "a" : "dea"}ctivate this bitcoin wallet address ?",
-                                    actionTitle: "I'm Sure",
-                                    isDestructive: true);
-
-                                if (_proceed != null && _proceed) {
-                                  showLoadingModal(
+                              },
+                            ),
+                            SizedBox(
+                              height: 24,
+                            ),
+                            SecondaryTextButton(
+                              onPressed: () async {
+                                if (_formKey.currentState!.validate()) {
+                                  bool? _proceed = await showOptionPopup(
                                       context: context,
-                                      title:
-                                          "${_wallet.status == 0 ? "A" : "Dea"}ctivating Wallet");
-                                  late ProcessError _error;
-                                  if (_wallet.status == 0) {
-                                    _error =
-                                        await adminWorker.activateBitcoinWallet(
-                                            id: _wallet.id, context: context);
-                                  } else {
-                                    _error = await adminWorker
-                                        .deactivateBitcoinWallet(
-                                            id: _wallet.id, context: context);
-                                  }
-                                  Navigator.pop(context);
-                                  if (_error.any) {
-                                    showErrorResponse(
-                                        context: context, error: _error);
-                                  } else {
-                                    setState(() {
-                                      _wallet = _error.data;
-                                    });
-                                    showInfoModal(
+                                      title: "Please Confirm",
+                                      body:
+                                          "Are you sure you want to ${_wallet.status == 0 ? "a" : "dea"}ctivate this bitcoin wallet address ?",
+                                      actionTitle: "I'm Sure",
+                                      isDestructive: true);
+
+                                  if (_proceed != null && _proceed) {
+                                    showLoadingModal(
                                         context: context,
-                                        title: "Success",
-                                        content:
-                                            "Bitcoin wallet address ${_wallet.status == 0 ? "a" : "dea"}ctivated successfully");
+                                        title:
+                                            "${_wallet.status == 0 ? "A" : "Dea"}ctivating Wallet");
+                                    late ProcessError _error;
+                                    if (_wallet.status == 0) {
+                                      _error = await adminWorker
+                                          .activateBitcoinWallet(
+                                              id: _wallet.id, context: context);
+                                    } else {
+                                      _error = await adminWorker
+                                          .deactivateBitcoinWallet(
+                                              id: _wallet.id, context: context);
+                                    }
+                                    Navigator.pop(context);
+                                    if (_error.any) {
+                                      showErrorResponse(
+                                          context: context, error: _error);
+                                    } else {
+                                      setState(() {
+                                        _wallet = _error.data;
+                                      });
+                                      showInfoModal(
+                                          context: context,
+                                          title: "Success",
+                                          content:
+                                              "Bitcoin wallet address ${_wallet.status == 0 ? "a" : "dea"}ctivated successfully");
+                                    }
                                   }
                                 }
-                              }
-                            },
-                            title:
-                                "${_wallet.status == 0 ? "A" : "Dea"}ctivate",
-                            isActive: _wallet.status == 0,
-                          ),
-                        ],
-                      ),
-                      const SizedBox(
-                        height: 40,
-                      ),
-                    ],
+                              },
+                              title:
+                                  "${_wallet.status == 0 ? "A" : "Dea"}ctivate",
+                              isActive: _wallet.status == 0,
+                            ),
+                          ],
+                        ),
+                        const SizedBox(
+                          height: 40,
+                        ),
+                      ],
+                    ),
                   ),
                 ),
-              ),
-              const SizedBox(
-                height: 40,
-              ),
-            ],
+                const SizedBox(
+                  height: 40,
+                ),
+              ],
+            ),
           ),
         ),
       ),
@@ -508,13 +611,14 @@ class _PageShimmer extends StatelessWidget {
                     keyboardType:
                         getKeyboardType(inputType: AppInputType.number),
                     style: kFormTextStyle,
-                    controller: _btcController,
+                    controller: _cryptoController,
                     decoration: InputDecoration(
                       hintMaxLines: 1,
                       suffix: GestureDetector(
                         onTap: () {
                           copyToClipboard(
-                              copyText: _btcController.text, context: context);
+                              copyText: _cryptoController.text,
+                              context: context);
                         },
                         child: Row(
                           mainAxisSize: MainAxisSize.min,

@@ -46,6 +46,7 @@ class _AppBodyState extends State<AppBody> {
     adminWorker.getUserList(context: context);
     adminWorker.getCryptoWallets(context: context);
     adminWorker.getGiftCards(context: context);
+    adminWorker.getCryptos(context: context);
     if (!Provider.of<UserData>(context, listen: false).fcmUpdated) {
       adminWorker.updateFCM(
           context: context, token: pushNotificationsManager.token!);
