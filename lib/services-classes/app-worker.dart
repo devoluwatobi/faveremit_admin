@@ -1965,7 +1965,7 @@ class AppWorker {
         network: false,
         other: false,
         any: false,
-        data: BtcWalletModel.fromJson(jsonDecode(_response.body)),
+        data: CryptoWalletAddress.fromJson(jsonDecode(_response.body)),
       );
     } else if (_response.statusCode >= 400 && _response.statusCode < 500) {
       if (kDebugMode) {
@@ -2528,13 +2528,15 @@ class AppWorker {
     }
   }
 
-  Future<ProcessError> createBitcoinWallet(
-      {required String address, required BuildContext context}) async {
+  Future<ProcessError> createCryptoWallet(
+      {required String address,
+      required int cryptoId,
+      required BuildContext context}) async {
     late http.Response _response;
     try {
       _response = await http
           .post(
-        Uri.parse('$_apiBaseUrl/add-btc-address'),
+        Uri.parse('$_apiBaseUrl/add-crypto-address'),
         headers: {
           'Content-Type': 'application/json',
           'Authorization':
@@ -2542,6 +2544,7 @@ class AppWorker {
         },
         body: jsonEncode({
           "address": address,
+          "crypto_id": cryptoId,
         }),
       )
           .timeout(const Duration(seconds: 20), onTimeout: () {

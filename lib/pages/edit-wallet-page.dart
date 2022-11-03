@@ -30,7 +30,7 @@ Map? _btcAddress;
 io.File? _paymentProofFile;
 Widget? _paymentProof;
 late CryptoWalletAddress _wallet;
-String _selectedCrypto = "0";
+String _selectedCrypto = "1";
 
 TextEditingController _cryptoController = TextEditingController();
 
