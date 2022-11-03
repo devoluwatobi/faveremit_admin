@@ -302,7 +302,7 @@ class _RangeRateDetailsPageState extends State<RangeRateDetailsPage> {
                   showCupertinoModalBottomSheet(
                       context: context,
                       builder: (context) => CategoriesListPage(
-                          categories: _range.receiptCategories));
+                          categories: _range.receiptCategories, range: _range));
                 },
                 title: "Receipt Categories"),
             const SizedBox(

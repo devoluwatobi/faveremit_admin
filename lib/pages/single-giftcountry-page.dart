@@ -95,7 +95,7 @@ class _SingleCountryPageState extends State<SingleCountryPage> {
     return Scaffold(
       backgroundColor: kGeneralWhite,
       appBar: AppBar(
-        title: Text(""),
+        title: const Text(""),
         backgroundColor: kGeneralWhite,
         elevation: 0,
         foregroundColor: kGeneralWhite,

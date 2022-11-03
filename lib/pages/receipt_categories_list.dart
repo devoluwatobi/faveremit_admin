@@ -1,15 +1,20 @@
 import 'package:faveremit_admin/config/dimensions.dart';
 import 'package:faveremit_admin/config/styles.dart';
+import 'package:faveremit_admin/pages/create_category_page.dart';
 import 'package:faveremit_admin/widgets/giftcard_category_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_remix/flutter_remix.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 import '../models/giftcard-country-model.dart';
+import '../widgets/app-fab.dart';
 
 class CategoriesListPage extends StatefulWidget {
   final List<ReceiptCategory> categories;
-  const CategoriesListPage({Key? key, required this.categories})
+  final GiftCardRange range;
+  const CategoriesListPage(
+      {Key? key, required this.categories, required this.range})
       : super(key: key);
 
   @override
@@ -39,6 +44,25 @@ class _CategoriesListPageState extends State<CategoriesListPage> {
             "Receipt Categories",
             style: GoogleFonts.poppins(color: kTextPrimary),
           ),
+        ),
+        floatingActionButton: AppFAB(
+          leading: Icon(
+            FlutterRemix.add_fill,
+            color: kGeneralWhite,
+          ),
+          title: "New Category",
+          onTap: () async {
+            await showCupertinoModalBottomSheet(
+              context: context,
+              expand: false,
+              barrierColor: const Color(0xFF000000).withOpacity(0.6),
+              builder: (context) {
+                return CreateCategoryPage(
+                  range: widget.range,
+                );
+              },
+            );
+          },
         ),
         body: ListView(
           padding: kAppHorizontalPadding.copyWith(top: 20),
