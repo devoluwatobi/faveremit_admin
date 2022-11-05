@@ -434,11 +434,11 @@ class _EditWalletPageState extends State<EditWalletPage> {
                                     late ProcessError _error;
                                     if (_wallet.status == 0) {
                                       _error = await adminWorker
-                                          .activateBitcoinWallet(
+                                          .activateCryptoWallet(
                                               id: _wallet.id, context: context);
                                     } else {
                                       _error = await adminWorker
-                                          .deactivateBitcoinWallet(
+                                          .deactivateCryptoWallet(
                                               id: _wallet.id, context: context);
                                     }
                                     Navigator.pop(context);

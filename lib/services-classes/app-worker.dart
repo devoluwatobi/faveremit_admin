@@ -14,7 +14,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../main.dart';
 import '../models/bank-list.dart';
 import '../models/bitcoin-trx-info-model.dart';
-import '../models/bitcoin-wallet-model.dart';
 import '../models/btc-trade-data.dart';
 import '../models/cryptos.dart';
 import '../models/dx-country-model.dart';
@@ -1992,13 +1991,13 @@ class AppWorker {
     }
   }
 
-  Future<ProcessError> activateBitcoinWallet(
+  Future<ProcessError> activateCryptoWallet(
       {required int id, required BuildContext context}) async {
     late http.Response _response;
     try {
       _response = await http
           .post(
-        Uri.parse('$_apiBaseUrl/activate-btc-address'),
+        Uri.parse('$_apiBaseUrl/activate-crypto-address'),
         headers: {
           'Content-Type': 'application/json',
           'Authorization':
@@ -2032,7 +2031,7 @@ class AppWorker {
         network: false,
         other: false,
         any: false,
-        data: BtcWalletModel.fromJson(jsonDecode(_response.body)),
+        data: CryptoWalletAddress.fromJson(jsonDecode(_response.body)),
       );
     } else if (_response.statusCode >= 400 && _response.statusCode < 500) {
       if (kDebugMode) {
@@ -2461,13 +2460,13 @@ class AppWorker {
     }
   }
 
-  Future<ProcessError> deactivateBitcoinWallet(
+  Future<ProcessError> deactivateCryptoWallet(
       {required int id, required BuildContext context}) async {
     late http.Response _response;
     try {
       _response = await http
           .post(
-        Uri.parse('$_apiBaseUrl/deactivate-btc-address'),
+        Uri.parse('$_apiBaseUrl/deactivate-crypto-address'),
         headers: {
           'Content-Type': 'application/json',
           'Authorization':
@@ -2501,7 +2500,7 @@ class AppWorker {
         network: false,
         other: false,
         any: false,
-        data: BtcWalletModel.fromJson(jsonDecode(_response.body)),
+        data: CryptoWalletAddress.fromJson(jsonDecode(_response.body)),
       );
     } else if (_response.statusCode >= 400 && _response.statusCode < 500) {
       if (kDebugMode) {

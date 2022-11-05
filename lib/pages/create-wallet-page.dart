@@ -68,7 +68,7 @@ class _CreateWalletPageState extends State<CreateWalletPage> {
             ),
             centerTitle: true,
             title: Text(
-              "Create Bitcoin Wallet",
+              "Create Crypto Wallet",
               style: GoogleFonts.poppins(color: kTextPrimary),
             ),
             backgroundColor: kBackground,
