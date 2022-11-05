@@ -2,12 +2,12 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:faveremit_admin/main.dart';
 import 'package:faveremit_admin/pages/app-body.dart';
 import 'package:faveremit_admin/pages/update-btc-rate-page.dart';
+import 'package:faveremit_admin/services-classes/app-worker.dart';
 import 'package:faveremit_admin/services-classes/functions.dart';
 import 'package:faveremit_admin/widgets/transaction-card.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_remix/flutter_remix.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
@@ -52,100 +52,44 @@ class _HomePageState extends State<HomePage> {
                   ),
                 ),
                 SliverToBoxAdapter(
-                  child: Container(
-                    padding: EdgeInsets.all(screenSize.width < tabletBreakPoint
-                        ? 20
-                        : screenSize.width * 0.04),
-                    width: double.infinity,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(
-                          screenSize.width < tabletBreakPoint
-                              ? 20
-                              : screenSize.width * 0.04),
-                      color: kFormBG,
-                    ),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Container(
-                          width: double.infinity,
-                          alignment: Alignment.center,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(
-                                screenSize.width < tabletBreakPoint
-                                    ? 10
-                                    : screenSize.width * 0.02),
-                            color: kDarkBG,
+                  child: Column(
+                    children: [
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            "Crypto Rates",
+                            style: GoogleFonts.poppins(
+                                fontSize: 16,
+                                color: kDarkBG,
+                                fontWeight: FontWeight.w500),
                           ),
-                          child: Stack(
-                            clipBehavior: Clip.hardEdge,
-                            children: [
-                              Positioned(
-                                bottom: 0,
-                                child: SvgPicture.asset(
-                                  "assets/svg/bg-art.svg",
-                                  color: kGeneralWhite.withOpacity(.07),
-                                ),
-                              ),
-                              Padding(
-                                padding: EdgeInsets.all(
-                                    screenSize.width < tabletBreakPoint
-                                        ? 20
-                                        : screenSize.width * 0.04),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Column(
-                                      children: [
-                                        Text(
-                                          "BTC Rate",
-                                          style: GoogleFonts.poppins(
-                                              color: kGeneralWhite,
-                                              fontWeight: FontWeight.normal,
-                                              fontSize: screenSize.width <
-                                                      tabletBreakPoint
-                                                  ? 16
-                                                  : 20),
-                                        ),
-                                        SizedBox(
-                                          height: screenSize.width <
-                                                  tabletBreakPoint
-                                              ? 10
-                                              : screenSize.width * 0.02,
-                                        ),
-                                        Text(
-                                          "₦${Provider.of<AppData>(context).homeDataModel!.btcRate.value}/\$",
-                                          style: kWalletBalTextStyle,
-                                        ),
-                                      ],
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        SizedBox(
-                          height: screenSize.width < tabletBreakPoint
-                              ? 20
-                              : screenSize.width * 0.04,
-                        ),
-                        PrimaryButton(
-                          title: Text(
-                            "Update Rate",
-                            style: kPrimaryButtonTextStyle,
-                          ),
-                          onPressed: () async {
-                            Navigator.push(
-                                context,
-                                CupertinoPageRoute(
-                                    builder: (context) =>
-                                        const BitcoinRatePage()));
+                        ],
+                      ),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      SizedBox(
+                        height: 150,
+                        child: ListView.builder(
+                          itemBuilder: (context, index) {
+                            return HomeRateCard(
+                                rate: Provider.of<AppData>(context)
+                                    .homeDataModel!
+                                    .cryptoRates[index]);
                           },
+                          scrollDirection: Axis.horizontal,
+                          shrinkWrap: true,
+                          itemCount: Provider.of<AppData>(context)
+                              .homeDataModel!
+                              .cryptoRates
+                              .length,
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
                 ),
                 SliverToBoxAdapter(
@@ -173,7 +117,7 @@ class _HomePageState extends State<HomePage> {
                             child: Row(children: [
                               Text(
                                 "view all",
-                                style: GoogleFonts.roboto(
+                                style: GoogleFonts.poppins(
                                     fontSize: 14, color: kPrimaryColor),
                               ),
                               SizedBox(width: 10),
@@ -222,7 +166,7 @@ class _HomePageState extends State<HomePage> {
                         child: Row(children: [
                           Text(
                             "view all",
-                            style: GoogleFonts.roboto(
+                            style: GoogleFonts.poppins(
                                 fontSize: 14, color: kPrimaryColor),
                           ),
                           const SizedBox(width: 10),
@@ -541,3 +485,121 @@ class HomeGiftCard extends StatelessWidget {
 //   serviceType: 0,
 //   id: 0
 // }
+
+LinearGradient getRateGradient(int id) {
+  switch (id) {
+    case 1:
+      return const LinearGradient(
+        colors: [Color(0xFF113984), Color(0xFF009EE3)],
+        begin: Alignment.centerLeft,
+        end: Alignment.centerRight,
+      );
+    case 2:
+      return const LinearGradient(
+        colors: [Color(0xFF00A084), Color(0xFF00DEB6)],
+        begin: Alignment.centerLeft,
+        end: Alignment.centerRight,
+      );
+    case 3:
+      return const LinearGradient(
+        colors: [Color(0xFFEE7541), Color(0xFFDE5B3E)],
+        begin: Alignment.centerLeft,
+        end: Alignment.centerRight,
+      );
+    case 4:
+      return const LinearGradient(
+        colors: [Color(0xFF321DBB), Color(0xFF4183E8)],
+        begin: Alignment.centerLeft,
+        end: Alignment.centerRight,
+      );
+    default:
+      return const LinearGradient(
+        colors: [Color(0xFF113984), Color(0xFF009EE3)],
+        begin: Alignment.centerLeft,
+        end: Alignment.centerRight,
+      );
+  }
+}
+
+class HomeRateCard extends StatelessWidget {
+  final CryptoRate rate;
+  const HomeRateCard({Key? key, required this.rate}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () async {
+        {
+          Navigator.push(
+              context,
+              CupertinoPageRoute(
+                  builder: (context) => BitcoinRatePage(rate: rate)));
+        }
+      },
+      child: Container(
+        width: 200,
+        margin: const EdgeInsets.symmetric(horizontal: 5),
+        decoration: BoxDecoration(
+            gradient: getRateGradient(rate.id),
+            borderRadius: BorderRadius.circular(15)),
+        padding: const EdgeInsets.all(20),
+        child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          rate.crypto.name,
+                          style: GoogleFonts.poppins(
+                              fontSize: 16,
+                              color: kGeneralWhite,
+                              fontWeight: FontWeight.w600),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                        const SizedBox(height: 5),
+                        Text(
+                          rate.crypto.shortCode,
+                          style: GoogleFonts.poppins(
+                              fontSize: 13,
+                              color: kGeneralWhite,
+                              fontWeight: FontWeight.w500),
+                        ),
+                      ],
+                    ),
+                  ),
+                  CachedNetworkImage(
+                    imageUrl: AppWorker().baseUrl + rate.crypto.icon.toString(),
+                    height: 56,
+                  )
+                ],
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    "₦${rate.value}/\$",
+                    style: GoogleFonts.poppins(
+                        fontSize: 20,
+                        color: kGeneralWhite,
+                        fontWeight: FontWeight.w600),
+                  ),
+                  Icon(
+                    FlutterRemix.arrow_right_fill,
+                    color: kGeneralWhite,
+                  )
+                ],
+              ),
+            ]),
+      ),
+    );
+  }
+}

@@ -1,4 +1,5 @@
 import 'package:faveremit_admin/extensions/time_string.dart';
+import 'package:faveremit_admin/models/home-data-info.dart';
 import 'package:faveremit_admin/services-classes/app-worker.dart';
 import 'package:faveremit_admin/services-classes/functions.dart';
 import 'package:faveremit_admin/services-classes/info-modal.dart';
@@ -19,7 +20,8 @@ import '../widgets/withdraw-terms.dart';
 TextEditingController _amountController = TextEditingController();
 
 class BitcoinRatePage extends StatefulWidget {
-  const BitcoinRatePage({Key? key}) : super(key: key);
+  final CryptoRate rate;
+  const BitcoinRatePage({Key? key, required this.rate}) : super(key: key);
 
   @override
   _BitcoinRatePageState createState() => _BitcoinRatePageState();
@@ -29,10 +31,7 @@ class _BitcoinRatePageState extends State<BitcoinRatePage> {
   final _formKey = GlobalKey<FormState>();
   @override
   void initState() {
-    _amountController.text = Provider.of<AppData>(context, listen: false)
-        .homeDataModel!
-        .btcRate
-        .value;
+    _amountController.text = widget.rate.value.toString();
     super.initState();
   }
 
@@ -53,7 +52,7 @@ class _BitcoinRatePageState extends State<BitcoinRatePage> {
           },
         ),
         title: Text(
-          "BTC Rate",
+          "${widget.rate.crypto.name} Rate",
           style: GoogleFonts.poppins(
               color: kTextPrimary, fontWeight: FontWeight.w500),
         ),
@@ -76,7 +75,7 @@ class _BitcoinRatePageState extends State<BitcoinRatePage> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        "Enter the new bitcoin rate",
+                        "Enter the new ${widget.rate.crypto.name.toLowerCase()} rate",
                         style: kFormTitleTextStyle,
                       ),
                       const SizedBox(
@@ -175,35 +174,9 @@ class _BitcoinRatePageState extends State<BitcoinRatePage> {
                       )
                     ],
                   ),
-                  // RichText(
-                  //   text: TextSpan(
-                  //       text: "Limit for this transaction is between ",
-                  //       style: GoogleFonts.poppins(
-                  //           fontSize: 12,
-                  //           color: kTextPrimary.withOpacity(.8),
-                  //           fontWeight: FontWeight.normal),
-                  //       children: [
-                  //         TextSpan(
-                  //           text: "₦10,000",
-                  //           style: GoogleFonts.poppins(
-                  //               fontWeight: FontWeight.bold),
-                  //         ),
-                  //         TextSpan(
-                  //           text: " and ",
-                  //           style: GoogleFonts.poppins(
-                  //               fontWeight: FontWeight.normal),
-                  //         ),
-                  //         TextSpan(
-                  //           text: "₦5,000,000",
-                  //           style: GoogleFonts.poppins(
-                  //               fontWeight: FontWeight.bold),
-                  //         ),
-                  //       ]),
-                  // ),
                   const SizedBox(
                     height: 60,
                   ),
-
                   PrimaryTextButton(
                       onPressed: () async {
                         if (_formKey.currentState!.validate()) {
@@ -222,20 +195,23 @@ class _BitcoinRatePageState extends State<BitcoinRatePage> {
                               showLoadingModal(
                                   context: context, title: "updating Rate");
                               ProcessError _error =
-                                  await adminWorker.updateBitcoinRate(
-                                      amount: int.parse(
-                                          _amountController.text.trim()),
-                                      context: context);
+                                  await adminWorker.updateCryptoRate(
+                                      value: int.parse(
+                                        _amountController.text.trim(),
+                                      ),
+                                      context: context,
+                                      cryptoId: widget.rate.cryptoId);
                               Navigator.pop(context);
                               if (_error.any) {
                                 showErrorResponse(
                                     context: context, error: _error);
                               } else {
+                                adminWorker.getHomeData(context: context);
                                 showInfoModal(
                                     context: context,
                                     title: "Success",
                                     content:
-                                        "The Bitcoin rate has been updated successfully");
+                                        "The ${widget.rate.crypto.name.inTitleCase} rate has been updated successfully");
                               }
                             }
                           }
@@ -276,18 +252,9 @@ class _BitcoinRatePageState extends State<BitcoinRatePage> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                Provider.of<AppData>(context)
-                                                .homeDataModel!
-                                                .btcRate
-                                                .updatedBy ==
-                                            null ||
-                                        Provider.of<AppData>(context)
-                                                .homeDataModel!
-                                                .btcRate
-                                                .updatedBy ==
-                                            0
-                                    ? "Updated By: User - ${Provider.of<AppData>(context).homeDataModel!.btcRate.updatedBy}"
-                                    : "Updated By: ${Provider.of<AppData>(context).users!.firstWhere((element) => element.id == int.parse(Provider.of<AppData>(context).homeDataModel!.btcRate.updatedBy.toString())).name.inTitleCase}",
+                                widget.rate.updatedBy == 0
+                                    ? "Updated By: User - ${widget.rate.updatedBy}"
+                                    : "Updated By: ${Provider.of<AppData>(context).users!.firstWhere((element) => element.id == widget.rate.updatedBy).name.inTitleCase}",
                                 style: GoogleFonts.poppins(
                                     color: kYellow,
                                     fontSize: 11,
@@ -297,7 +264,7 @@ class _BitcoinRatePageState extends State<BitcoinRatePage> {
                                 height: 10,
                               ),
                               Text(
-                                "Updated At: ${Provider.of<AppData>(context).homeDataModel!.btcRate.updatedAt.toDateTimeString()}"
+                                "Updated At: ${widget.rate.updatedAt.toDateTimeString()}"
                                     .inTitleCase,
                                 style: GoogleFonts.poppins(
                                     color: kYellow,
