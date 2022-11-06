@@ -441,6 +441,43 @@ class _UserDetailsPageState extends State<UserDetailsPage> {
                     color: Color(0xFFE8EBF3),
                     height: 1,
                   ),
+                  // Status
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 14, vertical: 20),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          "Account Status",
+                          style: GoogleFonts.poppins(
+                              fontSize: 13,
+                              color: kTextPrimary,
+                              fontWeight: FontWeight.normal),
+                        ),
+                        const SizedBox(
+                          width: 20,
+                        ),
+                        Expanded(
+                          child: Text(
+                            widget.user.status == 0 ? "Deactivated" : "Active",
+                            style: GoogleFonts.poppins(
+                              fontSize: 13,
+                              color: widget.user.status == 0 ? kYellow : kGreen,
+                              fontWeight: FontWeight.w600,
+                            ),
+                            textAlign: TextAlign.end,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const Divider(
+                    thickness: 1,
+                    color: Color(0xFFE8EBF3),
+                    height: 1,
+                  ),
+                  // Date Joined
                   Padding(
                     padding: const EdgeInsets.symmetric(
                         horizontal: 14, vertical: 20),
