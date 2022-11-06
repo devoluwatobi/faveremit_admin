@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:faveremit_admin/extensions/time_string.dart';
+import 'package:faveremit_admin/pages/user-details.page.dart';
 import 'package:faveremit_admin/select-lists/review-btc-trx.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -687,6 +688,30 @@ class _BTCTrxReceiptPageState extends State<BTCTrxReceiptPage> {
                   const SizedBox(
                     height: 20,
                   ),
+                  SecondaryTextButton(
+                      onPressed: () async {
+                        if (Provider.of<AppData>(context, listen: false)
+                            .users!
+                            .any((element) =>
+                                element.id == _theTransactionModel!.userId)) {
+                          await showCupertinoModalBottomSheet(
+                            context: context,
+                            expand: false,
+                            barrierColor:
+                                const Color(0xFF000000).withOpacity(0.6),
+                            builder: (context) {
+                              return UserDetailsPage(
+                                  user: Provider.of<AppData>(context,
+                                          listen: false)
+                                      .users!
+                                      .firstWhere((element) =>
+                                          element.id ==
+                                          _theTransactionModel!.userId));
+                            },
+                          );
+                        }
+                      },
+                      title: "View User's Profile"),
                   const SizedBox(
                     height: 60,
                   ),

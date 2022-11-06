@@ -15,11 +15,13 @@ class HomeData {
     required this.cryptoRates,
     required this.giftCards,
     required this.transaction,
+    required this.promotions,
   });
 
   List<GiftCard> giftCards;
   List<FavTransaction> transaction;
   List<CryptoRate> cryptoRates;
+  List<Promotion> promotions;
 
   factory HomeData.fromJson(Map<String, dynamic> json) => HomeData(
         cryptoRates: List<CryptoRate>.from(
@@ -28,11 +30,14 @@ class HomeData {
             json["gift_cards"].map((x) => GiftCard.fromJson(x))),
         transaction: List<FavTransaction>.from(
             json["transaction"].map((x) => FavTransaction.fromJson(x))),
+        promotions: List<Promotion>.from(
+            json["promotions"].map((x) => Promotion.fromJson(x))),
       );
 
   Map<String, dynamic> toJson() => {
         "gift_cards": List<dynamic>.from(giftCards.map((x) => x.toJson())),
         "transaction": List<dynamic>.from(transaction.map((x) => x.toJson())),
+        "promotions": List<dynamic>.from(promotions.map((x) => x.toJson())),
       };
 }
 
@@ -157,5 +162,33 @@ class Crypto {
         "created_at": createdAt.toIso8601String(),
         "updated_at": updatedAt.toIso8601String(),
         "description": description,
+      };
+}
+
+class Promotion {
+  Promotion({
+    required this.id,
+    required this.title,
+    required this.bannerUrl,
+    required this.promotionUrl,
+  });
+
+  int id;
+  String title;
+  String bannerUrl;
+  String promotionUrl;
+
+  factory Promotion.fromJson(Map<String, dynamic> json) => Promotion(
+        id: json["id"],
+        title: json["title"].toString(),
+        bannerUrl: json["banner_url"].toString(),
+        promotionUrl: json["promotion_url"].toString(),
+      );
+
+  Map<String, dynamic> toJson() => {
+        "id": id,
+        "title": title,
+        "banner_url": bannerUrl,
+        "promotion_url": promotionUrl,
       };
 }

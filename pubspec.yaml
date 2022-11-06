@@ -102,6 +102,8 @@ dependencies:
   flutter_native_contact_picker: ^0.0.3
   loader_overlay: ^2.1.0
 
+  carousel_slider: ^4.0.0
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

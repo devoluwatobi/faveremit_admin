@@ -1,10 +1,10 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:faveremit_admin/main.dart';
 import 'package:faveremit_admin/pages/app-body.dart';
 import 'package:faveremit_admin/pages/update-btc-rate-page.dart';
 import 'package:faveremit_admin/services-classes/app-worker.dart';
 import 'package:faveremit_admin/services-classes/functions.dart';
-import 'package:faveremit_admin/widgets/transaction-card.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_remix/flutter_remix.dart';
@@ -15,6 +15,7 @@ import 'package:shimmer/shimmer.dart';
 import '../config/dimensions.dart';
 import '../config/styles.dart';
 import '../models/home-data-info.dart';
+import '../widgets/mobile_promo_card.dart';
 import '../widgets/primary-button.dart';
 
 class HomePage extends StatefulWidget {
@@ -32,315 +33,322 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      alignment: Alignment.center,
-      padding: kAppHorizontalPadding,
-      child: Provider.of<AppData>(context).homeDataAvailable
-          ? CustomScrollView(
-              physics: const BouncingScrollPhysics(),
-              slivers: [
-                SliverToBoxAdapter(
-                  child: Padding(
-                    padding: EdgeInsets.symmetric(
-                        vertical: screenSize.width < tabletBreakPoint
-                            ? 20
-                            : screenSize.width * 0.04),
-                    child: Text(
-                      "Hello ${getFirstName(fullName: Provider.of<UserData>(context).userModel!.user.name)}",
-                      style: kSubTitleTextStyle,
-                    ),
-                  ),
-                ),
-                SliverToBoxAdapter(
-                  child: Column(
-                    children: [
-                      const SizedBox(
-                        height: 10,
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            "Crypto Rates",
-                            style: GoogleFonts.poppins(
-                                fontSize: 16,
-                                color: kDarkBG,
-                                fontWeight: FontWeight.w500),
+    return Consumer<AppData>(
+        builder: (context, appData, child) => Container(
+              alignment: Alignment.center,
+              padding: kAppHorizontalPadding,
+              child: Provider.of<AppData>(context).homeDataAvailable
+                  ? CustomScrollView(
+                      physics: const BouncingScrollPhysics(),
+                      slivers: [
+                        SliverToBoxAdapter(
+                          child: Padding(
+                            padding: EdgeInsets.symmetric(
+                                vertical: screenSize.width < tabletBreakPoint
+                                    ? 20
+                                    : screenSize.width * 0.04),
+                            child: Text(
+                              "Hello ${getFirstName(fullName: Provider.of<UserData>(context).userModel!.user.name)}",
+                              style: kSubTitleTextStyle,
+                            ),
                           ),
-                        ],
-                      ),
-                      const SizedBox(
-                        height: 10,
-                      ),
-                      SizedBox(
-                        height: 150,
-                        child: ListView.builder(
-                          itemBuilder: (context, index) {
-                            return HomeRateCard(
-                                rate: Provider.of<AppData>(context)
-                                    .homeDataModel!
-                                    .cryptoRates[index]);
-                          },
-                          scrollDirection: Axis.horizontal,
-                          shrinkWrap: true,
-                          itemCount: Provider.of<AppData>(context)
-                              .homeDataModel!
-                              .cryptoRates
-                              .length,
                         ),
-                      ),
-                    ],
-                  ),
-                ),
-                SliverToBoxAdapter(
-                  child: Column(
-                    children: [
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            "Top GiftCards",
-                            style: GoogleFonts.poppins(
-                                fontSize: 16,
-                                color: kTextSecondary,
-                                fontWeight: FontWeight.w500),
-                          ),
-                          GestureDetector(
-                            onTap: () {
-                              clientBodyPageController.animateToPage(1,
-                                  duration: const Duration(milliseconds: 300),
-                                  curve: Curves.easeInOut);
-                            },
-                            child: Row(children: [
-                              Text(
-                                "view all",
-                                style: GoogleFonts.poppins(
-                                    fontSize: 14, color: kPrimaryColor),
+                        SliverToBoxAdapter(
+                          child: Column(
+                            children: [
+                              const SizedBox(
+                                height: 10,
                               ),
-                              SizedBox(width: 10),
-                              Icon(FlutterRemix.arrow_right_circle_fill,
-                                  color: kPrimaryColor),
-                            ]),
-                          )
-                        ],
-                      ),
-                      Container(
-                        height: 140,
-                        margin: const EdgeInsets.symmetric(vertical: 20),
-                        child: ListView.builder(
-                          itemBuilder: (context, index) => HomeGiftCard(
-                              giftcard: Provider.of<AppData>(context)
-                                  .homeDataModel!
-                                  .giftCards[index]),
-                          shrinkWrap: true,
-                          scrollDirection: Axis.horizontal,
-                          itemCount: Provider.of<AppData>(context)
-                              .homeDataModel!
-                              .giftCards
-                              .length,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                SliverToBoxAdapter(
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        "Pending Transaction",
-                        style: GoogleFonts.poppins(
-                            fontSize: 16,
-                            color: kTextSecondary,
-                            fontWeight: FontWeight.w500),
-                      ),
-                      GestureDetector(
-                        onTap: () {
-                          clientBodyPageController.animateToPage(1,
-                              duration: const Duration(milliseconds: 300),
-                              curve: Curves.easeInOut);
-                        },
-                        child: Row(children: [
-                          Text(
-                            "view all",
-                            style: GoogleFonts.poppins(
-                                fontSize: 14, color: kPrimaryColor),
-                          ),
-                          const SizedBox(width: 10),
-                          Icon(FlutterRemix.arrow_right_circle_fill,
-                              color: kPrimaryColor),
-                        ]),
-                      )
-                    ],
-                  ),
-                ),
-                SliverList(
-                  delegate: SliverChildBuilderDelegate(
-                      (context, index) => TransactionItem(
-                          transaction: Provider.of<AppData>(context)
-                              .homeDataModel!
-                              .transaction[index]),
-                      childCount: Provider.of<AppData>(context)
-                          .homeDataModel!
-                          .transaction
-                          .length),
-                ),
-                const SliverToBoxAdapter(
-                  child: SizedBox(
-                    height: 40,
-                  ),
-                )
-              ],
-            )
-          //Shimmer
-          : SizedBox(
-              width: double.infinity,
-              child: Shimmer.fromColors(
-                baseColor: Colors.grey.withOpacity(0.3),
-                highlightColor: Colors.grey.withOpacity(0.1),
-                enabled: true,
-                child: CustomScrollView(
-                  physics: const BouncingScrollPhysics(),
-                  slivers: [
-                    SliverToBoxAdapter(
-                      child: Padding(
-                        padding: EdgeInsets.symmetric(
-                            vertical: screenSize.width < tabletBreakPoint
-                                ? 20
-                                : screenSize.width * 0.04),
-                        child: Text(
-                          "Hello ${getFirstName(fullName: Provider.of<UserData>(context).userModel!.user.name)}",
-                          style: kSubTitleTextStyle,
-                        ),
-                      ),
-                    ),
-                    SliverToBoxAdapter(
-                      child: Container(
-                        padding: EdgeInsets.all(
-                            screenSize.width < tabletBreakPoint
-                                ? 20
-                                : screenSize.width * 0.04),
-                        width: double.infinity,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(
-                              screenSize.width < tabletBreakPoint
-                                  ? 20
-                                  : screenSize.width * 0.04),
-                          color: kFormBG,
-                        ),
-                        child: Column(
-                          children: [
-                            Container(
-                              width: double.infinity,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(
-                                    screenSize.width < tabletBreakPoint
-                                        ? 10
-                                        : screenSize.width * 0.02),
-                                color: Color(0xFF0C2253),
-                              ),
-                              padding: EdgeInsets.all(
-                                  screenSize.width < tabletBreakPoint
-                                      ? 20
-                                      : screenSize.width * 0.04),
-                              child: Column(
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
                                 children: [
                                   Text(
-                                    "Wallet Balance",
-                                    style: kWhiteSubTitleTextStyle,
-                                  ),
-                                  SizedBox(
-                                    height: screenSize.width < tabletBreakPoint
-                                        ? 10
-                                        : screenSize.width * 0.02,
-                                  ),
-                                  Text(
-                                    "₦540,000.00",
-                                    style: kWalletBalTextStyle,
+                                    "Crypto Rates",
+                                    style: GoogleFonts.poppins(
+                                        fontSize: 16,
+                                        color: kDarkBG,
+                                        fontWeight: FontWeight.w500),
                                   ),
                                 ],
                               ),
-                            ),
-                            SizedBox(
-                              height: screenSize.width < tabletBreakPoint
-                                  ? 20
-                                  : screenSize.width * 0.04,
-                            ),
-                            PrimaryButton(
-                              title: Text(
-                                "Withdraw",
-                                style: kPrimaryButtonTextStyle,
+                              const SizedBox(
+                                height: 10,
                               ),
-                              onPressed: () async {},
-                            ),
-                          ],
+                              SizedBox(
+                                height: 150,
+                                child: ListView.builder(
+                                  itemBuilder: (context, index) {
+                                    return HomeRateCard(
+                                        rate: Provider.of<AppData>(context)
+                                            .homeDataModel!
+                                            .cryptoRates[index]);
+                                  },
+                                  scrollDirection: Axis.horizontal,
+                                  shrinkWrap: true,
+                                  itemCount: Provider.of<AppData>(context)
+                                      .homeDataModel!
+                                      .cryptoRates
+                                      .length,
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
-                      ),
-                    ),
-                    SliverToBoxAdapter(
-                      child: Padding(
-                        padding: EdgeInsets.symmetric(
-                            vertical: screenSize.width < tabletBreakPoint
-                                ? 10
-                                : screenSize.width * 0.02),
-                        child: Column(
-                          children: [
-                            // PrimaryOptionCard(
-                            //   service: PrimaryServiceObject(
-                            //       description:
-                            //           'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
-                            //       title: 'Dummy Service',
-                            //       serviceType: 0,
-                            //       id: 0),
-                            // ),
-                            // PrimaryOptionCard(
-                            //   service: PrimaryServiceObject(
-                            //       description:
-                            //           'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
-                            //       title: 'Dummy Service',
-                            //       serviceType: 0,
-                            //       id: 0),
-                            // ),
-                            // PrimaryOptionCard(
-                            //   service: PrimaryServiceObject(
-                            //       description:
-                            //           'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
-                            //       title: 'Dummy Service',
-                            //       serviceType: 0,
-                            //       id: 0),
-                            // ),0
-                          ],
+                        SliverToBoxAdapter(
+                          child: Column(
+                            children: [
+                              const SizedBox(
+                                height: 16,
+                              ),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    "Promotions",
+                                    style: GoogleFonts.poppins(
+                                        fontSize: 16,
+                                        color: kTextSecondary,
+                                        fontWeight: FontWeight.w500),
+                                  ),
+                                ],
+                              ),
+                              const SizedBox(
+                                height: 16,
+                              ),
+                              CarouselSlider(
+                                options: CarouselOptions(
+                                    height: 120.0,
+                                    autoPlay: true,
+                                    viewportFraction: .9),
+                                items: appData.homeDataModel!.promotions
+                                    .map((promo) {
+                                  return Builder(
+                                    builder: (BuildContext context) {
+                                      return PromotionCard(
+                                        promo: promo,
+                                      );
+                                    },
+                                  );
+                                }).toList(),
+                              ),
+                            ],
+                          ),
                         ),
-                      ),
-                    ),
-                    SliverToBoxAdapter(
-                      child: Text(
-                        "Recent Transactions",
-                        style: kSubTitleTextStyle,
-                      ),
-                    ),
-                    SliverList(
-                        delegate: SliverChildListDelegate([
-                      DummyTrx(),
-                      DummyTrx(),
-                      DummyTrx(),
-                      DummyTrx(),
-                      DummyTrx(),
-                      DummyTrx(),
-                    ])),
-                    SliverToBoxAdapter(
-                      child: SizedBox(
-                        height: 40,
-                      ),
+                        SliverToBoxAdapter(
+                          child: Column(
+                            children: [
+                              const SizedBox(
+                                height: 20,
+                              ),
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    "Top GiftCards",
+                                    style: GoogleFonts.poppins(
+                                        fontSize: 16,
+                                        color: kTextSecondary,
+                                        fontWeight: FontWeight.w500),
+                                  ),
+                                  GestureDetector(
+                                    onTap: () {
+                                      clientBodyPageController.animateToPage(1,
+                                          duration:
+                                              const Duration(milliseconds: 300),
+                                          curve: Curves.easeInOut);
+                                    },
+                                    child: Row(children: [
+                                      Text(
+                                        "view all",
+                                        style: GoogleFonts.poppins(
+                                            fontSize: 14, color: kPrimaryColor),
+                                      ),
+                                      SizedBox(width: 10),
+                                      Icon(FlutterRemix.arrow_right_circle_fill,
+                                          color: kPrimaryColor),
+                                    ]),
+                                  )
+                                ],
+                              ),
+                              Container(
+                                height: 140,
+                                margin:
+                                    const EdgeInsets.symmetric(vertical: 20),
+                                child: ListView.builder(
+                                  itemBuilder: (context, index) => HomeGiftCard(
+                                      giftcard: Provider.of<AppData>(context)
+                                          .homeDataModel!
+                                          .giftCards[index]),
+                                  shrinkWrap: true,
+                                  scrollDirection: Axis.horizontal,
+                                  itemCount: Provider.of<AppData>(context)
+                                      .homeDataModel!
+                                      .giftCards
+                                      .length,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        const SliverToBoxAdapter(
+                          child: SizedBox(
+                            height: 40,
+                          ),
+                        )
+                      ],
                     )
-                  ],
-                ),
-              ),
-            ),
-    );
+                  //Shimmer
+                  : SizedBox(
+                      width: double.infinity,
+                      child: Shimmer.fromColors(
+                        baseColor: Colors.grey.withOpacity(0.3),
+                        highlightColor: Colors.grey.withOpacity(0.1),
+                        enabled: true,
+                        child: CustomScrollView(
+                          physics: const BouncingScrollPhysics(),
+                          slivers: [
+                            SliverToBoxAdapter(
+                              child: Padding(
+                                padding: EdgeInsets.symmetric(
+                                    vertical:
+                                        screenSize.width < tabletBreakPoint
+                                            ? 20
+                                            : screenSize.width * 0.04),
+                                child: Text(
+                                  "Hello ${getFirstName(fullName: Provider.of<UserData>(context).userModel!.user.name)}",
+                                  style: kSubTitleTextStyle,
+                                ),
+                              ),
+                            ),
+                            SliverToBoxAdapter(
+                              child: Container(
+                                padding: EdgeInsets.all(
+                                    screenSize.width < tabletBreakPoint
+                                        ? 20
+                                        : screenSize.width * 0.04),
+                                width: double.infinity,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(
+                                      screenSize.width < tabletBreakPoint
+                                          ? 20
+                                          : screenSize.width * 0.04),
+                                  color: kFormBG,
+                                ),
+                                child: Column(
+                                  children: [
+                                    Container(
+                                      width: double.infinity,
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(
+                                            screenSize.width < tabletBreakPoint
+                                                ? 10
+                                                : screenSize.width * 0.02),
+                                        color: Color(0xFF0C2253),
+                                      ),
+                                      padding: EdgeInsets.all(
+                                          screenSize.width < tabletBreakPoint
+                                              ? 20
+                                              : screenSize.width * 0.04),
+                                      child: Column(
+                                        children: [
+                                          Text(
+                                            "Wallet Balance",
+                                            style: kWhiteSubTitleTextStyle,
+                                          ),
+                                          SizedBox(
+                                            height: screenSize.width <
+                                                    tabletBreakPoint
+                                                ? 10
+                                                : screenSize.width * 0.02,
+                                          ),
+                                          Text(
+                                            "₦540,000.00",
+                                            style: kWalletBalTextStyle,
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      height:
+                                          screenSize.width < tabletBreakPoint
+                                              ? 20
+                                              : screenSize.width * 0.04,
+                                    ),
+                                    PrimaryButton(
+                                      title: Text(
+                                        "Withdraw",
+                                        style: kPrimaryButtonTextStyle,
+                                      ),
+                                      onPressed: () async {},
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                            SliverToBoxAdapter(
+                              child: Padding(
+                                padding: EdgeInsets.symmetric(
+                                    vertical:
+                                        screenSize.width < tabletBreakPoint
+                                            ? 10
+                                            : screenSize.width * 0.02),
+                                child: Column(
+                                  children: [
+                                    // PrimaryOptionCard(
+                                    //   service: PrimaryServiceObject(
+                                    //       description:
+                                    //           'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
+                                    //       title: 'Dummy Service',
+                                    //       serviceType: 0,
+                                    //       id: 0),
+                                    // ),
+                                    // PrimaryOptionCard(
+                                    //   service: PrimaryServiceObject(
+                                    //       description:
+                                    //           'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
+                                    //       title: 'Dummy Service',
+                                    //       serviceType: 0,
+                                    //       id: 0),
+                                    // ),
+                                    // PrimaryOptionCard(
+                                    //   service: PrimaryServiceObject(
+                                    //       description:
+                                    //           'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
+                                    //       title: 'Dummy Service',
+                                    //       serviceType: 0,
+                                    //       id: 0),
+                                    // ),0
+                                  ],
+                                ),
+                              ),
+                            ),
+                            SliverToBoxAdapter(
+                              child: Text(
+                                "Recent Transactions",
+                                style: kSubTitleTextStyle,
+                              ),
+                            ),
+                            SliverList(
+                                delegate: SliverChildListDelegate([
+                              DummyTrx(),
+                              DummyTrx(),
+                              DummyTrx(),
+                              DummyTrx(),
+                              DummyTrx(),
+                              DummyTrx(),
+                            ])),
+                            SliverToBoxAdapter(
+                              child: SizedBox(
+                                height: 40,
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
+                    ),
+            ));
   }
 }
 
