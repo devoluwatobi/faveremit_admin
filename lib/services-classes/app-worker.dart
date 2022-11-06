@@ -2123,6 +2123,243 @@ class AppWorker {
     }
   }
 
+  Future<ProcessError> deactivateAccount({
+    required BuildContext context,
+    required int id,
+    required String email,
+    required String phone,
+  }) async {
+    late http.Response _response;
+    try {
+      _response = await http
+          .post(
+        Uri.parse('$_apiBaseUrl/deactivate-account'),
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization':
+              'Bearer ${Provider.of<UserData>(context, listen: false).userModel!.token}'
+        },
+        body: jsonEncode(
+          {
+            "user_id": id,
+            "email": email,
+            "phone": phone,
+          },
+        ),
+      )
+          .timeout(const Duration(seconds: 20), onTimeout: () {
+        throw ('Timeout Exception');
+      });
+    } catch (e) {
+      if (kDebugMode) {
+        print(e);
+      }
+
+      return ProcessError(
+        details: false,
+        network: true,
+        other: false,
+        any: true,
+      );
+    }
+    if (_response.statusCode >= 200 && _response.statusCode < 300) {
+      getHomeData(context: context);
+      // Provider.of<AppData>(context, listen: false)
+      //     .updateHomeData(basicHomeModelFromJson(_response.body));
+
+      if (kDebugMode) {
+        print("Status Code: ${_response.statusCode}");
+      }
+      return ProcessError(
+        details: false,
+        network: false,
+        other: false,
+        any: false,
+      );
+    } else if (_response.statusCode >= 400 && _response.statusCode < 500) {
+      if (kDebugMode) {
+        print("Status Code: ${_response.statusCode}");
+        print("Status Body: ${_response.body}");
+      }
+      return ProcessError(
+        details: true,
+        network: false,
+        other: false,
+        any: true,
+      );
+    } else {
+      if (kDebugMode) {
+        print("Status Code: ${_response.statusCode}");
+        print("Status Body: ${_response.body}");
+      }
+
+      return ProcessError(
+        details: false,
+        network: false,
+        other: true,
+        any: true,
+      );
+    }
+  }
+
+  Future<ProcessError> activateAccount({
+    required BuildContext context,
+    required int id,
+    required String email,
+    required String phone,
+  }) async {
+    late http.Response _response;
+    try {
+      _response = await http
+          .post(
+        Uri.parse('$_apiBaseUrl/activate-account'),
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization':
+              'Bearer ${Provider.of<UserData>(context, listen: false).userModel!.token}'
+        },
+        body: jsonEncode(
+          {
+            "user_id": id,
+            "email": email,
+            "phone": phone,
+          },
+        ),
+      )
+          .timeout(const Duration(seconds: 20), onTimeout: () {
+        throw ('Timeout Exception');
+      });
+    } catch (e) {
+      if (kDebugMode) {
+        print(e);
+      }
+
+      return ProcessError(
+        details: false,
+        network: true,
+        other: false,
+        any: true,
+      );
+    }
+    if (_response.statusCode >= 200 && _response.statusCode < 300) {
+      getHomeData(context: context);
+      // Provider.of<AppData>(context, listen: false)
+      //     .updateHomeData(basicHomeModelFromJson(_response.body));
+
+      if (kDebugMode) {
+        print("Status Code: ${_response.statusCode}");
+      }
+      return ProcessError(
+        details: false,
+        network: false,
+        other: false,
+        any: false,
+      );
+    } else if (_response.statusCode >= 400 && _response.statusCode < 500) {
+      if (kDebugMode) {
+        print("Status Code: ${_response.statusCode}");
+        print("Status Body: ${_response.body}");
+      }
+      return ProcessError(
+        details: true,
+        network: false,
+        other: false,
+        any: true,
+      );
+    } else {
+      if (kDebugMode) {
+        print("Status Code: ${_response.statusCode}");
+        print("Status Body: ${_response.body}");
+      }
+
+      return ProcessError(
+        details: false,
+        network: false,
+        other: true,
+        any: true,
+      );
+    }
+  }
+
+  Future<ProcessError> upgradeDowngradeUser({
+    required BuildContext context,
+    required int role,
+    required String email,
+    required String phone,
+  }) async {
+    late http.Response _response;
+    try {
+      _response = await http
+          .post(
+        Uri.parse('$_apiBaseUrl/change-user-role'),
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization':
+              'Bearer ${Provider.of<UserData>(context, listen: false).userModel!.token}'
+        },
+        body: jsonEncode(
+          {
+            "role": role,
+            "email": email,
+            "phone": phone,
+          },
+        ),
+      )
+          .timeout(const Duration(seconds: 20), onTimeout: () {
+        throw ('Timeout Exception');
+      });
+    } catch (e) {
+      if (kDebugMode) {
+        print(e);
+      }
+
+      return ProcessError(
+        details: false,
+        network: true,
+        other: false,
+        any: true,
+      );
+    }
+    if (_response.statusCode >= 200 && _response.statusCode < 300) {
+      getHomeData(context: context);
+      // Provider.of<AppData>(context, listen: false)
+      //     .updateHomeData(basicHomeModelFromJson(_response.body));
+
+      if (kDebugMode) {
+        print("Status Code: ${_response.statusCode}");
+      }
+      return ProcessError(
+        details: false,
+        network: false,
+        other: false,
+        any: false,
+      );
+    } else if (_response.statusCode >= 400 && _response.statusCode < 500) {
+      if (kDebugMode) {
+        print("Status Code: ${_response.statusCode}");
+        print("Status Body: ${_response.body}");
+      }
+      return ProcessError(
+        details: true,
+        network: false,
+        other: false,
+        any: true,
+      );
+    } else {
+      if (kDebugMode) {
+        print("Status Code: ${_response.statusCode}");
+        print("Status Body: ${_response.body}");
+      }
+
+      return ProcessError(
+        details: false,
+        network: false,
+        other: true,
+        any: true,
+      );
+    }
+  }
+
   Future<ProcessError> activateCryptoWallet(
       {required int id, required BuildContext context}) async {
     late http.Response _response;

@@ -11,7 +11,12 @@ import 'package:intl/intl.dart';
 
 import '../config/dimensions.dart';
 import '../config/styles.dart';
+import '../main.dart';
+import '../services-classes/app-worker.dart';
+import '../services-classes/info-modal.dart';
+import '../widgets/loading-modal.dart';
 import '../widgets/primary-button.dart';
+import '../widgets/show-option-modal.dart';
 import '../widgets/tertiary-button.dart';
 
 late String _paypalAddress;
@@ -491,12 +496,48 @@ class _UserDetailsPageState extends State<UserDetailsPage> {
               height: 20,
             ),
             TertiaryTextButton2(
-                onPressed: () {
-                  Navigator.push(
-                      context,
-                      CupertinoPageRoute(
-                          builder: (context) =>
-                              UserTransactions(user: widget.user)));
+                onPressed: () async {
+                  bool? proceed = await showOptionPopup(
+                      context: context,
+                      title: "Please Confirm",
+                      body:
+                          "Are you sure you want to ${widget.user.status != 1 ? "" : "de"}activate this account ?. ${widget.user.status != 1 ? "This user will be granted access to all faveremit user features" : "This user would not be able to login or access faveremit resources till the account is re-activated."}",
+                      actionTitle:
+                          "${widget.user.status != 1 ? "A" : "Dea"}ctivate Account",
+                      isDestructive: true);
+                  if (proceed != null && proceed) {
+                    showLoadingModal(context: context);
+                    late ProcessError error;
+                    if (widget.user.status == 1) {
+                      error = await adminWorker.deactivateAccount(
+                          context: context,
+                          email: widget.user.email,
+                          phone: widget.user.phone,
+                          id: widget.user.id);
+                    } else {
+                      error = await adminWorker.activateAccount(
+                          context: context,
+                          email: widget.user.email,
+                          phone: widget.user.phone,
+                          id: widget.user.id);
+                    }
+                    Navigator.pop(context);
+                    if (error.any) {
+                      showErrorResponse(context: context, error: error);
+                    } else {
+                      // Navigator.pop(context);
+                      // Navigator.pop(context);
+
+                      showInfoModal(
+                          context: context,
+                          title: "Success",
+                          content:
+                              "Account has been ${widget.user.status != 1 ? "" : "de"}activated successfully.");
+                      setState(() {
+                        widget.user.status = widget.user.status != 1 ? 1 : 0;
+                      });
+                    }
+                  }
                 },
                 title:
                     "${widget.user.status == 1 ? "Dea" : "A"}ctivate User Account"),

@@ -69,6 +69,21 @@ class _UserListPageState extends State<UserListPage> {
     if (Provider.of<AppData>(context, listen: false).users == null) {
       _refreshUsers();
     }
+    _periodicSyncTimer =
+        Timer.periodic(const Duration(seconds: 20), (Timer t) async {
+      if (kDebugMode) {
+        print("Periodic Tasks");
+      }
+
+      ProcessError response = await adminWorker.getUserList(context: context);
+      adminWorker.getHomeData(context: context);
+      if (response.any) {
+        // showSnackBar(
+        //     context: context,
+        //     content: "couldn't update details",
+        //     isGood: false);
+      }
+    });
     super.initState();
   }
 
@@ -239,7 +254,7 @@ class _UserListPageState extends State<UserListPage> {
                   SliverList(
                     delegate: SliverChildBuilderDelegate(
                       (context, index) {
-                        return DXUserWidget(
+                        return FavUserWidget(
                             user: _usersTab == 0
                                 ? Provider.of<AppData>(context)
                                     .users!
@@ -315,9 +330,9 @@ class _UserListPageState extends State<UserListPage> {
   }
 }
 
-class DXUserWidget extends StatelessWidget {
+class FavUserWidget extends StatelessWidget {
   final FavUserModel user;
-  const DXUserWidget({
+  const FavUserWidget({
     Key? key,
     required this.user,
   }) : super(key: key);
@@ -329,9 +344,7 @@ class DXUserWidget extends StatelessWidget {
         await showCupertinoModalBottomSheet(
           context: context,
           expand: false,
-          barrierColor: user.status == 1
-              ? const Color(0xFF000000).withOpacity(0.6)
-              : kYellow,
+          barrierColor: const Color(0xFF000000).withOpacity(0.6),
           builder: (context) {
             return UserDetailsPage(user: user);
           },
@@ -344,7 +357,9 @@ class DXUserWidget extends StatelessWidget {
         height: 60,
         decoration: BoxDecoration(
             border: Border.all(
-                color: Color(0xFFE8EBF3), width: 1, style: BorderStyle.solid),
+                color: user.status == 1 ? const Color(0xFFE8EBF3) : kYellow,
+                width: 1,
+                style: BorderStyle.solid),
             boxShadow: [],
             borderRadius: BorderRadius.circular(10),
             color: kGeneralWhite),
