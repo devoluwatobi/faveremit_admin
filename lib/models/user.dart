@@ -32,12 +32,15 @@ class User {
   User({
     required this.id,
     required this.name,
+    required this.username,
+    required this.referrer,
     required this.email,
     required this.phone,
     this.photo,
     this.dob,
     this.apiToken,
     this.role,
+    required this.status,
     this.emailVerifiedAt,
     this.phoneVerifiedAt,
     this.createdAt,
@@ -47,11 +50,14 @@ class User {
   int id;
   String name;
   String email;
+  String username;
   String phone;
+  String? referrer;
   String? photo;
   dynamic dob;
   dynamic apiToken;
   int? role;
+  int status;
   dynamic emailVerifiedAt;
   dynamic phoneVerifiedAt;
   DateTime? createdAt;
@@ -66,6 +72,7 @@ class User {
         dob: json["dob"],
         apiToken: json["api_token"],
         role: int.parse(json["role"].toString()),
+        status: int.parse(json["status"].toString()),
         emailVerifiedAt: json["email_verified_at"],
         phoneVerifiedAt: json["phone_verified_at"],
         createdAt: json["created_at"] == null
@@ -74,6 +81,10 @@ class User {
         updatedAt: json["updated_at"] == null
             ? null
             : DateTime.parse(json["updated_at"]),
+        username: json["username"].toString(),
+        referrer: json["referrer"] == null
+            ? json["referrer"]
+            : json["referrer"].toString(),
       );
 
   Map<String, dynamic> toJson() => {

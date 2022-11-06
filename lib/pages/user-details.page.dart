@@ -1,22 +1,25 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:faveremit_admin/extensions/time_string.dart';
 import 'package:faveremit_admin/models/dx-user-model.dart';
+import 'package:faveremit_admin/pages/user_transaction_page.dart';
 import 'package:faveremit_admin/services-classes/functions.dart';
+import 'package:faveremit_admin/widgets/secondary-button.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 
 import '../config/dimensions.dart';
 import '../config/styles.dart';
-import '../main.dart';
 import '../widgets/primary-button.dart';
+import '../widgets/tertiary-button.dart';
 
 late String _paypalAddress;
 
 late int _role;
 
 class UserDetailsPage extends StatefulWidget {
-  final DxUserModel user;
+  final FavUserModel user;
   const UserDetailsPage({
     Key? key,
     required this.user,
@@ -76,8 +79,7 @@ class _UserDetailsPageState extends State<UserDetailsPage> {
                 ClipRRect(
                   borderRadius: BorderRadius.circular(50),
                   child: CachedNetworkImage(
-                    imageUrl:
-                        adminWorker.baseUrl + widget.user.photo.toString(),
+                    imageUrl: widget.user.photo.toString(),
                     height: 100,
                     width: 100,
                     fit: BoxFit.cover,
@@ -149,6 +151,7 @@ class _UserDetailsPageState extends State<UserDetailsPage> {
               ),
               child: Column(
                 children: [
+                  //User ID
                   Padding(
                     padding: const EdgeInsets.symmetric(
                         horizontal: 14, vertical: 20),
@@ -181,6 +184,7 @@ class _UserDetailsPageState extends State<UserDetailsPage> {
                     color: Color(0xFFE8EBF3),
                     height: 1,
                   ),
+                  // Name
                   Padding(
                     padding: const EdgeInsets.symmetric(
                         horizontal: 14, vertical: 20),
@@ -216,6 +220,7 @@ class _UserDetailsPageState extends State<UserDetailsPage> {
                     color: Color(0xFFE8EBF3),
                     height: 1,
                   ),
+                  // Email
                   Padding(
                     padding: const EdgeInsets.symmetric(
                         horizontal: 14, vertical: 20),
@@ -251,6 +256,7 @@ class _UserDetailsPageState extends State<UserDetailsPage> {
                     color: Color(0xFFE8EBF3),
                     height: 1,
                   ),
+                  // Phone
                   Padding(
                     padding: const EdgeInsets.symmetric(
                         horizontal: 14, vertical: 20),
@@ -286,6 +292,115 @@ class _UserDetailsPageState extends State<UserDetailsPage> {
                     color: Color(0xFFE8EBF3),
                     height: 1,
                   ),
+                  // Balance
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 14, vertical: 20),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          "Wallet Balance",
+                          style: GoogleFonts.poppins(
+                              fontSize: 13,
+                              color: kTextPrimary,
+                              fontWeight: FontWeight.normal),
+                        ),
+                        const SizedBox(
+                          width: 20,
+                        ),
+                        Expanded(
+                          child: Text(
+                            "₦${addCommas(widget.user.balance)}",
+                            style: GoogleFonts.poppins(
+                              fontSize: 13,
+                              color: kDarkBG,
+                              fontWeight: FontWeight.w600,
+                            ),
+                            textAlign: TextAlign.end,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const Divider(
+                    thickness: 1,
+                    color: Color(0xFFE8EBF3),
+                    height: 1,
+                  ),
+                  // Username
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 14, vertical: 20),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          "Username",
+                          style: GoogleFonts.poppins(
+                              fontSize: 13,
+                              color: kTextPrimary,
+                              fontWeight: FontWeight.normal),
+                        ),
+                        const SizedBox(
+                          width: 20,
+                        ),
+                        Expanded(
+                          child: Text(
+                            widget.user.username,
+                            style: GoogleFonts.poppins(
+                              fontSize: 13,
+                              color: kDarkBG,
+                              fontWeight: FontWeight.w600,
+                            ),
+                            textAlign: TextAlign.end,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const Divider(
+                    thickness: 1,
+                    color: Color(0xFFE8EBF3),
+                    height: 1,
+                  ),
+                  // Referrer
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 14, vertical: 20),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          "Referred By",
+                          style: GoogleFonts.poppins(
+                              fontSize: 13,
+                              color: kTextPrimary,
+                              fontWeight: FontWeight.normal),
+                        ),
+                        const SizedBox(
+                          width: 20,
+                        ),
+                        Expanded(
+                          child: Text(
+                            widget.user.referrer.toString(),
+                            style: GoogleFonts.poppins(
+                              fontSize: 13,
+                              color: kDarkBG,
+                              fontWeight: FontWeight.w600,
+                            ),
+                            textAlign: TextAlign.end,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const Divider(
+                    thickness: 1,
+                    color: Color(0xFFE8EBF3),
+                    height: 1,
+                  ),
+                  // User Role
                   Padding(
                     padding: const EdgeInsets.symmetric(
                         horizontal: 14, vertical: 20),
@@ -363,6 +478,28 @@ class _UserDetailsPageState extends State<UserDetailsPage> {
             const SizedBox(
               height: 20,
             ),
+            SecondaryTextButton(
+                onPressed: () {
+                  Navigator.push(
+                      context,
+                      CupertinoPageRoute(
+                          builder: (context) =>
+                              UserTransactions(user: widget.user)));
+                },
+                title: "View User's Transactions"),
+            const SizedBox(
+              height: 20,
+            ),
+            TertiaryTextButton2(
+                onPressed: () {
+                  Navigator.push(
+                      context,
+                      CupertinoPageRoute(
+                          builder: (context) =>
+                              UserTransactions(user: widget.user)));
+                },
+                title:
+                    "${widget.user.status == 1 ? "Dea" : "A"}ctivate User Account"),
             const SizedBox(
               height: 60,
             ),

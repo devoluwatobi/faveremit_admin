@@ -370,9 +370,9 @@ class AppData with ChangeNotifier, DiagnosticableTreeMixin {
     notifyListeners();
   }
 
-  List<DxUserModel>? users;
+  List<FavUserModel>? users;
 
-  updateUsers(List<DxUserModel> newList) {
+  updateUsers(List<FavUserModel> newList) {
     users = newList;
 
     notifyListeners();

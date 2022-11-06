@@ -24,6 +24,7 @@ import '../models/giftcard-trx-info-model.dart';
 import '../models/home-data-info.dart';
 import '../models/single-giftcard-model.dart';
 import '../models/transactions-object.dart';
+import '../models/user_transaction-list.dart';
 import '../models/withdrawal-trx-info-model.dart';
 
 late String userFullName;
@@ -1105,6 +1106,68 @@ class AppWorker {
         network: false,
         other: false,
         any: false,
+      );
+    } else if (_response.statusCode >= 400 && _response.statusCode < 500) {
+      if (kDebugMode) {
+        print("Status Code: ${_response.statusCode}");
+        print("Status Body: ${_response.body}");
+      }
+      return ProcessError(
+        details: true,
+        network: false,
+        other: false,
+        any: true,
+      );
+    } else {
+      if (kDebugMode) {
+        print("Status Code: ${_response.statusCode}");
+        print("Status Body: ${_response.body}");
+      }
+      return ProcessError(
+        details: false,
+        network: false,
+        other: true,
+        any: true,
+      );
+    }
+  }
+
+  Future<ProcessError> getUserTransactionsList(
+      {required BuildContext context, required int userId}) async {
+    late http.Response _response;
+    try {
+      _response = await http.get(
+        Uri.parse('$_apiBaseUrl/user-transactions/$userId'),
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization':
+              'Bearer ${Provider.of<UserData>(context, listen: false).userModel!.token}',
+        },
+      ).timeout(const Duration(seconds: 20), onTimeout: () {
+        throw ('Timeout Exception');
+      });
+    } catch (e) {
+      if (kDebugMode) {
+        print(e);
+      }
+      return ProcessError(
+        details: false,
+        network: true,
+        other: false,
+        any: true,
+      );
+    }
+    if (_response.statusCode >= 200 && _response.statusCode < 300) {
+      if (kDebugMode) {
+        print("Status Code: ${_response.statusCode}");
+      }
+
+      return ProcessError(
+        details: false,
+        network: false,
+        other: false,
+        any: false,
+        data: favTransactionFromJson(_response.body),
       );
     } else if (_response.statusCode >= 400 && _response.statusCode < 500) {
       if (kDebugMode) {
@@ -3446,30 +3509,30 @@ class ProcessError {
     this.data,
   });
 }
-
-UserModel getDXUser(String mapString) {
-  var map = jsonDecode(mapString);
-  UserModel _user = UserModel(
-    token: map["token"],
-    user: User(
-        id: map["user"]["id"],
-        name: map["user"]["name"],
-        email: map["user"]["email"],
-        phone: map["user"]["phone"],
-        photo: map["user"]["photo"],
-        role: map["user"]["role"],
-        emailVerifiedAt: map["user"]["email_verified_at"] != null
-            ? DateTime.parse(map["user"]["email_verified_at"])
-            : null,
-        phoneVerifiedAt: map["user"]["phone_verified_at"] != null
-            ? DateTime.parse(map["user"]["phone_verified_at"])
-            : null,
-        createdAt: DateTime.parse(map["user"]["created_at"]),
-        updatedAt: DateTime.parse(map["user"]["updated_at"]),
-        apiToken: map["user"]["api_token"]),
-  );
-  return _user;
-}
+//
+// UserModel getDXUser(String mapString) {
+//   var map = jsonDecode(mapString);
+//   UserModel _user = UserModel(
+//     token: map["token"],
+//     user: User(
+//         id: map["user"]["id"],
+//         name: map["user"]["name"],
+//         email: map["user"]["email"],
+//         phone: map["user"]["phone"],
+//         photo: map["user"]["photo"],
+//         role: map["user"]["role"],
+//         emailVerifiedAt: map["user"]["email_verified_at"] != null
+//             ? DateTime.parse(map["user"]["email_verified_at"])
+//             : null,
+//         phoneVerifiedAt: map["user"]["phone_verified_at"] != null
+//             ? DateTime.parse(map["user"]["phone_verified_at"])
+//             : null,
+//         createdAt: DateTime.parse(map["user"]["created_at"]),
+//         updatedAt: DateTime.parse(map["user"]["updated_at"]),
+//         apiToken: map["user"]["api_token"]),
+//   );
+//   return _user;
+// }
 
 String? getOTPFromSignup(String mapString) {
   var map = jsonDecode(mapString);

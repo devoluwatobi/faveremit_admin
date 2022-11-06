@@ -316,7 +316,7 @@ class _UserListPageState extends State<UserListPage> {
 }
 
 class DXUserWidget extends StatelessWidget {
-  final DxUserModel user;
+  final FavUserModel user;
   const DXUserWidget({
     Key? key,
     required this.user,
@@ -329,7 +329,9 @@ class DXUserWidget extends StatelessWidget {
         await showCupertinoModalBottomSheet(
           context: context,
           expand: false,
-          barrierColor: const Color(0xFF000000).withOpacity(0.6),
+          barrierColor: user.status == 1
+              ? const Color(0xFF000000).withOpacity(0.6)
+              : kYellow,
           builder: (context) {
             return UserDetailsPage(user: user);
           },
@@ -352,7 +354,7 @@ class DXUserWidget extends StatelessWidget {
             ClipRRect(
               borderRadius: BorderRadius.circular(5),
               child: CachedNetworkImage(
-                imageUrl: adminWorker.baseUrl + user.photo.toString(),
+                imageUrl: user.photo.toString(),
                 // imageUrl: pallyWorker.baseUrl + user.photo.toString(),
                 height: 40,
                 width: 40,

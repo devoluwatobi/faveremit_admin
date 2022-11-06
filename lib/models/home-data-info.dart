@@ -12,19 +12,16 @@ String homeDataToJson(HomeData data) => json.encode(data.toJson());
 
 class HomeData {
   HomeData({
-    required this.btcRate,
     required this.cryptoRates,
     required this.giftCards,
     required this.transaction,
   });
 
-  BtcRate btcRate;
   List<GiftCard> giftCards;
   List<FavTransaction> transaction;
   List<CryptoRate> cryptoRates;
 
   factory HomeData.fromJson(Map<String, dynamic> json) => HomeData(
-        btcRate: BtcRate.fromJson(json["btc_rate"]),
         cryptoRates: List<CryptoRate>.from(
             json["crypto_rates"].map((x) => CryptoRate.fromJson(x))),
         giftCards: List<GiftCard>.from(
@@ -34,38 +31,8 @@ class HomeData {
       );
 
   Map<String, dynamic> toJson() => {
-        "btc_rate": btcRate.toJson(),
         "gift_cards": List<dynamic>.from(giftCards.map((x) => x.toJson())),
         "transaction": List<dynamic>.from(transaction.map((x) => x.toJson())),
-      };
-}
-
-class BtcRate {
-  BtcRate({
-    required this.name,
-    required this.value,
-    required this.createdAt,
-    required this.updatedAt,
-    required this.updatedBy,
-  });
-
-  String name;
-  String value;
-  DateTime createdAt;
-  DateTime updatedAt;
-  int updatedBy;
-
-  factory BtcRate.fromJson(Map<String, dynamic> json) => BtcRate(
-        name: json["name"],
-        value: json["value"],
-        createdAt: DateTime.parse(json["created_at"]),
-        updatedAt: DateTime.parse(json["updated_at"]),
-        updatedBy: int.parse(json["updated_by"].toString()),
-      );
-
-  Map<String, dynamic> toJson() => {
-        "name": name.toString(),
-        "value": value.toString(),
       };
 }
 
