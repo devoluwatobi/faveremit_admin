@@ -102,7 +102,7 @@ class _AppBodyState extends State<AppBody> {
               elevation: 0,
               title: pageIndex == 0
                   ? SvgPicture.asset(
-                      "assets/svg/logo-primary.svg",
+                      "assets/logos/logo-primary.svg",
                       width: screenSize.width < tabletBreakPoint
                           ? screenSize.width * 0.2
                           : 105,

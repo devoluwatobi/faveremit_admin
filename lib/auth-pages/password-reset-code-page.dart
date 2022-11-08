@@ -162,7 +162,7 @@ class _PasswordResetCodePageState extends State<PasswordResetCodePage>
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     SvgPicture.asset(
-                      "assets/svg/logo-primary.svg",
+                      "assets/logos/logo-primary.svg",
                       width: screenSize.width < tabletBreakPoint
                           ? screenSize.width * 0.5
                           : 300,

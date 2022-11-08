@@ -277,7 +277,7 @@ class _FundsFromBankPageState extends State<FundsFromBankPage> {
                                       ],
                                     ),
                                     SvgPicture.asset(
-                                      "assets/svg/logo-primary.svg",
+                                      "assets/logos/logo-primary.svg",
                                       height:
                                           screenSize.width < tabletBreakPoint
                                               ? 14

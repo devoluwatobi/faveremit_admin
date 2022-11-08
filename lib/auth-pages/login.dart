@@ -76,7 +76,7 @@ class _LoginPageState extends State<LoginPage> {
                           GestureDetector(
                             onTap: () {},
                             child: SvgPicture.asset(
-                              "assets/svg/logo-primary.svg",
+                              "assets/logos/logo-primary.svg",
                               width: screenSize.width < tabletBreakPoint
                                   ? screenSize.width * 0.5
                                   : 300,

@@ -187,7 +187,7 @@ class _SplashScreenState extends State<SplashScreen> {
                     outgoingEffect:
                         WidgetTransitionEffects.outgoingOffsetThenScale(),
                     child: SvgPicture.asset(
-                      "assets/svg/logo-primary.svg",
+                      "assets/logos/logo-primary.svg",
                       width: screenSize.width < tabletBreakPoint
                           ? screenSize.width * 0.6
                           : 500,
@@ -206,7 +206,7 @@ class _SplashScreenState extends State<SplashScreen> {
                   outgoingEffect:
                       WidgetTransitionEffects.outgoingOffsetThenScale(),
                   child: SvgPicture.asset(
-                    "assets/svg/logo-primary.svg",
+                    "assets/logos/logo-primary.svg",
                     width: screenSize.width < tabletBreakPoint
                         ? screenSize.width * 0.6
                         : 500,
@@ -378,5 +378,3 @@ class AppData with ChangeNotifier, DiagnosticableTreeMixin {
     notifyListeners();
   }
 }
-
-
