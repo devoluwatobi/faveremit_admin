@@ -73,7 +73,7 @@ class _RatesPageState extends State<RatesPage> {
     if (Provider.of<AppData>(context, listen: false).giftCardList == null) {
       _fetchGiftCards();
     }
-    _refreshController = RefreshController(initialRefresh: false);
+    _refreshController = RefreshController(initialRefresh: true);
     _fetchGiftCards();
 
     super.initState();

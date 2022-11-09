@@ -1,6 +1,5 @@
 import 'package:faveremit_admin/main.dart';
 import 'package:faveremit_admin/models/crypto_wallet_address.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_remix/flutter_remix.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -71,7 +70,7 @@ class _WalletsPageState extends State<WalletsPage> {
 
   @override
   void initState() {
-    _refreshController = RefreshController(initialRefresh: false);
+    _refreshController = RefreshController(initialRefresh: true);
     _fetchWallets();
     super.initState();
   }

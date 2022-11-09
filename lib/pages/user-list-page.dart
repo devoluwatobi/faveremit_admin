@@ -11,6 +11,7 @@ import 'package:flutter_remix/flutter_remix.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:provider/provider.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:shimmer/shimmer.dart';
 
 import '../config/dimensions.dart';
@@ -24,6 +25,8 @@ import 'home-page.dart';
 ProcessError? _trxResponse;
 late Timer _periodicSyncTimer;
 TextEditingController _searchController = TextEditingController();
+
+late RefreshController _refreshController;
 
 class UserListPage extends StatefulWidget {
   const UserListPage({Key? key}) : super(key: key);
@@ -61,8 +64,28 @@ class _UserListPageState extends State<UserListPage> {
     }
   }
 
+  void _onRefresh() async {
+    // monitor network fetch
+    ProcessError _response = await adminWorker.getUserList(context: context);
+    setState(() {});
+    if (_response.any) {
+      _refreshController.refreshFailed();
+    } else {
+      setState(() {});
+      _refreshController.refreshCompleted();
+    }
+  }
+
+  void _onLoading() async {
+    // monitor network fetch
+    await Future.delayed(const Duration(milliseconds: 1000));
+    // if failed,use loadFailed(),if no data return,use LoadNodata()
+    _refreshController.loadComplete();
+  }
+
   @override
   void initState() {
+    _refreshController = RefreshController(initialRefresh: true);
     _refreshUsers();
     _usersTab = 0;
     _searchController.clear();
@@ -180,144 +203,145 @@ class _UserListPageState extends State<UserListPage> {
                   ],
                 ),
               )
-            : CustomScrollView(
-                physics: const BouncingScrollPhysics(),
-                slivers: [
-                  // const SliverToBoxAdapter(
-                  //   child: SizedBox(
-                  //     height: 20,
-                  //   ),
-                  // ),
-                  SliverPersistentHeader(
-                    pinned: true,
-                    delegate: AppPersistentSlideControlDelegate(
-                      widget: Container(
-                        padding: EdgeInsets.symmetric(
-                            vertical: screenSize.width < tabletBreakPoint
-                                ? 10
-                                : screenSize.width * 0.02),
-                        width: double.infinity,
-                        child: CupertinoSlidingSegmentedControl(
-                          onValueChanged: (newValue) {
-                            setState(() {
-                              _usersTab = int.parse(newValue.toString());
-                            });
-                          },
-                          groupValue: _usersTab,
-                          children: {
-                            0: Padding(
-                              padding: EdgeInsets.symmetric(vertical: 8),
-                              child: Text(
-                                "Users",
-                                style: GoogleFonts.poppins(
-                                  color: _usersTab == 0
-                                      ? kPrimaryColor
-                                      : kTextGray,
-                                  fontWeight: FontWeight.w500,
-                                  fontSize: 16,
+            : SmartRefresher(
+                header: const WaterDropHeader(),
+                enablePullDown: true,
+                controller: _refreshController,
+                onRefresh: _onRefresh,
+                child: CustomScrollView(
+                  physics: const BouncingScrollPhysics(),
+                  slivers: [
+                    // const SliverToBoxAdapter(
+                    //   child: SizedBox(
+                    //     height: 20,
+                    //   ),
+                    // ),
+                    SliverPersistentHeader(
+                      pinned: true,
+                      delegate: AppPersistentSlideControlDelegate(
+                        widget: Container(
+                          padding: EdgeInsets.symmetric(
+                              vertical: screenSize.width < tabletBreakPoint
+                                  ? 10
+                                  : screenSize.width * 0.02),
+                          width: double.infinity,
+                          child: CupertinoSlidingSegmentedControl(
+                            onValueChanged: (newValue) {
+                              setState(() {
+                                _usersTab = int.parse(newValue.toString());
+                              });
+                            },
+                            groupValue: _usersTab,
+                            children: {
+                              0: Padding(
+                                padding: EdgeInsets.symmetric(vertical: 8),
+                                child: Text(
+                                  "Users",
+                                  style: GoogleFonts.poppins(
+                                    color: _usersTab == 0
+                                        ? kPrimaryColor
+                                        : kTextGray,
+                                    fontWeight: FontWeight.w500,
+                                    fontSize: 16,
+                                  ),
                                 ),
                               ),
-                            ),
-                            1: Padding(
-                              padding: EdgeInsets.symmetric(vertical: 8),
-                              child: Text(
-                                "Admins",
-                                style: GoogleFonts.poppins(
-                                  color: _usersTab == 1
-                                      ? kPrimaryColor
-                                      : kTextGray,
-                                  fontWeight: FontWeight.w500,
-                                  fontSize: 16,
+                              1: Padding(
+                                padding: EdgeInsets.symmetric(vertical: 8),
+                                child: Text(
+                                  "Admins",
+                                  style: GoogleFonts.poppins(
+                                    color: _usersTab == 1
+                                        ? kPrimaryColor
+                                        : kTextGray,
+                                    fontWeight: FontWeight.w500,
+                                    fontSize: 16,
+                                  ),
                                 ),
-                              ),
-                            )
-                          },
+                              )
+                            },
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                  SliverToBoxAdapter(
-                    child: Column(
-                      children: [
-                        CupertinoSearchTextField(
-                          onChanged: (x) {
-                            setState(() {});
-                          },
-                          controller: _searchController,
-                        ),
-                        const SizedBox(
-                          height: 10,
-                        )
-                      ],
+                    SliverToBoxAdapter(
+                      child: Column(
+                        children: [
+                          CupertinoSearchTextField(
+                            onChanged: (x) {
+                              setState(() {});
+                            },
+                            controller: _searchController,
+                          ),
+                          const SizedBox(
+                            height: 10,
+                          )
+                        ],
+                      ),
                     ),
-                  ),
-                  SliverList(
-                    delegate: SliverChildBuilderDelegate(
-                      (context, index) {
-                        return FavUserWidget(
-                            user: _usersTab == 0
-                                ? Provider.of<AppData>(context)
-                                    .users!
-                                    .where((element) => element.role == 0)
-                                    .toList()
-                                    .where((element) =>
-                                        element.name.toLowerCase().contains(_searchController.text.trim().toLowerCase()) ||
-                                        element.email.toLowerCase().contains(
-                                            _searchController.text
-                                                .trim()
-                                                .toLowerCase()))
-                                    .toList()[index]
-                                : Provider.of<AppData>(context)
-                                    .users!
-                                    .where((element) => element.role != 0)
-                                    .toList()
-                                    .where((element) =>
-                                        element.name.toLowerCase().contains(
-                                            _searchController.text
-                                                .trim()
-                                                .toLowerCase()) ||
-                                        element.email
-                                            .toLowerCase()
-                                            .contains(_searchController.text.trim().toLowerCase()))
-                                    .toList()[index]);
-                      },
-                      childCount: _usersTab == 0
-                          ? Provider.of<AppData>(context)
-                              .users!
-                              .where((element) => element.role == 0)
-                              .toList()
-                              .where((element) =>
-                                  element.name.toLowerCase().contains(_searchController.text
-                                      .trim()
-                                      .toLowerCase()) ||
-                                  element.email.toLowerCase().contains(
-                                      _searchController.text
-                                          .trim()
-                                          .toLowerCase()))
-                              .toList()
-                              .length
-                          : Provider.of<AppData>(context)
-                              .users!
-                              .where((element) => element.role != 0)
-                              .toList()
-                              .where((element) =>
-                                  element.name.toLowerCase().contains(
-                                      _searchController.text
-                                          .trim()
-                                          .toLowerCase()) ||
-                                  element.email
-                                      .toLowerCase()
-                                      .contains(_searchController.text.trim().toLowerCase()))
-                              .toList()
-                              .length,
+                    SliverList(
+                      delegate: SliverChildBuilderDelegate(
+                        (context, index) {
+                          return FavUserWidget(
+                              user: _usersTab == 0
+                                  ? Provider.of<AppData>(context)
+                                      .users!
+                                      .where((element) => element.role == 0)
+                                      .toList()
+                                      .where((element) =>
+                                          element.name.toLowerCase().contains(_searchController.text.trim().toLowerCase()) ||
+                                          element.email.toLowerCase().contains(
+                                              _searchController.text
+                                                  .trim()
+                                                  .toLowerCase()))
+                                      .toList()[index]
+                                  : Provider.of<AppData>(context)
+                                      .users!
+                                      .where((element) => element.role != 0)
+                                      .toList()
+                                      .where((element) =>
+                                          element.name.toLowerCase().contains(
+                                              _searchController.text
+                                                  .trim()
+                                                  .toLowerCase()) ||
+                                          element.email.toLowerCase().contains(_searchController.text.trim().toLowerCase()))
+                                      .toList()[index]);
+                        },
+                        childCount: _usersTab == 0
+                            ? Provider.of<AppData>(context)
+                                .users!
+                                .where((element) => element.role == 0)
+                                .toList()
+                                .where((element) =>
+                                    element.name.toLowerCase().contains(_searchController.text.trim().toLowerCase()) ||
+                                    element.email.toLowerCase().contains(
+                                        _searchController.text
+                                            .trim()
+                                            .toLowerCase()))
+                                .toList()
+                                .length
+                            : Provider.of<AppData>(context)
+                                .users!
+                                .where((element) => element.role != 0)
+                                .toList()
+                                .where((element) =>
+                                    element.name.toLowerCase().contains(
+                                        _searchController.text
+                                            .trim()
+                                            .toLowerCase()) ||
+                                    element.email.toLowerCase().contains(
+                                        _searchController.text.trim().toLowerCase()))
+                                .toList()
+                                .length,
+                      ),
                     ),
-                  ),
-                  const SliverToBoxAdapter(
-                    child: SizedBox(
-                      height: 100,
+                    const SliverToBoxAdapter(
+                      child: SizedBox(
+                        height: 100,
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
       ),
     );

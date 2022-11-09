@@ -69,7 +69,7 @@ class _TransactionsPageState extends State<TransactionsPage> {
 
   @override
   void initState() {
-    _refreshController = RefreshController(initialRefresh: false);
+    _refreshController = RefreshController(initialRefresh: true);
     _refreshTransactions();
     super.initState();
   }

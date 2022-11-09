@@ -73,7 +73,7 @@ class _HomePageState extends State<HomePage> {
 
   @override
   void initState() {
-    _refreshController = RefreshController(initialRefresh: false);
+    _refreshController = RefreshController(initialRefresh: true);
     _refreshTransactions();
     super.initState();
   }
