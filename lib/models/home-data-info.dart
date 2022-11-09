@@ -95,8 +95,8 @@ class CryptoRate {
   factory CryptoRate.fromJson(Map<String, dynamic> json) => CryptoRate(
         id: json["id"],
         value: json["value"],
-        cryptoId: json["crypto_id"],
-        updatedBy: json["updated_by"],
+        cryptoId: int.parse(json["crypto_id"].toString()),
+        updatedBy: int.parse(json["updated_by"].toString()),
         createdAt: DateTime.parse(json["created_at"]),
         updatedAt: DateTime.parse(json["updated_at"]),
         crypto: Crypto.fromJson(json["crypto"]),

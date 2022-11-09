@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_remix/flutter_remix.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:intl/intl.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
@@ -377,7 +378,7 @@ class _BTCTrxReceiptPageState extends State<BTCTrxReceiptPage> {
                                 width: 20,
                               ),
                               Text(
-                                "\$${_theTransactionModel!.usdRate}",
+                                "${NumberFormat.simpleCurrency(name: "NGN").format(double.parse(_theTransactionModel!.usdRate.toString().replaceAll(",", "")))}/\$",
                                 style: GoogleFonts.poppins(
                                   fontSize: 13,
                                   color: kDarkBG,
@@ -409,7 +410,10 @@ class _BTCTrxReceiptPageState extends State<BTCTrxReceiptPage> {
                                 width: 20,
                               ),
                               Text(
-                                "₦${addCommas(_theTransactionModel!.ngnAmount)}",
+                                NumberFormat.simpleCurrency(name: "NGN").format(
+                                    double.parse(_theTransactionModel!.ngnAmount
+                                        .toString()
+                                        .replaceAll(",", ""))),
                                 style: GoogleFonts.poppins(
                                   fontSize: 13,
                                   color: kDarkBG,

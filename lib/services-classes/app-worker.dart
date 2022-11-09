@@ -41,10 +41,10 @@ class AppWorker {
   var localAuth = LocalAuthentication();
 
   bool _initialized = false;
-  final String _apiBaseUrl = "http://127.0.0.1:8000/api/admin";
-  // final String _apiBaseUrl = "https://api.faveremit.com/api/admin";
-  final String baseUrl = "http://127.0.0.1:8000";
-  // final String baseUrl = "https://api.faveremit.com/";
+  // final String _apiBaseUrl = "http://127.0.0.1:8000/api/admin";
+  final String _apiBaseUrl = "https://api.faveremit.com/api/admin";
+  // final String baseUrl = "http://127.0.0.1:8000";
+  final String baseUrl = "https://api.faveremit.com/";
   late UserModel? _faveremitUser;
   late String? userMapString;
   late bool userAvailable;

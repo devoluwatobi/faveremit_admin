@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:shimmer/shimmer.dart';
 
 import '../config/dimensions.dart';
@@ -13,6 +14,8 @@ import '../models/gift-card-mode.dart';
 import '../services-classes/app-worker.dart';
 import '../widgets/persistent-slide-control-delegate.dart';
 import '../widgets/show-option-modal.dart';
+
+late RefreshController _refreshController;
 
 class RatesPage extends StatefulWidget {
   const RatesPage({Key? key}) : super(key: key);
@@ -38,12 +41,31 @@ class _RatesPageState extends State<RatesPage> {
             Navigator.pop(context, true);
             _fetchGiftCards();
           });
-      if (rez == null || rez == false) {
-        Navigator.pop(context);
-      }
+      // if (rez == null || rez == false) {
+      //   Navigator.pop(context);
+      // }
     } else {
       setState(() {});
     }
+  }
+
+  void _onRefresh() async {
+    // monitor network fetch
+    ProcessError _response = await adminWorker.getGiftCards(context: context);
+    setState(() {});
+    if (_response.any) {
+      _refreshController.refreshFailed();
+    } else {
+      setState(() {});
+      _refreshController.refreshCompleted();
+    }
+  }
+
+  void _onLoading() async {
+    // monitor network fetch
+    await Future.delayed(const Duration(milliseconds: 1000));
+    // if failed,use loadFailed(),if no data return,use LoadNodata()
+    _refreshController.loadComplete();
   }
 
   @override
@@ -51,6 +73,8 @@ class _RatesPageState extends State<RatesPage> {
     if (Provider.of<AppData>(context, listen: false).giftCardList == null) {
       _fetchGiftCards();
     }
+    _refreshController = RefreshController(initialRefresh: false);
+    _fetchGiftCards();
 
     super.initState();
   }
@@ -62,121 +86,128 @@ class _RatesPageState extends State<RatesPage> {
       body: Container(
         padding: kAppHorizontalPadding,
         alignment: Alignment.center,
-        child: CustomScrollView(
-          physics: BouncingScrollPhysics(),
-          slivers: [
-            // SliverPersistentHeader(delegate: delegate)
-            SliverPersistentHeader(
-              pinned: true,
-              delegate: AppPersistentSlideControlDelegate(
-                widget: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    CupertinoSearchTextField(
-                      controller: _searchController,
-                      onChanged: (x) {
-                        setState(() {});
-                      },
-                    ),
-                  ],
+        child: SmartRefresher(
+          header: const WaterDropHeader(),
+          enablePullDown: true,
+          controller: _refreshController,
+          onRefresh: _onRefresh,
+          child: CustomScrollView(
+            physics: BouncingScrollPhysics(),
+            slivers: [
+              // SliverPersistentHeader(delegate: delegate)
+              SliverPersistentHeader(
+                pinned: true,
+                delegate: AppPersistentSlideControlDelegate(
+                  widget: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      CupertinoSearchTextField(
+                        controller: _searchController,
+                        onChanged: (x) {
+                          setState(() {});
+                        },
+                      ),
+                    ],
+                  ),
                 ),
               ),
-            ),
-            // SliverGrid(
-            //   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            //       crossAxisCount: 2,
-            //       childAspectRatio: 1.65,
-            //       mainAxisSpacing: 15,
-            //       crossAxisSpacing: 15),
-            //   delegate: SliverChildListDelegate([
-            //     Container(
-            //       decoration: BoxDecoration(
-            //         color: kInactive,
-            //         borderRadius: BorderRadius.circular(10),
-            //       ),
-            //     ),
-            //     Container(
-            //       decoration: BoxDecoration(
-            //         color: kInactive,
-            //         borderRadius: BorderRadius.circular(10),
-            //       ),
-            //     ),
-            //     Container(
-            //       decoration: BoxDecoration(
-            //         color: kInactive,
-            //         borderRadius: BorderRadius.circular(10),
-            //       ),
-            //     ),
-            //     Container(
-            //       decoration: BoxDecoration(
-            //         color: kInactive,
-            //         borderRadius: BorderRadius.circular(10),
-            //       ),
-            //     ),
-            //     Container(
-            //       decoration: BoxDecoration(
-            //         color: kInactive,
-            //         borderRadius: BorderRadius.circular(10),
-            //       ),
-            //     ),
-            //     Container(
-            //       decoration: BoxDecoration(
-            //         color: kInactive,
-            //         borderRadius: BorderRadius.circular(10),
-            //       ),
-            //     ),
-            //     Container(
-            //       decoration: BoxDecoration(
-            //         color: kInactive,
-            //         borderRadius: BorderRadius.circular(10),
-            //       ),
-            //     ),
-            //     Container(
-            //       decoration: BoxDecoration(
-            //         color: kInactive,
-            //         borderRadius: BorderRadius.circular(10),
-            //       ),
-            //     ),
-            //   ]),
-            // ),
-            Provider.of<AppData>(context, listen: false).giftCardList == null
-                ? SliverToBoxAdapter(
-                    child: _PageShimmer(),
-                  )
-                : SliverGrid(
-                    delegate: SliverChildBuilderDelegate(
-                      (context, index) {
-                        return GiftCardWidget(
-                            giftCardModel: Provider.of<AppData>(context)
-                                .giftCardList!
-                                .where((element) => element.title
-                                    .toLowerCase()
-                                    .contains(_searchController.text
-                                        .trim()
-                                        .toLowerCase()))
-                                .toList()[index]);
-                      },
-                      childCount: Provider.of<AppData>(context)
-                          .giftCardList!
-                          .where((element) => element.title
-                              .toLowerCase()
-                              .contains(
-                                  _searchController.text.trim().toLowerCase()))
-                          .toList()
-                          .length,
-                    ),
-                    gridDelegate:
-                        const SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 2,
-                            childAspectRatio: 1.05,
-                            mainAxisSpacing: 15,
-                            crossAxisSpacing: 15)),
-            const SliverToBoxAdapter(
-              child: SizedBox(
-                height: 80,
+              // SliverGrid(
+              //   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              //       crossAxisCount: 2,
+              //       childAspectRatio: 1.65,
+              //       mainAxisSpacing: 15,
+              //       crossAxisSpacing: 15),
+              //   delegate: SliverChildListDelegate([
+              //     Container(
+              //       decoration: BoxDecoration(
+              //         color: kInactive,
+              //         borderRadius: BorderRadius.circular(10),
+              //       ),
+              //     ),
+              //     Container(
+              //       decoration: BoxDecoration(
+              //         color: kInactive,
+              //         borderRadius: BorderRadius.circular(10),
+              //       ),
+              //     ),
+              //     Container(
+              //       decoration: BoxDecoration(
+              //         color: kInactive,
+              //         borderRadius: BorderRadius.circular(10),
+              //       ),
+              //     ),
+              //     Container(
+              //       decoration: BoxDecoration(
+              //         color: kInactive,
+              //         borderRadius: BorderRadius.circular(10),
+              //       ),
+              //     ),
+              //     Container(
+              //       decoration: BoxDecoration(
+              //         color: kInactive,
+              //         borderRadius: BorderRadius.circular(10),
+              //       ),
+              //     ),
+              //     Container(
+              //       decoration: BoxDecoration(
+              //         color: kInactive,
+              //         borderRadius: BorderRadius.circular(10),
+              //       ),
+              //     ),
+              //     Container(
+              //       decoration: BoxDecoration(
+              //         color: kInactive,
+              //         borderRadius: BorderRadius.circular(10),
+              //       ),
+              //     ),
+              //     Container(
+              //       decoration: BoxDecoration(
+              //         color: kInactive,
+              //         borderRadius: BorderRadius.circular(10),
+              //       ),
+              //     ),
+              //   ]),
+              // ),
+              Provider.of<AppData>(context, listen: false).giftCardList == null
+                  ? SliverToBoxAdapter(
+                      child: _PageShimmer(),
+                    )
+                  : SliverGrid(
+                      delegate: SliverChildBuilderDelegate(
+                        (context, index) {
+                          return GiftCardWidget(
+                              giftCardModel: Provider.of<AppData>(context)
+                                  .giftCardList!
+                                  .where((element) => element.title
+                                      .toLowerCase()
+                                      .contains(_searchController.text
+                                          .trim()
+                                          .toLowerCase()))
+                                  .toList()[index]);
+                        },
+                        childCount: Provider.of<AppData>(context)
+                            .giftCardList!
+                            .where((element) => element.title
+                                .toLowerCase()
+                                .contains(_searchController.text
+                                    .trim()
+                                    .toLowerCase()))
+                            .toList()
+                            .length,
+                      ),
+                      gridDelegate:
+                          const SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: 2,
+                              childAspectRatio: 1.05,
+                              mainAxisSpacing: 15,
+                              crossAxisSpacing: 15)),
+              const SliverToBoxAdapter(
+                child: SizedBox(
+                  height: 80,
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

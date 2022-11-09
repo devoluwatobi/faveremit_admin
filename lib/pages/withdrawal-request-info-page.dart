@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_remix/flutter_remix.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:intl/intl.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
@@ -139,7 +140,10 @@ class _WithdrawalReceiptPageState extends State<WithdrawalReceiptPage> {
                             height: 10,
                           ),
                           Text(
-                            "₦${addCommas(widget.transaction.ngnAmount)}",
+                            NumberFormat.simpleCurrency(name: "NGN").format(
+                                double.parse(widget.transaction.ngnAmount
+                                    .toString()
+                                    .replaceAll(",", ""))),
                             style: GoogleFonts.poppins(
                                 fontSize: 33,
                                 color: kPrimaryColor,
@@ -340,7 +344,10 @@ class _WithdrawalReceiptPageState extends State<WithdrawalReceiptPage> {
                                 width: 20,
                               ),
                               Text(
-                                "₦" + _theTransactionModel!.amount,
+                                NumberFormat.simpleCurrency(name: "NGN").format(
+                                    double.parse(_theTransactionModel!.amount
+                                        .toString()
+                                        .replaceAll(",", ""))),
                                 style: GoogleFonts.poppins(
                                   fontSize: 13,
                                   color: kDarkBG,

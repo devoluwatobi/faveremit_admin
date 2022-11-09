@@ -84,7 +84,7 @@ class GiftCardRange {
         min: int.parse(json["min"].toString()),
         max: int.parse(json["max"].toString()),
         status: json["status"].toString(),
-        updatedBy: json["updated_by"],
+        updatedBy: int.parse(json["updated_by"].toString()),
         createdAt: DateTime.parse(json["created_at"]),
         updatedAt: DateTime.parse(json["updated_at"]),
         receiptCategories: List<ReceiptCategory>.from(

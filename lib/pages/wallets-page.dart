@@ -6,9 +6,12 @@ import 'package:flutter_remix/flutter_remix.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:provider/provider.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 import '../config/dimensions.dart';
 import '../config/styles.dart';
+import '../services-classes/app-worker.dart';
+import '../widgets/show-option-modal.dart';
 import 'edit-wallet-page.dart';
 
 bool dxg = true;
@@ -20,9 +23,56 @@ class WalletsPage extends StatefulWidget {
   _WalletsPageState createState() => _WalletsPageState();
 }
 
+late RefreshController _refreshController;
+
 class _WalletsPageState extends State<WalletsPage> {
+  _fetchWallets() async {
+    ProcessError error = await adminWorker.getCryptoWallets(context: context);
+    ;
+    if (error.any) {
+      dynamic rez = await showSingleOptionPopup(
+          context: context,
+          title: "Oops!",
+          body:
+              "Couldn't fetch page resources. Please check your internet connection and try again.",
+          actionTitle: "retry",
+          isDestructive: false,
+          onPressed: () {
+            Navigator.pop(context, true);
+            _fetchWallets();
+          });
+      // if (rez == null || rez == false) {
+      //   Navigator.pop(context);
+      // }
+    } else {
+      setState(() {});
+    }
+  }
+
+  void _onRefresh() async {
+    // monitor network fetch
+    ProcessError _response =
+        await adminWorker.getCryptoWallets(context: context);
+    setState(() {});
+    if (_response.any) {
+      _refreshController.refreshFailed();
+    } else {
+      setState(() {});
+      _refreshController.refreshCompleted();
+    }
+  }
+
+  void _onLoading() async {
+    // monitor network fetch
+    await Future.delayed(const Duration(milliseconds: 1000));
+    // if failed,use loadFailed(),if no data return,use LoadNodata()
+    _refreshController.loadComplete();
+  }
+
   @override
   void initState() {
+    _refreshController = RefreshController(initialRefresh: false);
+    _fetchWallets();
     super.initState();
   }
 
@@ -30,23 +80,29 @@ class _WalletsPageState extends State<WalletsPage> {
   Widget build(BuildContext context) {
     return Container(
       margin: kAppHorizontalPadding,
-      child: ListView(
-        physics: const BouncingScrollPhysics(),
-        children: [
-          SizedBox(
-            height: screenSize.width < tabletBreakPoint
-                ? 60
-                : screenSize.width * 0.10,
-          ),
-          Column(
-            children: Provider.of<AppData>(context)
-                .cryptoWallets!
-                .map((e) => CryptoWalletCard(
-                      wallet: e,
-                    ))
-                .toList(),
-          )
-        ],
+      child: SmartRefresher(
+        header: const WaterDropHeader(),
+        enablePullDown: true,
+        controller: _refreshController,
+        onRefresh: _onRefresh,
+        child: ListView(
+          physics: const BouncingScrollPhysics(),
+          children: [
+            SizedBox(
+              height: screenSize.width < tabletBreakPoint
+                  ? 60
+                  : screenSize.width * 0.10,
+            ),
+            Column(
+              children: Provider.of<AppData>(context)
+                  .cryptoWallets!
+                  .map((e) => CryptoWalletCard(
+                        wallet: e,
+                      ))
+                  .toList(),
+            )
+          ],
+        ),
       ),
     );
   }

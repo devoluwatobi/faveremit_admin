@@ -226,7 +226,8 @@ class _TransactionItemState extends State<TransactionItem> {
                   widget.transaction.serviceId.toString() == 0.toString()
                       ? SizedBox()
                       : Text(
-                          "${widget.transaction.createdAt.toDateTimeString()}"
+                          widget.transaction.createdAt
+                              .toDateTimeString()
                               .inTitleCase,
                           // "03:42 PM Today",
                           style: widget.transaction.serviceId.toString() ==
@@ -245,7 +246,10 @@ class _TransactionItemState extends State<TransactionItem> {
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
                 Text(
-                  "₦${addCommas(widget.transaction.ngnAmount!)}",
+                  NumberFormat.simpleCurrency(name: "NGN").format(double.parse(
+                      widget.transaction.ngnAmount
+                          .toString()
+                          .replaceAll(",", ""))),
                   style: widget.transaction.serviceId.toString() == 0.toString()
                       ? trxAmountTextStyle.copyWith(fontSize: 15.5)
                       : trxAmountTextStyle,

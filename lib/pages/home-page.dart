@@ -9,7 +9,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_remix/flutter_remix.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:shimmer/shimmer.dart';
 
 import '../config/dimensions.dart';
@@ -17,6 +19,7 @@ import '../config/styles.dart';
 import '../models/home-data-info.dart';
 import '../widgets/mobile_promo_card.dart';
 import '../widgets/primary-button.dart';
+import '../widgets/show-option-modal.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -25,9 +28,53 @@ class HomePage extends StatefulWidget {
   _HomePageState createState() => _HomePageState();
 }
 
+late RefreshController _refreshController;
+
 class _HomePageState extends State<HomePage> {
+  _refreshTransactions() async {
+    ProcessError _response = await adminWorker.getHomeData(context: context);
+    ;
+    setState(() {});
+    if (_response.any) {
+      bool? temp = await showSingleOptionPopup(
+          context: context,
+          title: "Oops!",
+          body:
+              "Unable update transactions list please check your internet and try again",
+          actionTitle: "Retry",
+          onPressed: () {
+            Navigator.pop(context, true);
+            _refreshTransactions();
+          },
+          isDestructive: false);
+    } else {
+      setState(() {});
+    }
+  }
+
+  void _onRefresh() async {
+    // monitor network fetch
+    ProcessError _response = await adminWorker.getHomeData(context: context);
+    setState(() {});
+    if (_response.any) {
+      _refreshController.refreshFailed();
+    } else {
+      setState(() {});
+      _refreshController.refreshCompleted();
+    }
+  }
+
+  void _onLoading() async {
+    // monitor network fetch
+    await Future.delayed(const Duration(milliseconds: 1000));
+    // if failed,use loadFailed(),if no data return,use LoadNodata()
+    _refreshController.loadComplete();
+  }
+
   @override
   void initState() {
+    _refreshController = RefreshController(initialRefresh: false);
+    _refreshTransactions();
     super.initState();
   }
 
@@ -38,166 +85,179 @@ class _HomePageState extends State<HomePage> {
               alignment: Alignment.center,
               padding: kAppHorizontalPadding,
               child: Provider.of<AppData>(context).homeDataAvailable
-                  ? CustomScrollView(
-                      physics: const BouncingScrollPhysics(),
-                      slivers: [
-                        SliverToBoxAdapter(
-                          child: Padding(
-                            padding: EdgeInsets.symmetric(
-                                vertical: screenSize.width < tabletBreakPoint
-                                    ? 20
-                                    : screenSize.width * 0.04),
-                            child: Text(
-                              "Hello ${getFirstName(fullName: Provider.of<UserData>(context).userModel!.user.name)}",
-                              style: kSubTitleTextStyle,
+                  ? SmartRefresher(
+                      header: const WaterDropHeader(),
+                      enablePullDown: true,
+                      controller: _refreshController,
+                      onRefresh: _onRefresh,
+                      child: CustomScrollView(
+                        physics: const BouncingScrollPhysics(),
+                        slivers: [
+                          SliverToBoxAdapter(
+                            child: Padding(
+                              padding: EdgeInsets.symmetric(
+                                  vertical: screenSize.width < tabletBreakPoint
+                                      ? 20
+                                      : screenSize.width * 0.04),
+                              child: Text(
+                                "Hello ${getFirstName(fullName: Provider.of<UserData>(context).userModel!.user.name)}",
+                                style: kSubTitleTextStyle,
+                              ),
                             ),
                           ),
-                        ),
-                        SliverToBoxAdapter(
-                          child: Column(
-                            children: [
-                              const SizedBox(
-                                height: 10,
-                              ),
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text(
-                                    "Crypto Rates",
-                                    style: GoogleFonts.poppins(
-                                        fontSize: 16,
-                                        color: kDarkBG,
-                                        fontWeight: FontWeight.w500),
-                                  ),
-                                ],
-                              ),
-                              const SizedBox(
-                                height: 10,
-                              ),
-                              SizedBox(
-                                height: 150,
-                                child: ListView.builder(
-                                  itemBuilder: (context, index) {
-                                    return HomeRateCard(
-                                        rate: Provider.of<AppData>(context)
-                                            .homeDataModel!
-                                            .cryptoRates[index]);
-                                  },
-                                  scrollDirection: Axis.horizontal,
-                                  shrinkWrap: true,
-                                  itemCount: Provider.of<AppData>(context)
-                                      .homeDataModel!
-                                      .cryptoRates
-                                      .length,
+                          SliverToBoxAdapter(
+                            child: Column(
+                              children: [
+                                const SizedBox(
+                                  height: 10,
                                 ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        SliverToBoxAdapter(
-                          child: Column(
-                            children: [
-                              const SizedBox(
-                                height: 16,
-                              ),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text(
-                                    "Promotions",
-                                    style: GoogleFonts.poppins(
-                                        fontSize: 16,
-                                        color: kTextSecondary,
-                                        fontWeight: FontWeight.w500),
-                                  ),
-                                ],
-                              ),
-                              const SizedBox(
-                                height: 16,
-                              ),
-                              CarouselSlider(
-                                options: CarouselOptions(
-                                    height: 120.0,
-                                    autoPlay: true,
-                                    viewportFraction: .9),
-                                items: appData.homeDataModel!.promotions
-                                    .map((promo) {
-                                  return Builder(
-                                    builder: (BuildContext context) {
-                                      return PromotionCard(
-                                        promo: promo,
-                                      );
-                                    },
-                                  );
-                                }).toList(),
-                              ),
-                            ],
-                          ),
-                        ),
-                        SliverToBoxAdapter(
-                          child: Column(
-                            children: [
-                              const SizedBox(
-                                height: 20,
-                              ),
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text(
-                                    "Top GiftCards",
-                                    style: GoogleFonts.poppins(
-                                        fontSize: 16,
-                                        color: kTextSecondary,
-                                        fontWeight: FontWeight.w500),
-                                  ),
-                                  GestureDetector(
-                                    onTap: () {
-                                      clientBodyPageController.animateToPage(1,
-                                          duration:
-                                              const Duration(milliseconds: 300),
-                                          curve: Curves.easeInOut);
-                                    },
-                                    child: Row(children: [
-                                      Text(
-                                        "view all",
-                                        style: GoogleFonts.poppins(
-                                            fontSize: 14, color: kPrimaryColor),
-                                      ),
-                                      SizedBox(width: 10),
-                                      Icon(FlutterRemix.arrow_right_circle_fill,
-                                          color: kPrimaryColor),
-                                    ]),
-                                  )
-                                ],
-                              ),
-                              Container(
-                                height: 140,
-                                margin:
-                                    const EdgeInsets.symmetric(vertical: 20),
-                                child: ListView.builder(
-                                  itemBuilder: (context, index) => HomeGiftCard(
-                                      giftcard: Provider.of<AppData>(context)
-                                          .homeDataModel!
-                                          .giftCards[index]),
-                                  shrinkWrap: true,
-                                  scrollDirection: Axis.horizontal,
-                                  itemCount: Provider.of<AppData>(context)
-                                      .homeDataModel!
-                                      .giftCards
-                                      .length,
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(
+                                      "Crypto Rates",
+                                      style: GoogleFonts.poppins(
+                                          fontSize: 16,
+                                          color: kDarkBG,
+                                          fontWeight: FontWeight.w500),
+                                    ),
+                                  ],
                                 ),
-                              ),
-                            ],
+                                const SizedBox(
+                                  height: 10,
+                                ),
+                                SizedBox(
+                                  height: 150,
+                                  child: ListView.builder(
+                                    itemBuilder: (context, index) {
+                                      return HomeRateCard(
+                                          rate: Provider.of<AppData>(context)
+                                              .homeDataModel!
+                                              .cryptoRates[index]);
+                                    },
+                                    scrollDirection: Axis.horizontal,
+                                    shrinkWrap: true,
+                                    itemCount: Provider.of<AppData>(context)
+                                        .homeDataModel!
+                                        .cryptoRates
+                                        .length,
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
-                        ),
-                        const SliverToBoxAdapter(
-                          child: SizedBox(
-                            height: 40,
+                          SliverToBoxAdapter(
+                            child: Column(
+                              children: [
+                                const SizedBox(
+                                  height: 16,
+                                ),
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(
+                                      "Promotions",
+                                      style: GoogleFonts.poppins(
+                                          fontSize: 16,
+                                          color: kTextSecondary,
+                                          fontWeight: FontWeight.w500),
+                                    ),
+                                  ],
+                                ),
+                                const SizedBox(
+                                  height: 16,
+                                ),
+                                CarouselSlider(
+                                  options: CarouselOptions(
+                                      height: 120.0,
+                                      autoPlay: true,
+                                      viewportFraction: .9),
+                                  items: appData.homeDataModel!.promotions
+                                      .map((promo) {
+                                    return Builder(
+                                      builder: (BuildContext context) {
+                                        return PromotionCard(
+                                          promo: promo,
+                                        );
+                                      },
+                                    );
+                                  }).toList(),
+                                ),
+                              ],
+                            ),
                           ),
-                        )
-                      ],
+                          SliverToBoxAdapter(
+                            child: Column(
+                              children: [
+                                const SizedBox(
+                                  height: 20,
+                                ),
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(
+                                      "Top GiftCards",
+                                      style: GoogleFonts.poppins(
+                                          fontSize: 16,
+                                          color: kTextSecondary,
+                                          fontWeight: FontWeight.w500),
+                                    ),
+                                    GestureDetector(
+                                      onTap: () {
+                                        clientBodyPageController.animateToPage(
+                                            1,
+                                            duration: const Duration(
+                                                milliseconds: 300),
+                                            curve: Curves.easeInOut);
+                                      },
+                                      child: Row(children: [
+                                        Text(
+                                          "view all",
+                                          style: GoogleFonts.poppins(
+                                              fontSize: 14,
+                                              color: kPrimaryColor),
+                                        ),
+                                        SizedBox(width: 10),
+                                        Icon(
+                                            FlutterRemix
+                                                .arrow_right_circle_fill,
+                                            color: kPrimaryColor),
+                                      ]),
+                                    )
+                                  ],
+                                ),
+                                Container(
+                                  height: 140,
+                                  margin:
+                                      const EdgeInsets.symmetric(vertical: 20),
+                                  child: ListView.builder(
+                                    itemBuilder: (context, index) =>
+                                        HomeGiftCard(
+                                            giftcard:
+                                                Provider.of<AppData>(context)
+                                                    .homeDataModel!
+                                                    .giftCards[index]),
+                                    shrinkWrap: true,
+                                    scrollDirection: Axis.horizontal,
+                                    itemCount: Provider.of<AppData>(context)
+                                        .homeDataModel!
+                                        .giftCards
+                                        .length,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          const SliverToBoxAdapter(
+                            child: SizedBox(
+                              height: 40,
+                            ),
+                          )
+                        ],
+                      ),
                     )
                   //Shimmer
                   : SizedBox(
@@ -594,7 +654,7 @@ class HomeRateCard extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    "₦${rate.value}/\$",
+                    "${NumberFormat.simpleCurrency(name: "NGN", decimalDigits: 2).format(double.parse(rate.value))}/\$",
                     style: GoogleFonts.poppins(
                         fontSize: 20,
                         color: kGeneralWhite,
