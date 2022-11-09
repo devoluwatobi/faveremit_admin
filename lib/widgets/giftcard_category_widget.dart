@@ -2,6 +2,7 @@ import 'package:faveremit_admin/extensions/time_string.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_remix/flutter_remix.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:intl/intl.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 import '../config/styles.dart';
@@ -93,7 +94,8 @@ class SingleGiftCardCategory extends StatelessWidget {
                 width: 10,
               ),
               Text(
-                "₦${category.amount}",
+                NumberFormat.simpleCurrency(name: "NGN").format(double.parse(
+                    category.amount.toString().replaceAll(",", ""))),
                 style: GoogleFonts.poppins(
                     fontSize: 16,
                     fontWeight: FontWeight.w600,
