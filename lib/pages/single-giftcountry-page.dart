@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_remix/flutter_remix.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:shimmer/shimmer.dart';
 
 import '../config/dimensions.dart';
@@ -26,6 +27,7 @@ import '../widgets/show-option-modal.dart';
 GiftCardCountry? _giftCardCountry;
 
 late Timer _periodicSync;
+late RefreshController _refreshController;
 
 class SingleCountryPage extends StatefulWidget {
   final GiftCountry giftCountry;
@@ -65,8 +67,29 @@ class _SingleCountryPageState extends State<SingleCountryPage> {
     }
   }
 
+  void _onRefresh() async {
+    ProcessError error = await adminWorker.getSingleGiftCountry(
+        context: context, id: widget.giftCountry.id);
+    if (error.any) {
+      _refreshController.refreshFailed();
+    } else {
+      _giftCardCountry = error.data;
+      _refreshController.refreshCompleted();
+      setState(() {});
+    }
+    setState(() {});
+  }
+
+  void _onLoading() async {
+    // monitor network fetch
+    await Future.delayed(const Duration(milliseconds: 1000));
+    // if failed,use loadFailed(),if no data return,use LoadNodata()
+    _refreshController.loadComplete();
+  }
+
   @override
   void initState() {
+    _refreshController = RefreshController(initialRefresh: false);
     _giftCardCountry = null;
     _fetchGiftCards();
     _periodicSync =
@@ -174,62 +197,69 @@ class _SingleCountryPageState extends State<SingleCountryPage> {
                     );
                   },
                 );
+                _onRefresh();
               },
       ),
       body: Container(
         padding: kAppHorizontalPadding,
         alignment: Alignment.center,
-        child: CustomScrollView(
-          physics: BouncingScrollPhysics(),
-          slivers: [
-            SliverToBoxAdapter(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  Text(
-                    "${_giftCardCountry == null ? "" : _giftCardCountry!.cardTitle.inTitleCase} ${widget.giftCountry.name.toLowerCase().inTitleCase} Gift Card Rates",
-                    style: kSubTitleStyle,
-                    textAlign: TextAlign.left,
-                  ),
-                  SizedBox(
-                    height: screenSize.width < tabletBreakPoint
-                        ? 10
-                        : screenSize.width * 0.026,
-                  ),
-                  Text(
-                    "Select the card range to update the rates",
-                    style: kSubTextStyle,
-                  ),
-                  SizedBox(
-                    height: screenSize.width < tabletBreakPoint
-                        ? 40
-                        : screenSize.width * 0.1,
-                  ),
-                ],
+        child: SmartRefresher(
+          header: const WaterDropHeader(),
+          enablePullDown: true,
+          controller: _refreshController,
+          onRefresh: _onRefresh,
+          child: CustomScrollView(
+            physics: BouncingScrollPhysics(),
+            slivers: [
+              SliverToBoxAdapter(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    Text(
+                      "${_giftCardCountry == null ? "" : _giftCardCountry!.cardTitle.inTitleCase} ${widget.giftCountry.name.toLowerCase().inTitleCase} Gift Card Rates",
+                      style: kSubTitleStyle,
+                      textAlign: TextAlign.left,
+                    ),
+                    SizedBox(
+                      height: screenSize.width < tabletBreakPoint
+                          ? 10
+                          : screenSize.width * 0.026,
+                    ),
+                    Text(
+                      "Select the card range to update the rates",
+                      style: kSubTextStyle,
+                    ),
+                    SizedBox(
+                      height: screenSize.width < tabletBreakPoint
+                          ? 40
+                          : screenSize.width * 0.1,
+                    ),
+                  ],
+                ),
               ),
-            ),
-            SliverToBoxAdapter(
-                child: _giftCardCountry == null
-                    ? _PageShimmer()
-                    : Column(
-                        children: _giftCardCountry!.ranges
-                            .map((e) => SingleGiftCardRange(
-                                  range: e,
-                                  iso: widget.giftCountry.iso,
-                                  cardCountry: widget.giftCountry.name,
-                                  cardTitle: _giftCardCountry!.cardTitle,
-                                ))
-                            .toList(),
-                      )),
-            const SliverToBoxAdapter(
-              child: SizedBox(
-                height: 80,
+              SliverToBoxAdapter(
+                  child: _giftCardCountry == null
+                      ? _PageShimmer()
+                      : Column(
+                          children: _giftCardCountry!.ranges
+                              .map((e) => SingleGiftCardRange(
+                                    range: e,
+                                    iso: widget.giftCountry.iso,
+                                    cardCountry: widget.giftCountry.name,
+                                    cardTitle: _giftCardCountry!.cardTitle,
+                                  ))
+                              .toList(),
+                        )),
+              const SliverToBoxAdapter(
+                child: SizedBox(
+                  height: 80,
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

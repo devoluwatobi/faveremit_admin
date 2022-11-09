@@ -6,9 +6,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_remix/flutter_remix.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 
+import '../main.dart';
 import '../models/giftcard-country-model.dart';
+import '../services-classes/app-worker.dart';
 import '../widgets/app-fab.dart';
+
+GiftCardCountry? _giftCardCountry;
+List<ReceiptCategory> _cats = [];
+
+late RefreshController _refreshController;
 
 class CategoriesListPage extends StatefulWidget {
   final List<ReceiptCategory> categories;
@@ -22,6 +30,36 @@ class CategoriesListPage extends StatefulWidget {
 }
 
 class _CategoriesListPageState extends State<CategoriesListPage> {
+  void _onRefresh() async {
+    ProcessError error = await adminWorker.getSingleGiftCountry(
+        context: context, id: widget.range.giftCardCountryId);
+    if (error.any) {
+      _refreshController.refreshFailed();
+    } else {
+      _giftCardCountry = error.data;
+      _cats = _giftCardCountry!.ranges
+          .firstWhere((element) => element.id == widget.range.id)
+          .receiptCategories;
+      _refreshController.refreshCompleted();
+      setState(() {});
+    }
+    setState(() {});
+  }
+
+  void _onLoading() async {
+    // monitor network fetch
+    await Future.delayed(const Duration(milliseconds: 1000));
+    // if failed,use loadFailed(),if no data return,use LoadNodata()
+    _refreshController.loadComplete();
+  }
+
+  @override
+  void initState() {
+    _cats = widget.range.receiptCategories;
+    _refreshController = RefreshController(initialRefresh: true);
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Material(
@@ -62,14 +100,19 @@ class _CategoriesListPageState extends State<CategoriesListPage> {
                 );
               },
             );
+            _onRefresh();
           },
         ),
-        body: ListView(
-          padding: kAppHorizontalPadding.copyWith(top: 20),
-          children: List.generate(
-              widget.categories.length,
-              (index) =>
-                  SingleGiftCardCategory(category: widget.categories[index])),
+        body: SmartRefresher(
+          header: const WaterDropHeader(),
+          enablePullDown: true,
+          controller: _refreshController,
+          onRefresh: _onRefresh,
+          child: ListView(
+            padding: kAppHorizontalPadding.copyWith(top: 20),
+            children: List.generate(_cats.length,
+                (index) => SingleGiftCardCategory(category: _cats[index])),
+          ),
         ),
       ),
     );

@@ -10,6 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_remix/flutter_remix.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:shimmer/shimmer.dart';
 
 import '../config/dimensions.dart';
@@ -26,6 +27,7 @@ import 'edit-giftcard-page.dart';
 
 GiftCardInfo? _giftCardInfo;
 late Timer _periodicSync;
+late RefreshController _refreshController;
 
 class SingleGiftCardPage extends StatefulWidget {
   final GiftCardModel giftCardModel;
@@ -63,8 +65,29 @@ class _SingleGiftCardPageState extends State<SingleGiftCardPage> {
     }
   }
 
+  void _onRefresh() async {
+    ProcessError error = await adminWorker.getSingleGiftCard(
+        context: context, id: widget.giftCardModel.id);
+    if (error.any) {
+      _refreshController.refreshFailed();
+    } else {
+      _giftCardInfo = error.data;
+      _refreshController.refreshCompleted();
+      setState(() {});
+    }
+    setState(() {});
+  }
+
+  void _onLoading() async {
+    // monitor network fetch
+    await Future.delayed(const Duration(milliseconds: 1000));
+    // if failed,use loadFailed(),if no data return,use LoadNodata()
+    _refreshController.loadComplete();
+  }
+
   @override
   void initState() {
+    _refreshController = RefreshController(initialRefresh: false);
     _giftCardInfo = null;
     _fetchGiftCards();
     _periodicSync =
@@ -121,55 +144,61 @@ class _SingleGiftCardPageState extends State<SingleGiftCardPage> {
       body: Container(
         padding: kAppHorizontalPadding,
         alignment: Alignment.center,
-        child: CustomScrollView(
-          physics: BouncingScrollPhysics(),
-          slivers: [
-            SliverToBoxAdapter(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  Text(
-                    "${widget.giftCardModel.title.inTitleCase} Gift Card Rates",
-                    style: kSubTitleStyle,
-                    textAlign: TextAlign.left,
-                  ),
-                  SizedBox(
-                    height: screenSize.width < tabletBreakPoint
-                        ? 10
-                        : screenSize.width * 0.026,
-                  ),
-                  Text(
-                    "Select the card country to update the rates",
-                    style: kSubTextStyle,
-                  ),
-                  SizedBox(
-                    height: screenSize.width < tabletBreakPoint
-                        ? 40
-                        : screenSize.width * 0.1,
-                  ),
-                ],
+        child: SmartRefresher(
+          header: const WaterDropHeader(),
+          enablePullDown: true,
+          controller: _refreshController,
+          onRefresh: _onRefresh,
+          child: CustomScrollView(
+            physics: BouncingScrollPhysics(),
+            slivers: [
+              SliverToBoxAdapter(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    Text(
+                      "${widget.giftCardModel.title.inTitleCase} Gift Card Rates",
+                      style: kSubTitleStyle,
+                      textAlign: TextAlign.left,
+                    ),
+                    SizedBox(
+                      height: screenSize.width < tabletBreakPoint
+                          ? 10
+                          : screenSize.width * 0.026,
+                    ),
+                    Text(
+                      "Select the card country to update the rates",
+                      style: kSubTextStyle,
+                    ),
+                    SizedBox(
+                      height: screenSize.width < tabletBreakPoint
+                          ? 40
+                          : screenSize.width * 0.1,
+                    ),
+                  ],
+                ),
               ),
-            ),
-            SliverToBoxAdapter(
-                child: _giftCardInfo == null
-                    ? _PageShimmer()
-                    : Column(
-                        children: _giftCardInfo!.countries
-                            .map((e) => GiftCountryWidget(
-                                  giftCountry: e,
-                                  giftCardID: _giftCardInfo!.id,
-                                ))
-                            .toList(),
-                      )),
-            const SliverToBoxAdapter(
-              child: SizedBox(
-                height: 80,
+              SliverToBoxAdapter(
+                  child: _giftCardInfo == null
+                      ? _PageShimmer()
+                      : Column(
+                          children: _giftCardInfo!.countries
+                              .map((e) => GiftCountryWidget(
+                                    giftCountry: e,
+                                    giftCardID: _giftCardInfo!.id,
+                                  ))
+                              .toList(),
+                        )),
+              const SliverToBoxAdapter(
+                child: SizedBox(
+                  height: 80,
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
       floatingActionButton: AppFAB(
