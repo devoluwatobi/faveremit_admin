@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:drop_shadow/drop_shadow.dart' as ds;
 import 'package:faveremit_admin/extensions/time_string.dart';
+import 'package:faveremit_admin/widgets/naira/naira.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -116,14 +117,21 @@ class FavUserTransactionCard extends StatelessWidget {
             Column(
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
-                Text(
-                  "₦${addCommas(transaction.amount)}",
-                  style: GoogleFonts.poppins(
+                Row(
+                  children: [
+                    Naira(
                       color: kTextPrimary,
-                      fontSize: 16,
-                      fontWeight: FontWeight.w500),
-                  textAlign: TextAlign.right,
-                  overflow: TextOverflow.ellipsis,
+                    ),
+                    Text(
+                      addCommas(transaction.amount),
+                      style: GoogleFonts.poppins(
+                          color: kTextPrimary,
+                          fontSize: 16,
+                          fontWeight: FontWeight.w500),
+                      textAlign: TextAlign.right,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ],
                 ),
                 Text(
                   transaction.status.inTitleCase,

@@ -18,6 +18,7 @@ import '../config/dimensions.dart';
 import '../config/styles.dart';
 import '../models/home-data-info.dart';
 import '../widgets/mobile_promo_card.dart';
+import '../widgets/naira/naira.dart';
 import '../widgets/primary-button.dart';
 import '../widgets/show-option-modal.dart';
 
@@ -653,12 +654,23 @@ class HomeRateCard extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(
-                    "${NumberFormat.simpleCurrency(name: "NGN", decimalDigits: 2).format(double.parse(rate.value))}/\$",
-                    style: GoogleFonts.poppins(
-                        fontSize: 20,
+                  Row(
+                    children: [
+                      Naira(
+                        size: 16,
                         color: kGeneralWhite,
-                        fontWeight: FontWeight.w600),
+                      ),
+                      SizedBox(
+                        width: 1,
+                      ),
+                      Text(
+                        "${NumberFormat.simpleCurrency(name: "", decimalDigits: 2).format(double.parse(rate.value))}/\$",
+                        style: GoogleFonts.poppins(
+                            fontSize: 20,
+                            color: kGeneralWhite,
+                            fontWeight: FontWeight.w600),
+                      ),
+                    ],
                   ),
                   Icon(
                     FlutterRemix.arrow_right_fill,

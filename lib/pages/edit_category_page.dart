@@ -13,6 +13,7 @@ import '../services-classes/app-worker.dart';
 import '../services-classes/info-modal.dart';
 import '../widgets/form-field.dart';
 import '../widgets/loading-modal.dart';
+import '../widgets/naira/naira.dart';
 import '../widgets/primary-button.dart';
 import '../widgets/show-option-modal.dart';
 
@@ -100,13 +101,21 @@ class _EditCategoryPageState extends State<EditCategoryPage> {
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        "Rate in ₦",
-                        style: GoogleFonts.poppins(
-                            color: kTextSecondary,
-                            fontWeight: FontWeight.w600,
-                            fontSize:
-                                screenSize.width < tabletBreakPoint ? 12 : 15),
+                      Row(
+                        children: [
+                          Text(
+                            "Rate in ",
+                            style: GoogleFonts.poppins(
+                                color: kTextSecondary,
+                                fontWeight: FontWeight.w600,
+                                fontSize: screenSize.width < tabletBreakPoint
+                                    ? 12
+                                    : 15),
+                          ),
+                          Naira(
+                            size: 10,
+                          ),
+                        ],
                       ),
                       const SizedBox(
                         height: 5,

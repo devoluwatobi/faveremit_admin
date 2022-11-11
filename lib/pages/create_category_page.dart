@@ -1,4 +1,5 @@
 import 'package:faveremit_admin/config/styles.dart';
+import 'package:faveremit_admin/widgets/naira/naira.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_remix/flutter_remix.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -97,13 +98,22 @@ class _CreateCategoryPageState extends State<CreateCategoryPage> {
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        "Rate in ₦",
-                        style: GoogleFonts.poppins(
-                            color: kTextSecondary,
-                            fontWeight: FontWeight.w600,
-                            fontSize:
-                                screenSize.width < tabletBreakPoint ? 12 : 15),
+                      Row(
+                        children: [
+                          Text(
+                            "Rate in ",
+                            style: GoogleFonts.poppins(
+                                color: kTextSecondary,
+                                fontWeight: FontWeight.w600,
+                                fontSize: screenSize.width < tabletBreakPoint
+                                    ? 12
+                                    : 15),
+                          ),
+                          Naira(
+                            color: kDarkBG,
+                            size: 10,
+                          )
+                        ],
                       ),
                       const SizedBox(
                         height: 5,

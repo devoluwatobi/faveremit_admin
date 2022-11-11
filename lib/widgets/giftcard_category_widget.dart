@@ -9,6 +9,7 @@ import '../config/styles.dart';
 import '../models/giftcard-country-model.dart';
 import '../pages/edit_category_page.dart';
 import '../services-classes/functions.dart';
+import 'naira/naira.dart';
 
 class SingleGiftCardCategory extends StatelessWidget {
   final ReceiptCategory category;
@@ -93,13 +94,24 @@ class SingleGiftCardCategory extends StatelessWidget {
               const SizedBox(
                 width: 10,
               ),
-              Text(
-                NumberFormat.simpleCurrency(name: "NGN").format(double.parse(
-                    category.amount.toString().replaceAll(",", ""))),
-                style: GoogleFonts.poppins(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w600,
-                    color: kPrimaryColor),
+              Row(
+                children: [
+                  Naira(
+                    size: 13,
+                    color: kPrimaryColor,
+                  ),
+                  const SizedBox(
+                    width: 1,
+                  ),
+                  Text(
+                    NumberFormat.simpleCurrency(name: "").format(double.parse(
+                        category.amount.toString().replaceAll(",", ""))),
+                    style: GoogleFonts.poppins(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                        color: kPrimaryColor),
+                  ),
+                ],
               )
             ],
           ),

@@ -17,6 +17,7 @@ import '../main.dart';
 import '../models/withdrawal-trx-info-model.dart';
 import '../services-classes/app-worker.dart';
 import '../services-classes/functions.dart';
+import '../widgets/naira/naira.dart';
 import '../widgets/primary-button.dart';
 import '../widgets/secondary-button.dart';
 import '../widgets/show-option-modal.dart';
@@ -139,15 +140,27 @@ class _WithdrawalReceiptPageState extends State<WithdrawalReceiptPage> {
                           const SizedBox(
                             height: 10,
                           ),
-                          Text(
-                            NumberFormat.simpleCurrency(name: "NGN").format(
-                                double.parse(widget.transaction.ngnAmount
-                                    .toString()
-                                    .replaceAll(",", ""))),
-                            style: GoogleFonts.poppins(
-                                fontSize: 33,
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Naira(
+                                size: 26,
                                 color: kPrimaryColor,
-                                fontWeight: FontWeight.w600),
+                              ),
+                              SizedBox(
+                                width: 1,
+                              ),
+                              Text(
+                                NumberFormat.simpleCurrency(name: "").format(
+                                    double.parse(widget.transaction.ngnAmount
+                                        .toString()
+                                        .replaceAll(",", ""))),
+                                style: GoogleFonts.poppins(
+                                    fontSize: 33,
+                                    color: kPrimaryColor,
+                                    fontWeight: FontWeight.w600),
+                              ),
+                            ],
                           ),
                           const SizedBox(
                             height: 10,
@@ -343,16 +356,27 @@ class _WithdrawalReceiptPageState extends State<WithdrawalReceiptPage> {
                               const SizedBox(
                                 width: 20,
                               ),
-                              Text(
-                                NumberFormat.simpleCurrency(name: "NGN").format(
-                                    double.parse(_theTransactionModel!.amount
-                                        .toString()
-                                        .replaceAll(",", ""))),
-                                style: GoogleFonts.poppins(
-                                  fontSize: 13,
-                                  color: kDarkBG,
-                                  fontWeight: FontWeight.bold,
-                                ),
+                              Row(
+                                children: [
+                                  Naira(
+                                    size: 11,
+                                  ),
+                                  SizedBox(
+                                    width: 1,
+                                  ),
+                                  Text(
+                                    NumberFormat.simpleCurrency(name: "")
+                                        .format(double.parse(
+                                            _theTransactionModel!.amount
+                                                .toString()
+                                                .replaceAll(",", ""))),
+                                    style: GoogleFonts.poppins(
+                                      fontSize: 13,
+                                      color: kDarkBG,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ],
                               ),
                             ],
                           ),

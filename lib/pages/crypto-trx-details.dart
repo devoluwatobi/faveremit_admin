@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:faveremit_admin/extensions/time_string.dart';
 import 'package:faveremit_admin/pages/user-details.page.dart';
 import 'package:faveremit_admin/select-lists/review-btc-trx.dart';
+import 'package:faveremit_admin/widgets/naira/naira.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_remix/flutter_remix.dart';
@@ -377,13 +378,23 @@ class _BTCTrxReceiptPageState extends State<BTCTrxReceiptPage> {
                               const SizedBox(
                                 width: 20,
                               ),
-                              Text(
-                                "${NumberFormat.simpleCurrency(name: "NGN").format(double.parse(_theTransactionModel!.usdRate.toString().replaceAll(",", "")))}/\$",
-                                style: GoogleFonts.poppins(
-                                  fontSize: 13,
-                                  color: kDarkBG,
-                                  fontWeight: FontWeight.bold,
-                                ),
+                              Row(
+                                children: [
+                                  Naira(
+                                    size: 11,
+                                  ),
+                                  SizedBox(
+                                    width: 1,
+                                  ),
+                                  Text(
+                                    "${NumberFormat.simpleCurrency(name: "").format(double.parse(_theTransactionModel!.usdRate.toString().replaceAll(",", "")))}/\$",
+                                    style: GoogleFonts.poppins(
+                                      fontSize: 13,
+                                      color: kDarkBG,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ],
                               ),
                             ],
                           ),
@@ -409,16 +420,27 @@ class _BTCTrxReceiptPageState extends State<BTCTrxReceiptPage> {
                               const SizedBox(
                                 width: 20,
                               ),
-                              Text(
-                                NumberFormat.simpleCurrency(name: "NGN").format(
-                                    double.parse(_theTransactionModel!.ngnAmount
-                                        .toString()
-                                        .replaceAll(",", ""))),
-                                style: GoogleFonts.poppins(
-                                  fontSize: 13,
-                                  color: kDarkBG,
-                                  fontWeight: FontWeight.bold,
-                                ),
+                              Row(
+                                children: [
+                                  Naira(
+                                    size: 11,
+                                  ),
+                                  SizedBox(
+                                    width: 1,
+                                  ),
+                                  Text(
+                                    NumberFormat.simpleCurrency(name: "")
+                                        .format(double.parse(
+                                            _theTransactionModel!.ngnAmount
+                                                .toString()
+                                                .replaceAll(",", ""))),
+                                    style: GoogleFonts.poppins(
+                                      fontSize: 13,
+                                      color: kDarkBG,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ],
                               ),
                             ],
                           ),

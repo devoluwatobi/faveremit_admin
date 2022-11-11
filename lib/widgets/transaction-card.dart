@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:faveremit_admin/extensions/time_string.dart';
 import 'package:faveremit_admin/pages/withdrawal-request-info-page.dart';
+import 'package:faveremit_admin/widgets/naira/naira.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_remix/flutter_remix.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -245,14 +246,26 @@ class _TransactionItemState extends State<TransactionItem> {
             Column(
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
-                Text(
-                  NumberFormat.simpleCurrency(name: "NGN").format(double.parse(
-                      widget.transaction.ngnAmount
-                          .toString()
-                          .replaceAll(",", ""))),
-                  style: widget.transaction.serviceId.toString() == 0.toString()
-                      ? trxAmountTextStyle.copyWith(fontSize: 15.5)
-                      : trxAmountTextStyle,
+                Row(
+                  children: [
+                    Naira(
+                      color: kPrimaryColor,
+                      size: 14,
+                    ),
+                    SizedBox(
+                      width: 1,
+                    ),
+                    Text(
+                      NumberFormat.simpleCurrency(name: "").format(double.parse(
+                          widget.transaction.ngnAmount
+                              .toString()
+                              .replaceAll(",", ""))),
+                      style: widget.transaction.serviceId.toString() ==
+                              0.toString()
+                          ? trxAmountTextStyle.copyWith(fontSize: 15.5)
+                          : trxAmountTextStyle,
+                    ),
+                  ],
                 ),
                 SizedBox(
                   height: screenSize.width < tabletBreakPoint

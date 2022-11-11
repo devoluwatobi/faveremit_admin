@@ -7,7 +7,6 @@ import 'package:faveremit_admin/widgets/secondary-button.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:intl/intl.dart';
 
 import '../config/dimensions.dart';
 import '../config/styles.dart';
@@ -15,6 +14,7 @@ import '../main.dart';
 import '../services-classes/app-worker.dart';
 import '../services-classes/info-modal.dart';
 import '../widgets/loading-modal.dart';
+import '../widgets/naira/naira.dart';
 import '../widgets/primary-button.dart';
 import '../widgets/show-option-modal.dart';
 import '../widgets/tertiary-button.dart';
@@ -315,14 +315,25 @@ class _UserDetailsPageState extends State<UserDetailsPage> {
                           width: 20,
                         ),
                         Expanded(
-                          child: Text(
-                            "₦${addCommas(widget.user.balance)}",
-                            style: GoogleFonts.poppins(
-                              fontSize: 13,
-                              color: kDarkBG,
-                              fontWeight: FontWeight.w600,
-                            ),
-                            textAlign: TextAlign.end,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              Naira(
+                                size: 11,
+                              ),
+                              SizedBox(
+                                width: 1,
+                              ),
+                              Text(
+                                "${addCommas(widget.user.balance)}",
+                                style: GoogleFonts.poppins(
+                                  fontSize: 13,
+                                  color: kDarkBG,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                                textAlign: TextAlign.end,
+                              ),
+                            ],
                           ),
                         ),
                       ],
@@ -496,7 +507,8 @@ class _UserDetailsPageState extends State<UserDetailsPage> {
                         ),
                         Expanded(
                           child: Text(
-                            "${DateFormat.jm().format(widget.user.createdAt)}, ${widget.user.createdAt.toDateTimeString()}"
+                            widget.user.createdAt
+                                .toDateTimeString()
                                 .inTitleCase,
                             style: GoogleFonts.poppins(
                               fontSize: 13,
