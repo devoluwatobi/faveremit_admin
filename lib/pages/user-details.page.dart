@@ -7,10 +7,12 @@ import 'package:faveremit_admin/widgets/secondary-button.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 import '../config/dimensions.dart';
 import '../config/styles.dart';
 import '../main.dart';
+import '../select-lists/user role options.dart';
 import '../services-classes/app-worker.dart';
 import '../services-classes/info-modal.dart';
 import '../widgets/loading-modal.dart';
@@ -528,7 +530,21 @@ class _UserDetailsPageState extends State<UserDetailsPage> {
               height: 60,
             ),
             PrimaryTextButton(
-                onPressed: () async {}, title: "Change Account Type"),
+                onPressed: () async {
+                  await showCupertinoModalBottomSheet(
+                    context: context,
+                    expand: false,
+                    barrierColor: const Color(0xFF000000).withOpacity(0.6),
+                    builder: (context) {
+                      return UserRoleOptionsList(
+                        user: widget.user,
+                      );
+                    },
+                  );
+
+                  setState(() {});
+                },
+                title: "Change Account Type"),
             const SizedBox(
               height: 20,
             ),

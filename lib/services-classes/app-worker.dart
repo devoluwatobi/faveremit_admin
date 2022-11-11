@@ -2129,9 +2129,9 @@ class AppWorker {
     required String email,
     required String phone,
   }) async {
-    late http.Response _response;
+    late http.Response response;
     try {
-      _response = await http
+      response = await http
           .post(
         Uri.parse('$_apiBaseUrl/deactivate-account'),
         headers: {
@@ -2162,13 +2162,13 @@ class AppWorker {
         any: true,
       );
     }
-    if (_response.statusCode >= 200 && _response.statusCode < 300) {
+    if (response.statusCode >= 200 && response.statusCode < 300) {
       getHomeData(context: context);
       // Provider.of<AppData>(context, listen: false)
       //     .updateHomeData(basicHomeModelFromJson(_response.body));
 
       if (kDebugMode) {
-        print("Status Code: ${_response.statusCode}");
+        print("Status Code: ${response.statusCode}");
       }
       return ProcessError(
         details: false,
@@ -2176,10 +2176,10 @@ class AppWorker {
         other: false,
         any: false,
       );
-    } else if (_response.statusCode >= 400 && _response.statusCode < 500) {
+    } else if (response.statusCode >= 400 && response.statusCode < 500) {
       if (kDebugMode) {
-        print("Status Code: ${_response.statusCode}");
-        print("Status Body: ${_response.body}");
+        print("Status Code: ${response.statusCode}");
+        print("Status Body: ${response.body}");
       }
       return ProcessError(
         details: true,
@@ -2189,8 +2189,8 @@ class AppWorker {
       );
     } else {
       if (kDebugMode) {
-        print("Status Code: ${_response.statusCode}");
-        print("Status Body: ${_response.body}");
+        print("Status Code: ${response.statusCode}");
+        print("Status Body: ${response.body}");
       }
 
       return ProcessError(
