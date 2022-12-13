@@ -51,7 +51,7 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: 'AIzaSyAY3DanIzKFDdnmhu-AV3HKT641A93g8E8',
-    appId: '1:268185982030:android:9ddb8525726af03f2e1f1f',
+    appId: '1:268185982030:android:4458daa065423b172e1f1f',
     messagingSenderId: '268185982030',
     projectId: 'faveremit-dev',
     storageBucket: 'faveremit-dev.appspot.com',
@@ -59,11 +59,11 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions ios = FirebaseOptions(
     apiKey: 'AIzaSyD1fgopSjl7mzLSEyPIyjDNPO2LBww7fYY',
-    appId: '1:268185982030:ios:7a5d39da918666a72e1f1f',
+    appId: '1:268185982030:ios:bdbc7875508b96e62e1f1f',
     messagingSenderId: '268185982030',
     projectId: 'faveremit-dev',
     storageBucket: 'faveremit-dev.appspot.com',
-    iosClientId: '268185982030-ao8vn7qf6g8aoncooh2lt7ls828ff1lo.apps.googleusercontent.com',
-    iosBundleId: 'com.faveremit.admin.faveremitAdmin',
+    iosClientId: '268185982030-talur1ch9hkssrk262ouibqk92sb4enn.apps.googleusercontent.com',
+    iosBundleId: 'com.faveremit.admin',
   );
 }

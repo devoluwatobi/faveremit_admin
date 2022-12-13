@@ -7,9 +7,9 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:268185982030:android:9ddb8525726af03f2e1f1f",
+        "mobilesdk_app_id": "1:268185982030:android:4458daa065423b172e1f1f",
         "android_client_info": {
-          "package_name": "com.faveremit.admin.faveremit_admin"
+          "package_name": "com.faveremit.admin"
         }
       },
       "oauth_client": [
@@ -31,10 +31,10 @@
               "client_type": 3
             },
             {
-              "client_id": "268185982030-elusa7fk5ljrapmvuqsm1uq9q8ahqqs4.apps.googleusercontent.com",
+              "client_id": "268185982030-ao8vn7qf6g8aoncooh2lt7ls828ff1lo.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "com.example.faveremit"
+                "bundle_id": "com.faveremit.admin.faveremitAdmin"
               }
             }
           ]
@@ -43,9 +43,9 @@
     },
     {
       "client_info": {
-        "mobilesdk_app_id": "1:268185982030:android:1ccc2967be3476de2e1f1f",
+        "mobilesdk_app_id": "1:268185982030:android:948f3e2c731f10ff2e1f1f",
         "android_client_info": {
-          "package_name": "com.faveremit.app"
+          "package_name": "com.faveremit.admin_app"
         }
       },
       "oauth_client": [
@@ -67,10 +67,10 @@
               "client_type": 3
             },
             {
-              "client_id": "268185982030-elusa7fk5ljrapmvuqsm1uq9q8ahqqs4.apps.googleusercontent.com",
+              "client_id": "268185982030-ao8vn7qf6g8aoncooh2lt7ls828ff1lo.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "com.example.faveremit"
+                "bundle_id": "com.faveremit.admin.faveremitAdmin"
               }
             }
           ]
@@ -79,9 +79,9 @@
     },
     {
       "client_info": {
-        "mobilesdk_app_id": "1:268185982030:android:a8e22ab4ca331df32e1f1f",
+        "mobilesdk_app_id": "1:268185982030:android:08250edfe75104792e1f1f",
         "android_client_info": {
-          "package_name": "com.faveremit.faveremit_app"
+          "package_name": "com.faveremit.faveremit"
         }
       },
       "oauth_client": [
@@ -103,10 +103,10 @@
               "client_type": 3
             },
             {
-              "client_id": "268185982030-elusa7fk5ljrapmvuqsm1uq9q8ahqqs4.apps.googleusercontent.com",
+              "client_id": "268185982030-ao8vn7qf6g8aoncooh2lt7ls828ff1lo.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "com.example.faveremit"
+                "bundle_id": "com.faveremit.admin.faveremitAdmin"
               }
             }
           ]
