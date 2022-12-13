@@ -114,6 +114,18 @@ String? textValidator(value) {
   }
 }
 
+String? urlValidator(value) {
+  var urlPattern =
+      r"(https?|http)://([-A-Z0-9.]+)(/[-A-Z0-9+&@#/%=~_|!:,.;]*)?(\?[A-Z0-9+&@#/%=~_|!:‌​,.;]*)?";
+  var match = new RegExp(urlPattern, caseSensitive: false)
+      .firstMatch('https://www.google.com');
+  if (RegExp(urlPattern, caseSensitive: false).hasMatch(value)) {
+    return null;
+  } else {
+    return 'please provide a valid url';
+  }
+}
+
 String? optionalTextValidator(value) {
   if (value == null || value.isEmpty) {
     return null;

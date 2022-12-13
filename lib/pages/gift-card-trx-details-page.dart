@@ -24,6 +24,7 @@ import '../widgets/naira/naira.dart';
 import '../widgets/primary-button.dart';
 import '../widgets/secondary-button.dart';
 import '../widgets/show-option-modal.dart';
+import 'ProductImageView.dart';
 import 'helpdesk-page.dart';
 
 bool _gottenTrx = false;
@@ -601,7 +602,26 @@ class _GTrxReceiptPageState extends State<GTrxReceiptPage> {
                   Column(
                     children: [
                       GestureDetector(
-                        onTap: () {},
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => ProductImageView(
+                                productImage:
+                                    NetworkImage(_theTransactionModel!.proof),
+                                pageController: PageController(initialPage: 0),
+                                isGallery: _theTransactionModel!.secondProof !=
+                                        null ||
+                                    _theTransactionModel!.thirdProof != null,
+                                gallery: [
+                                  _theTransactionModel!.proof,
+                                  _theTransactionModel!.secondProof ?? "",
+                                  _theTransactionModel!.thirdProof ?? "",
+                                ],
+                              ),
+                            ),
+                          );
+                        },
                         child: Container(
                           width: double.infinity,
                           padding: const EdgeInsets.all(10),
@@ -649,7 +669,26 @@ class _GTrxReceiptPageState extends State<GTrxReceiptPage> {
                     children: [
                       const SizedBox(height: 10),
                       GestureDetector(
-                        onTap: () {},
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => ProductImageView(
+                                pageController: PageController(initialPage: 1),
+                                productImage: NetworkImage(
+                                    _theTransactionModel!.secondProof!),
+                                isGallery: _theTransactionModel!.secondProof !=
+                                        null ||
+                                    _theTransactionModel!.thirdProof != null,
+                                gallery: [
+                                  _theTransactionModel!.proof,
+                                  _theTransactionModel!.secondProof ?? "",
+                                  _theTransactionModel!.thirdProof ?? "",
+                                ],
+                              ),
+                            ),
+                          );
+                        },
                         child: Container(
                           width: double.infinity,
                           padding: const EdgeInsets.all(10),
@@ -689,7 +728,26 @@ class _GTrxReceiptPageState extends State<GTrxReceiptPage> {
                     children: [
                       const SizedBox(height: 10),
                       GestureDetector(
-                        onTap: () {},
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => ProductImageView(
+                                pageController: PageController(initialPage: 2),
+                                productImage: NetworkImage(
+                                    _theTransactionModel!.thirdProof!),
+                                isGallery: _theTransactionModel!.secondProof !=
+                                        null ||
+                                    _theTransactionModel!.thirdProof != null,
+                                gallery: [
+                                  _theTransactionModel!.proof,
+                                  _theTransactionModel!.secondProof ?? "",
+                                  _theTransactionModel!.thirdProof ?? "",
+                                ],
+                              ),
+                            ),
+                          );
+                        },
                         child: Container(
                           width: double.infinity,
                           padding: const EdgeInsets.all(10),

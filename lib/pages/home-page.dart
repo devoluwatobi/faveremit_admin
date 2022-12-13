@@ -209,7 +209,7 @@ class _HomePageState extends State<HomePage> {
                                     GestureDetector(
                                       onTap: () {
                                         clientBodyPageController.animateToPage(
-                                            1,
+                                            2,
                                             duration: const Duration(
                                                 milliseconds: 300),
                                             curve: Curves.easeInOut);

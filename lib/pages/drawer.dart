@@ -164,6 +164,13 @@ class _DrawerPageState extends State<DrawerPage> {
                 Navigator.pushNamed(context, "r_trx");
               },
             ),
+            AppOptionTile(
+              title: "Promotions",
+              iconData: FlutterRemix.bookmark_2_fill,
+              onPressed: () {
+                Navigator.pushNamed(context, "promotions");
+              },
+            ),
             // AppOptionTile(
             //   title: "Password",
             //   iconData: FlutterRemix.lock_password_line,

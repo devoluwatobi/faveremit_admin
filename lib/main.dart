@@ -7,6 +7,7 @@ import 'package:faveremit_admin/models/home-data-info.dart';
 import 'package:faveremit_admin/models/transactions-object.dart';
 import 'package:faveremit_admin/models/user.dart';
 import 'package:faveremit_admin/pages/app-body.dart';
+import 'package:faveremit_admin/pages/promotions_page.dart';
 import 'package:faveremit_admin/pages/reviewed-transactions-page.dart';
 import 'package:faveremit_admin/pages/reviewed-withdrawals-page.dart';
 import 'package:faveremit_admin/pages/user-list-page.dart';
@@ -111,6 +112,7 @@ class _MyAppState extends State<MyApp> {
           "withdraw": (context) => const WithdrawPage(),
 
           "users": (context) => const UserListPage(),
+          "promotions": (context) => const PromotionsPage(),
           "r_trx": (context) => const RevTransactionsPage(),
           "r_withdrawals": (context) => const RevWithdrawalsPage(),
         },

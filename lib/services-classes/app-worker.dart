@@ -3642,6 +3642,234 @@ class AppWorker {
     }
   }
 
+  Future<ProcessError> uploadBanner(
+      {required String url,
+      required io.File banner,
+      required BuildContext context}) async {
+    var dio = Dio();
+    dio.options.baseUrl = _apiBaseUrl;
+    dio.options.connectTimeout = 20000; //5s
+    dio.options.receiveTimeout = 20000;
+    dio.options.headers = {
+      'Content-Type': 'multipart/form-data',
+      'Authorization':
+          'Bearer ${Provider.of<UserData>(context, listen: false).userModel!.token}'
+    };
+    late Response response;
+    late FormData formData;
+
+    formData = FormData.fromMap({
+      "url": url,
+      "image": await MultipartFile.fromFile(banner.path,
+          filename:
+              "Banner_${DateTime.now().microsecondsSinceEpoch}_Image.png"),
+    });
+
+    try {
+      response = await dio.post('$_apiBaseUrl/upload-banner', data: formData);
+    } on DioError catch (e) {
+      if (kDebugMode) {
+        print(e.message);
+      }
+      return ProcessError(
+        details: false,
+        network: true,
+        other: false,
+        any: true,
+      );
+    }
+
+    if (kDebugMode) {
+      print("Response status: ${response.statusCode}");
+      print("Response data: ${response.data}");
+    }
+
+    if (response.statusCode != null) {
+      if (response.statusCode! >= 200 && response.statusCode! < 300) {
+        return ProcessError(
+          details: false,
+          network: false,
+          other: false,
+          any: false,
+        );
+      } else if (response.statusCode! >= 400 && response.statusCode! < 500) {
+        return ProcessError(
+          details: true,
+          network: false,
+          other: false,
+          any: true,
+        );
+      } else {
+        return ProcessError(
+          details: false,
+          network: false,
+          other: true,
+          any: true,
+        );
+      }
+    } else {
+      return ProcessError(
+        details: false,
+        network: false,
+        other: true,
+        any: true,
+      );
+    }
+  }
+
+  Future<ProcessError> updateBanner(
+      {String? url,
+      io.File? banner,
+      required int id,
+      required BuildContext context}) async {
+    var dio = Dio();
+    dio.options.baseUrl = _apiBaseUrl;
+    dio.options.connectTimeout = 20000; //5s
+    dio.options.receiveTimeout = 20000;
+    dio.options.headers = {
+      'Content-Type': 'multipart/form-data',
+      'Authorization':
+          'Bearer ${Provider.of<UserData>(context, listen: false).userModel!.token}'
+    };
+    late Response response;
+    late FormData formData;
+
+    formData = FormData.fromMap({
+      "id": id,
+      "url": url,
+    });
+    if (banner != null) {
+      formData = FormData.fromMap({
+        "id": id,
+        "url": url,
+        "image": await MultipartFile.fromFile(banner.path,
+            filename:
+                "Banner_${DateTime.now().microsecondsSinceEpoch}_Image.png"),
+      });
+    }
+
+    try {
+      response = await dio.post('$_apiBaseUrl/update-banner', data: formData);
+    } on DioError catch (e) {
+      if (kDebugMode) {
+        print(e.message);
+      }
+      return ProcessError(
+        details: false,
+        network: true,
+        other: false,
+        any: true,
+      );
+    }
+
+    if (kDebugMode) {
+      print("Response status: ${response.statusCode}");
+      print("Response data: ${response.data}");
+    }
+
+    if (response.statusCode != null) {
+      if (response.statusCode! >= 200 && response.statusCode! < 300) {
+        return ProcessError(
+          details: false,
+          network: false,
+          other: false,
+          any: false,
+        );
+      } else if (response.statusCode! >= 400 && response.statusCode! < 500) {
+        return ProcessError(
+          details: true,
+          network: false,
+          other: false,
+          any: true,
+        );
+      } else {
+        return ProcessError(
+          details: false,
+          network: false,
+          other: true,
+          any: true,
+        );
+      }
+    } else {
+      return ProcessError(
+        details: false,
+        network: false,
+        other: true,
+        any: true,
+      );
+    }
+  }
+
+  Future<ProcessError> removeBanner(
+      {required int id, required BuildContext context}) async {
+    var dio = Dio();
+    dio.options.baseUrl = _apiBaseUrl;
+    dio.options.connectTimeout = 20000; //5s
+    dio.options.receiveTimeout = 20000;
+    dio.options.headers = {
+      'Content-Type': 'multipart/form-data',
+      'Authorization':
+          'Bearer ${Provider.of<UserData>(context, listen: false).userModel!.token}'
+    };
+    late Response response;
+    late FormData formData;
+
+    formData = FormData.fromMap({
+      "id": id,
+    });
+
+    try {
+      response = await dio.post('$_apiBaseUrl/remove-banner', data: formData);
+    } on DioError catch (e) {
+      if (kDebugMode) {
+        print(e.message);
+      }
+      return ProcessError(
+        details: false,
+        network: true,
+        other: false,
+        any: true,
+      );
+    }
+
+    if (kDebugMode) {
+      print("Response status: ${response.statusCode}");
+      print("Response data: ${response.data}");
+    }
+
+    if (response.statusCode != null) {
+      if (response.statusCode! >= 200 && response.statusCode! < 300) {
+        return ProcessError(
+          details: false,
+          network: false,
+          other: false,
+          any: false,
+        );
+      } else if (response.statusCode! >= 400 && response.statusCode! < 500) {
+        return ProcessError(
+          details: true,
+          network: false,
+          other: false,
+          any: true,
+        );
+      } else {
+        return ProcessError(
+          details: false,
+          network: false,
+          other: true,
+          any: true,
+        );
+      }
+    } else {
+      return ProcessError(
+        details: false,
+        network: false,
+        other: true,
+        any: true,
+      );
+    }
+  }
+
   Future<ProcessError> updateFCM({
     required BuildContext context,
     required String token,

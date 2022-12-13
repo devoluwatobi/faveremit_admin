@@ -23,6 +23,7 @@ import '../services-classes/functions.dart';
 import '../widgets/primary-button.dart';
 import '../widgets/secondary-button.dart';
 import '../widgets/show-option-modal.dart';
+import 'ProductImageView.dart';
 import 'helpdesk-page.dart';
 
 bool _gottenTrx = false;
@@ -602,7 +603,22 @@ class _BTCTrxReceiptPageState extends State<BTCTrxReceiptPage> {
                   Column(
                     children: [
                       GestureDetector(
-                        onTap: () {},
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => ProductImageView(
+                                productImage:
+                                    NetworkImage(_theTransactionModel!.proof),
+                                pageController: PageController(initialPage: 0),
+                                isGallery: false,
+                                gallery: [
+                                  _theTransactionModel!.proof,
+                                ],
+                              ),
+                            ),
+                          );
+                        },
                         child: Container(
                           width: double.infinity,
                           padding: const EdgeInsets.all(10),

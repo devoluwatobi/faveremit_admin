@@ -7,6 +7,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_remix/flutter_remix.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
@@ -245,11 +246,81 @@ class _SingleCountryPageState extends State<SingleCountryPage> {
                       ? _PageShimmer()
                       : Column(
                           children: _giftCardCountry!.ranges
-                              .map((e) => SingleGiftCardRange(
-                                    range: e,
-                                    iso: widget.giftCountry.iso,
-                                    cardCountry: widget.giftCountry.name,
-                                    cardTitle: _giftCardCountry!.cardTitle,
+                              .map((e) => Slidable(
+                                    key: ValueKey(e.id),
+
+                                    // The start action pane is the one at the left or the top side.
+                                    startActionPane: ActionPane(
+                                      // A motion is a widget used to control how the pane animates.
+                                      motion: const ScrollMotion(),
+
+                                      dragDismissible: false,
+
+                                      // A pane can dismiss the Slidable.
+                                      dismissible:
+                                          DismissiblePane(onDismissed: () {}),
+
+                                      // All actions are defined in the children parameter.
+                                      children: [
+                                        // A SlidableAction can have an icon and/or a label.
+                                        SlidableAction(
+                                          onPressed: (context) async {
+                                            {
+                                              showLoadingModal(
+                                                  context: context,
+                                                  title: "Updating Status");
+                                              late ProcessError _error;
+                                              if (e.status.toString() ==
+                                                  1.toString()) {
+                                                _error = await adminWorker
+                                                    .deactivateRange(
+                                                        id: e.id,
+                                                        context: context);
+                                              } else {
+                                                _error = await adminWorker
+                                                    .activateRange(
+                                                        id: e.id,
+                                                        context: context);
+                                              }
+                                              Navigator.pop(context);
+                                              if (_error.any) {
+                                                // Navigator.pop(context);
+                                                showErrorResponse(
+                                                    context: context,
+                                                    error: _error);
+                                              } else {
+                                                // Navigator.pop(context);
+                                                showInfoModal(
+                                                    context: context,
+                                                    title: "Success",
+                                                    content:
+                                                        "Gift card range status updated successfully");
+                                              }
+                                            }
+                                          },
+                                          backgroundColor:
+                                              e.status.toString() ==
+                                                      1.toString()
+                                                  ? kYellow
+                                                  : kGreen,
+                                          foregroundColor: Colors.white,
+                                          icon: e.status.toString() ==
+                                                  1.toString()
+                                              ? FlutterRemix.forbid_fill
+                                              : FlutterRemix
+                                                  .checkbox_circle_fill,
+                                          label:
+                                              '${e.status.toString() == 1.toString() ? "Dea" : "A"}ctivate',
+                                        ),
+                                      ],
+                                    ),
+
+                                    child: SingleGiftCardRange(
+                                      range: e,
+                                      iso: widget.giftCountry.iso,
+                                      cardCountry: widget.giftCountry.name,
+                                      cardTitle: _giftCardCountry!.cardTitle,
+                                    ),
                                   ))
                               .toList(),
                         )),
