@@ -196,9 +196,9 @@ class _BitcoinRatePageState extends State<BitcoinRatePage> {
                                   context: context, title: "updating Rate");
                               ProcessError _error =
                                   await adminWorker.updateCryptoRate(
-                                      value: int.parse(
-                                        _amountController.text.trim(),
-                                      ),
+                                      value: double.parse(
+                                              _amountController.text.trim())
+                                          .toInt(),
                                       context: context,
                                       cryptoId: widget.rate.cryptoId);
                               Navigator.pop(context);

@@ -22,6 +22,7 @@ import 'package:shimmer/shimmer.dart';
 import '../config/dimensions.dart';
 import '../config/styles.dart';
 import '../services-classes/functions.dart';
+import '../widgets/danger_button.dart';
 import '../widgets/form-field.dart';
 import '../widgets/primary-button.dart';
 
@@ -422,7 +423,7 @@ class _EditWalletPageState extends State<EditWalletPage> {
                                       context: context,
                                       title: "Please Confirm",
                                       body:
-                                          "Are you sure you want to ${_wallet.status == 0 ? "a" : "dea"}ctivate this bitcoin wallet address ?",
+                                          "Are you sure you want to ${_wallet.status == 0 ? "a" : "dea"}ctivate this crypto wallet address ?",
                                       actionTitle: "I'm Sure",
                                       isDestructive: true);
 
@@ -453,7 +454,8 @@ class _EditWalletPageState extends State<EditWalletPage> {
                                           context: context,
                                           title: "Success",
                                           content:
-                                              "Bitcoin wallet address ${_wallet.status == 0 ? "a" : "dea"}ctivated successfully");
+                                              "Crypto wallet address ${_wallet.status == 0 ? "a" : "dea"}ctivated successfully");
+                                      adminWorker.getCryptoWallets(context: context);
                                     }
                                   }
                                 }
@@ -461,6 +463,45 @@ class _EditWalletPageState extends State<EditWalletPage> {
                               title:
                                   "${_wallet.status == 0 ? "A" : "Dea"}ctivate",
                               isActive: _wallet.status == 0,
+                            ),
+                            SizedBox(
+                              height: 24,
+                            ),
+                            DangerTextButton(
+                              onPressed: () async {
+                                {
+                                  bool? _proceed = await showOptionPopup(
+                                      context: context,
+                                      title: "Please Confirm",
+                                      body:
+                                          "Are you sure you want to delete this bitcoin wallet address ?",
+                                      actionTitle: "I'm Sure",
+                                      isDestructive: true);
+
+                                  if (_proceed != null && _proceed) {
+                                    showLoadingModal(
+                                        context: context,
+                                        title: "Deleting Wallet");
+                                    late ProcessError _error;
+                                    _error = await adminWorker.deleteWallet(
+                                        id: _wallet.id, context: context);
+
+                                    Navigator.pop(context);
+                                    if (_error.any) {
+                                      showErrorResponse(
+                                          context: context, error: _error);
+                                    } else {
+                                      Navigator.pop(context);
+                                      showInfoModal(
+                                          context: context,
+                                          title: "Success",
+                                          content:
+                                              "Crypto wallet address deleted successfully");
+                                    }
+                                  }
+                                }
+                              },
+                              title: "Delete",
                             ),
                           ],
                         ),

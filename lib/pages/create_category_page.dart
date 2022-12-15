@@ -166,9 +166,7 @@ class _CreateCategoryPageState extends State<CreateCategoryPage> {
                               showErrorResponse(
                                   context: context, error: _error);
                             } else {
-                              setState(() {
-                                // widget.category = _error.data;
-                              });
+                              Navigator.pop(context);
                               showInfoModal(
                                   context: context,
                                   title: "Success",

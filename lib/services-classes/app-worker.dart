@@ -3941,6 +3941,274 @@ class AppWorker {
       );
     }
   }
+
+  Future<ProcessError> deleteCountry(
+      {required int id, required BuildContext context}) async {
+    late http.Response _response;
+    try {
+      _response = await http
+          .post(
+        Uri.parse('$_apiBaseUrl/delete-giftcard-country'),
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization':
+              'Bearer ${Provider.of<UserData>(context, listen: false).userModel!.token}'
+        },
+        body: jsonEncode({
+          "id": id,
+        }),
+      )
+          .timeout(const Duration(seconds: 20), onTimeout: () {
+        throw ('Timeout Exception');
+      });
+    } catch (e) {
+      if (kDebugMode) {
+        print(e);
+      }
+      return ProcessError(
+        details: false,
+        network: true,
+        other: false,
+        any: true,
+      );
+    }
+    if (_response.statusCode >= 200 && _response.statusCode < 300) {
+      if (kDebugMode) {
+        print("Status Code: ${_response.statusCode}");
+      }
+
+      getGiftCards(context: context);
+      return ProcessError(
+        details: false,
+        network: false,
+        other: false,
+        any: false,
+      );
+    } else if (_response.statusCode >= 400 && _response.statusCode < 500) {
+      if (kDebugMode) {
+        print("Status Code: ${_response.statusCode}");
+        print("Status Body: ${_response.body}");
+      }
+      return ProcessError(
+        details: true,
+        network: false,
+        other: false,
+        any: true,
+      );
+    } else {
+      if (kDebugMode) {
+        print("Status Code: ${_response.statusCode}");
+        print("Status Body: ${_response.body}");
+      }
+      return ProcessError(
+        details: false,
+        network: false,
+        other: true,
+        any: true,
+      );
+    }
+  }
+
+  Future<ProcessError> deleteWallet(
+      {required int id, required BuildContext context}) async {
+    late http.Response _response;
+    try {
+      _response = await http
+          .post(
+        Uri.parse('$_apiBaseUrl/delete-crypto-wallet'),
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization':
+              'Bearer ${Provider.of<UserData>(context, listen: false).userModel!.token}'
+        },
+        body: jsonEncode({
+          "id": id,
+        }),
+      )
+          .timeout(const Duration(seconds: 20), onTimeout: () {
+        throw ('Timeout Exception');
+      });
+    } catch (e) {
+      if (kDebugMode) {
+        print(e);
+      }
+      return ProcessError(
+        details: false,
+        network: true,
+        other: false,
+        any: true,
+      );
+    }
+    if (_response.statusCode >= 200 && _response.statusCode < 300) {
+      if (kDebugMode) {
+        print("Status Code: ${_response.statusCode}");
+      }
+
+      getGiftCards(context: context);
+      return ProcessError(
+        details: false,
+        network: false,
+        other: false,
+        any: false,
+      );
+    } else if (_response.statusCode >= 400 && _response.statusCode < 500) {
+      if (kDebugMode) {
+        print("Status Code: ${_response.statusCode}");
+        print("Status Body: ${_response.body}");
+      }
+      return ProcessError(
+        details: true,
+        network: false,
+        other: false,
+        any: true,
+      );
+    } else {
+      if (kDebugMode) {
+        print("Status Code: ${_response.statusCode}");
+        print("Status Body: ${_response.body}");
+      }
+      return ProcessError(
+        details: false,
+        network: false,
+        other: true,
+        any: true,
+      );
+    }
+  }
+
+  Future<ProcessError> deleteCategory(
+      {required int id, required BuildContext context}) async {
+    late http.Response _response;
+    try {
+      _response = await http
+          .post(
+        Uri.parse('$_apiBaseUrl/delete-giftcard-category'),
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization':
+              'Bearer ${Provider.of<UserData>(context, listen: false).userModel!.token}'
+        },
+        body: jsonEncode({
+          "id": id,
+        }),
+      )
+          .timeout(const Duration(seconds: 20), onTimeout: () {
+        throw ('Timeout Exception');
+      });
+    } catch (e) {
+      if (kDebugMode) {
+        print(e);
+      }
+      return ProcessError(
+        details: false,
+        network: true,
+        other: false,
+        any: true,
+      );
+    }
+    if (_response.statusCode >= 200 && _response.statusCode < 300) {
+      if (kDebugMode) {
+        print("Status Code: ${_response.statusCode}");
+      }
+
+      getGiftCards(context: context);
+      return ProcessError(
+        details: false,
+        network: false,
+        other: false,
+        any: false,
+      );
+    } else if (_response.statusCode >= 400 && _response.statusCode < 500) {
+      if (kDebugMode) {
+        print("Status Code: ${_response.statusCode}");
+        print("Status Body: ${_response.body}");
+      }
+      return ProcessError(
+        details: true,
+        network: false,
+        other: false,
+        any: true,
+      );
+    } else {
+      if (kDebugMode) {
+        print("Status Code: ${_response.statusCode}");
+        print("Status Body: ${_response.body}");
+      }
+      return ProcessError(
+        details: false,
+        network: false,
+        other: true,
+        any: true,
+      );
+    }
+  }
+
+  Future<ProcessError> deleteRange(
+      {required int id, required BuildContext context}) async {
+    late http.Response _response;
+    try {
+      _response = await http
+          .post(
+        Uri.parse('$_apiBaseUrl/delete-card-range'),
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization':
+              'Bearer ${Provider.of<UserData>(context, listen: false).userModel!.token}'
+        },
+        body: jsonEncode({
+          "id": id,
+        }),
+      )
+          .timeout(const Duration(seconds: 20), onTimeout: () {
+        throw ('Timeout Exception');
+      });
+    } catch (e) {
+      if (kDebugMode) {
+        print(e);
+      }
+      return ProcessError(
+        details: false,
+        network: true,
+        other: false,
+        any: true,
+      );
+    }
+    if (_response.statusCode >= 200 && _response.statusCode < 300) {
+      if (kDebugMode) {
+        print("Status Code: ${_response.statusCode}");
+      }
+
+      getGiftCards(context: context);
+      return ProcessError(
+        details: false,
+        network: false,
+        other: false,
+        any: false,
+      );
+    } else if (_response.statusCode >= 400 && _response.statusCode < 500) {
+      if (kDebugMode) {
+        print("Status Code: ${_response.statusCode}");
+        print("Status Body: ${_response.body}");
+      }
+      return ProcessError(
+        details: true,
+        network: false,
+        other: false,
+        any: true,
+      );
+    } else {
+      if (kDebugMode) {
+        print("Status Code: ${_response.statusCode}");
+        print("Status Body: ${_response.body}");
+      }
+      return ProcessError(
+        details: false,
+        network: false,
+        other: true,
+        any: true,
+      );
+    }
+  }
 }
 
 // var localAuth = LocalAuthentication();

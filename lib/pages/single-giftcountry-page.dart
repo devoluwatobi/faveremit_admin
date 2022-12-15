@@ -27,6 +27,7 @@ import '../widgets/show-option-modal.dart';
 
 GiftCardCountry? _giftCardCountry;
 
+bool _loading = false;
 late Timer _periodicSync;
 late RefreshController _refreshController;
 
@@ -88,8 +89,41 @@ class _SingleCountryPageState extends State<SingleCountryPage> {
     _refreshController.loadComplete();
   }
 
+  _showLoading() {
+    showLoadingModal(context: context);
+  }
+
+  _closeModal() {
+    Navigator.pop(context);
+  }
+
+  _showError(ProcessError e) {
+    showErrorResponse(context: context, error: e);
+  }
+
+  _showSuccess(String message) {
+    showInfoModal(context: context, title: "Success", content: message);
+  }
+
+  _deleteRange(int id) async {
+    late ProcessError _error;
+    _showLoading();
+    _error = await adminWorker.deleteRange(id: id, context: context);
+    _closeModal();
+    if (_error.any) {
+      // Navigator.pop(context);
+      _showError(_error);
+    } else {
+      // Navigator.pop(context);
+      _showSuccess("Giftcard Range Deleted Successfully");
+    }
+    adminWorker.getSingleGiftCountry(
+        context: context, id: widget.giftCountry.id);
+  }
+
   @override
   void initState() {
+    _loading = false;
     _refreshController = RefreshController(initialRefresh: false);
     _giftCardCountry = null;
     _fetchGiftCards();
@@ -266,9 +300,7 @@ class _SingleCountryPageState extends State<SingleCountryPage> {
                                         SlidableAction(
                                           onPressed: (context) async {
                                             {
-                                              showLoadingModal(
-                                                  context: context,
-                                                  title: "Updating Status");
+                                              _showLoading();
                                               late ProcessError _error;
                                               if (e.status.toString() ==
                                                   1.toString()) {
@@ -282,19 +314,17 @@ class _SingleCountryPageState extends State<SingleCountryPage> {
                                                         id: e.id,
                                                         context: context);
                                               }
-                                              Navigator.pop(context);
+                                              setState(() {
+                                                _loading = false;
+                                              });
+                                              _closeModal();
                                               if (_error.any) {
                                                 // Navigator.pop(context);
-                                                showErrorResponse(
-                                                    context: context,
-                                                    error: _error);
+                                                _showError(_error);
                                               } else {
                                                 // Navigator.pop(context);
-                                                showInfoModal(
-                                                    context: context,
-                                                    title: "Success",
-                                                    content:
-                                                        "Gift card range status updated successfully");
+                                                _showSuccess(
+                                                    "Gift card range status updated successfully");
                                               }
                                             }
                                           },
@@ -311,6 +341,42 @@ class _SingleCountryPageState extends State<SingleCountryPage> {
                                                   .checkbox_circle_fill,
                                           label:
                                               '${e.status.toString() == 1.toString() ? "Dea" : "A"}ctivate',
+                                        ),
+                                      ],
+                                    ),
+
+                                    endActionPane: ActionPane(
+                                      // A motion is a widget used to control how the pane animates.
+                                      motion: const ScrollMotion(),
+
+                                      dragDismissible: false,
+
+                                      // A pane can dismiss the Slidable.
+                                      dismissible:
+                                          DismissiblePane(onDismissed: () {}),
+
+                                      // All actions are defined in the children parameter.
+                                      children: [
+                                        // A SlidableAction can have an icon and/or a label.
+                                        SlidableAction(
+                                          onPressed: (context) async {
+                                            {
+                                              bool? _go = await showOptionPopup(
+                                                  context: context,
+                                                  title: "Please Confirm",
+                                                  body:
+                                                      "Are you sure you want to delete this range ?",
+                                                  actionTitle: "Yes, Delete",
+                                                  isDestructive: true);
+                                              if (_go != null && _go) {
+                                                _deleteRange(e.id);
+                                              }
+                                            }
+                                          },
+                                          backgroundColor: kRed,
+                                          foregroundColor: Colors.white,
+                                          icon: FlutterRemix.delete_bin_5_fill,
+                                          label: "Delete",
                                         ),
                                       ],
                                     ),
