@@ -1,3 +1,4 @@
+import 'package:faveremit_admin/extensions/show_or_not_extension.dart';
 import 'package:faveremit_admin/extensions/time_string.dart';
 import 'package:faveremit_admin/models/home-data-info.dart';
 import 'package:faveremit_admin/services-classes/app-worker.dart';
@@ -217,7 +218,7 @@ class _BitcoinRatePageState extends State<BitcoinRatePage> {
                           }
                         }
                       },
-                      title: "Update Rate"),
+                      title: "Update Rate").showOrHide(Provider.of<UserData>(context, listen: false).userModel!.user.role != null && (Provider.of<UserData>(context, listen: false).userModel!.user.role! == 1)),
                   const SizedBox(
                     height: 60,
                   ),

@@ -845,7 +845,22 @@ class _GTrxReceiptPageState extends State<GTrxReceiptPage> {
                           },
                           title: "Review Transaction",
                           isActive: false,
-                        )
+                        ).showOrHide(
+                          Provider.of<UserData>(context, listen: false)
+                                      .userModel!
+                                      .user
+                                      .role !=
+                                  null &&
+                              (Provider.of<UserData>(context, listen: false)
+                                          .userModel!
+                                          .user
+                                          .role! ==
+                                      1 ||
+                                  Provider.of<UserData>(context, listen: false)
+                                          .userModel!
+                                          .user
+                                          .role! ==
+                                      2))
                       : const SizedBox(),
                   const SizedBox(
                     height: 20,

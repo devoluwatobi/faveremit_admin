@@ -1,5 +1,6 @@
 import 'dart:io' as io;
 
+import 'package:faveremit_admin/extensions/show_or_not_extension.dart';
 import 'package:faveremit_admin/extensions/time_string.dart';
 import 'package:faveremit_admin/main.dart';
 import 'package:faveremit_admin/models/crypto_wallet_address.dart';
@@ -368,141 +369,159 @@ class _EditWalletPageState extends State<EditWalletPage> {
                             const SizedBox(
                               height: 80,
                             ),
-                            PrimaryButton(
-                              title: Text(
-                                "Update Wallet",
-                                style: kPrimaryButtonTextStyle,
-                              ),
-                              onPressed: () async {
-                                if (_formKey.currentState!.validate()) {
-                                  bool? proceed = await showOptionPopup(
-                                      context: context,
-                                      title: "Please Confirm",
-                                      body:
-                                          "Are you sure you want to update this bitcoin wallet address ?",
-                                      actionTitle: "I'm Sure",
-                                      isDestructive: true);
-
-                                  if (proceed != null && proceed) {
-                                    showLoadingModal(
-                                        context: context,
-                                        title: "Updating Wallet");
-                                    ProcessError error =
-                                        await adminWorker.updateCryptoWallet(
-                                            id: _wallet.id,
-                                            cryptoId:
-                                                int.parse(_selectedCrypto),
-                                            newAddress:
-                                                _cryptoController.text.trim(),
-                                            context: context);
-                                    Navigator.pop(context);
-                                    if (error.any) {
-                                      showErrorResponse(
-                                          context: context, error: error);
-                                    } else {
-                                      setState(() {
-                                        _wallet = error.data;
-                                      });
-                                      showInfoModal(
+                            Column(
+                              children: [
+                                PrimaryButton(
+                                  title: Text(
+                                    "Update Wallet",
+                                    style: kPrimaryButtonTextStyle,
+                                  ),
+                                  onPressed: () async {
+                                    if (_formKey.currentState!.validate()) {
+                                      bool? proceed = await showOptionPopup(
                                           context: context,
-                                          title: "Success",
-                                          content:
-                                              "Bitcoin wallet address updated successfully");
-                                    }
-                                  }
-                                }
-                              },
-                            ),
-                            SizedBox(
-                              height: 24,
-                            ),
-                            SecondaryTextButton(
-                              onPressed: () async {
-                                if (_formKey.currentState!.validate()) {
-                                  bool? _proceed = await showOptionPopup(
-                                      context: context,
-                                      title: "Please Confirm",
-                                      body:
-                                          "Are you sure you want to ${_wallet.status == 0 ? "a" : "dea"}ctivate this crypto wallet address ?",
-                                      actionTitle: "I'm Sure",
-                                      isDestructive: true);
+                                          title: "Please Confirm",
+                                          body:
+                                              "Are you sure you want to update this bitcoin wallet address ?",
+                                          actionTitle: "I'm Sure",
+                                          isDestructive: true);
 
-                                  if (_proceed != null && _proceed) {
-                                    showLoadingModal(
-                                        context: context,
-                                        title:
-                                            "${_wallet.status == 0 ? "A" : "Dea"}ctivating Wallet");
-                                    late ProcessError _error;
-                                    if (_wallet.status == 0) {
-                                      _error = await adminWorker
-                                          .activateCryptoWallet(
-                                              id: _wallet.id, context: context);
-                                    } else {
-                                      _error = await adminWorker
-                                          .deactivateCryptoWallet(
-                                              id: _wallet.id, context: context);
+                                      if (proceed != null && proceed) {
+                                        showLoadingModal(
+                                            context: context,
+                                            title: "Updating Wallet");
+                                        ProcessError error = await adminWorker
+                                            .updateCryptoWallet(
+                                                id: _wallet.id,
+                                                cryptoId:
+                                                    int.parse(_selectedCrypto),
+                                                newAddress: _cryptoController
+                                                    .text
+                                                    .trim(),
+                                                context: context);
+                                        Navigator.pop(context);
+                                        if (error.any) {
+                                          showErrorResponse(
+                                              context: context, error: error);
+                                        } else {
+                                          setState(() {
+                                            _wallet = error.data;
+                                          });
+                                          showInfoModal(
+                                              context: context,
+                                              title: "Success",
+                                              content:
+                                                  "Bitcoin wallet address updated successfully");
+                                        }
+                                      }
                                     }
-                                    Navigator.pop(context);
-                                    if (_error.any) {
-                                      showErrorResponse(
-                                          context: context, error: _error);
-                                    } else {
-                                      setState(() {
-                                        _wallet = _error.data;
-                                      });
-                                      showInfoModal(
+                                  },
+                                ),
+                                SizedBox(
+                                  height: 24,
+                                ),
+                                SecondaryTextButton(
+                                  onPressed: () async {
+                                    if (_formKey.currentState!.validate()) {
+                                      bool? _proceed = await showOptionPopup(
                                           context: context,
-                                          title: "Success",
-                                          content:
-                                              "Crypto wallet address ${_wallet.status == 0 ? "a" : "dea"}ctivated successfully");
-                                      adminWorker.getCryptoWallets(context: context);
+                                          title: "Please Confirm",
+                                          body:
+                                              "Are you sure you want to ${_wallet.status == 0 ? "a" : "dea"}ctivate this crypto wallet address ?",
+                                          actionTitle: "I'm Sure",
+                                          isDestructive: true);
+
+                                      if (_proceed != null && _proceed) {
+                                        showLoadingModal(
+                                            context: context,
+                                            title:
+                                                "${_wallet.status == 0 ? "A" : "Dea"}ctivating Wallet");
+                                        late ProcessError _error;
+                                        if (_wallet.status == 0) {
+                                          _error = await adminWorker
+                                              .activateCryptoWallet(
+                                                  id: _wallet.id,
+                                                  context: context);
+                                        } else {
+                                          _error = await adminWorker
+                                              .deactivateCryptoWallet(
+                                                  id: _wallet.id,
+                                                  context: context);
+                                        }
+                                        Navigator.pop(context);
+                                        if (_error.any) {
+                                          showErrorResponse(
+                                              context: context, error: _error);
+                                        } else {
+                                          setState(() {
+                                            _wallet = _error.data;
+                                          });
+                                          showInfoModal(
+                                              context: context,
+                                              title: "Success",
+                                              content:
+                                                  "Crypto wallet address ${_wallet.status == 0 ? "a" : "dea"}ctivated successfully");
+                                          adminWorker.getCryptoWallets(
+                                              context: context);
+                                        }
+                                      }
                                     }
-                                  }
-                                }
-                              },
-                              title:
-                                  "${_wallet.status == 0 ? "A" : "Dea"}ctivate",
-                              isActive: _wallet.status == 0,
-                            ),
-                            SizedBox(
-                              height: 24,
-                            ),
-                            DangerTextButton(
-                              onPressed: () async {
-                                {
-                                  bool? _proceed = await showOptionPopup(
-                                      context: context,
-                                      title: "Please Confirm",
-                                      body:
-                                          "Are you sure you want to delete this bitcoin wallet address ?",
-                                      actionTitle: "I'm Sure",
-                                      isDestructive: true);
-
-                                  if (_proceed != null && _proceed) {
-                                    showLoadingModal(
-                                        context: context,
-                                        title: "Deleting Wallet");
-                                    late ProcessError _error;
-                                    _error = await adminWorker.deleteWallet(
-                                        id: _wallet.id, context: context);
-
-                                    Navigator.pop(context);
-                                    if (_error.any) {
-                                      showErrorResponse(
-                                          context: context, error: _error);
-                                    } else {
-                                      Navigator.pop(context);
-                                      showInfoModal(
+                                  },
+                                  title:
+                                      "${_wallet.status == 0 ? "A" : "Dea"}ctivate",
+                                  isActive: _wallet.status == 0,
+                                ),
+                                SizedBox(
+                                  height: 24,
+                                ),
+                                DangerTextButton(
+                                  onPressed: () async {
+                                    {
+                                      bool? _proceed = await showOptionPopup(
                                           context: context,
-                                          title: "Success",
-                                          content:
-                                              "Crypto wallet address deleted successfully");
+                                          title: "Please Confirm",
+                                          body:
+                                              "Are you sure you want to delete this bitcoin wallet address ?",
+                                          actionTitle: "I'm Sure",
+                                          isDestructive: true);
+
+                                      if (_proceed != null && _proceed) {
+                                        showLoadingModal(
+                                            context: context,
+                                            title: "Deleting Wallet");
+                                        late ProcessError _error;
+                                        _error = await adminWorker.deleteWallet(
+                                            id: _wallet.id, context: context);
+
+                                        Navigator.pop(context);
+                                        if (_error.any) {
+                                          showErrorResponse(
+                                              context: context, error: _error);
+                                        } else {
+                                          Navigator.pop(context);
+                                          showInfoModal(
+                                              context: context,
+                                              title: "Success",
+                                              content:
+                                                  "Crypto wallet address deleted successfully");
+                                        }
+                                      }
                                     }
-                                  }
-                                }
-                              },
-                              title: "Delete",
-                            ),
+                                  },
+                                  title: "Delete",
+                                ),
+                              ],
+                            ).showOrHide(Provider.of<UserData>(context,
+                                            listen: false)
+                                        .userModel!
+                                        .user
+                                        .role !=
+                                    null &&
+                                Provider.of<UserData>(context, listen: false)
+                                        .userModel!
+                                        .user
+                                        .role! ==
+                                    1),
                           ],
                         ),
                         const SizedBox(

@@ -1,4 +1,5 @@
 import 'package:faveremit_admin/config/styles.dart';
+import 'package:faveremit_admin/extensions/show_or_not_extension.dart';
 import 'package:faveremit_admin/extensions/time_string.dart';
 import 'package:faveremit_admin/services-classes/functions.dart';
 import 'package:flutter/material.dart';
@@ -201,88 +202,102 @@ class _EditCategoryPageState extends State<EditCategoryPage> {
                   const SizedBox(
                     height: 80,
                   ),
-                  PrimaryTextButton(
-                      onPressed: () async {
-                        if (_formKey.currentState!.validate()) {
-                          bool? _proceed = await showOptionPopup(
-                              context: context,
-                              title: "Please Confirm",
-                              body:
-                                  "Are you sure you want to update this giftcard category ?",
-                              actionTitle: "I'm Sure",
-                              isDestructive: true);
+                  Column(
+                    children: [
+                      PrimaryTextButton(
+                          onPressed: () async {
+                            if (_formKey.currentState!.validate()) {
+                              bool? _proceed = await showOptionPopup(
+                                  context: context,
+                                  title: "Please Confirm",
+                                  body:
+                                      "Are you sure you want to update this giftcard category ?",
+                                  actionTitle: "I'm Sure",
+                                  isDestructive: true);
 
-                          if (_proceed != null && _proceed) {
-                            showLoadingModal(
-                                context: context, title: "Updating Rate");
-                            ProcessError _error =
-                                await adminWorker.updateGiftcardCategory(
+                              if (_proceed != null && _proceed) {
+                                showLoadingModal(
+                                    context: context, title: "Updating Rate");
+                                ProcessError _error =
+                                    await adminWorker.updateGiftcardCategory(
+                                        context: context,
+                                        id: widget.category.id,
+                                        giftCardsId: widget.category.giftCardId,
+                                        giftCardCountryId:
+                                            widget.category.giftCardCountryId,
+                                        rangeID: widget.category.id,
+                                        amount: double.parse(
+                                                _amountController.text.trim())
+                                            .toInt(),
+                                        title: _titleController.text.trim());
+                                Navigator.pop(context);
+                                if (_error.any) {
+                                  showErrorResponse(
+                                      context: context, error: _error);
+                                } else {
+                                  setState(() {
+                                    // widget.category = _error.data;
+                                  });
+                                  showInfoModal(
+                                      context: context,
+                                      title: "Success",
+                                      content:
+                                          "Giftcard Category updated successfully");
+                                }
+                              }
+                            }
+                          },
+                          title: "Update Rate"),
+                      const SizedBox(height: 16),
+                      DangerTextButton(
+                          onPressed: () async {
+                            if (_formKey.currentState!.validate()) {
+                              bool? _proceed = await showOptionPopup(
+                                  context: context,
+                                  title: "Please Confirm",
+                                  body:
+                                      "Are you sure you want to delete this giftcard range ?",
+                                  actionTitle: "I'm Sure",
+                                  isDestructive: true);
+
+                              if (_proceed != null && _proceed) {
+                                showLoadingModal(
                                     context: context,
-                                    id: widget.category.id,
-                                    giftCardsId: widget.category.giftCardId,
-                                    giftCardCountryId:
-                                        widget.category.giftCardCountryId,
-                                    rangeID: widget.category.id,
-                                    amount: double.parse(
-                                            _amountController.text.trim())
-                                        .toInt(),
-                                    title: _titleController.text.trim());
-                            Navigator.pop(context);
-                            if (_error.any) {
-                              showErrorResponse(
-                                  context: context, error: _error);
-                            } else {
-                              setState(() {
-                                // widget.category = _error.data;
-                              });
-                              showInfoModal(
+                                    title: "Deleting Category");
+                                ProcessError _error =
+                                    await adminWorker.deleteCategory(
                                   context: context,
-                                  title: "Success",
-                                  content:
-                                      "Giftcard Category updated successfully");
+                                  id: widget.category.id,
+                                );
+                                Navigator.pop(context);
+                                if (_error.any) {
+                                  showErrorResponse(
+                                      context: context, error: _error);
+                                } else {
+                                  setState(() {
+                                    // widget.category = _error.data;
+                                  });
+                                  showInfoModal(
+                                      context: context,
+                                      title: "Success",
+                                      content:
+                                          "Giftcard Category deleted successfully");
+                                }
+                              }
                             }
-                          }
-                        }
-                      },
-                      title: "Update Rate"),
-                  const SizedBox(height: 16),
-                  DangerTextButton(
-                      onPressed: () async {
-                        if (_formKey.currentState!.validate()) {
-                          bool? _proceed = await showOptionPopup(
-                              context: context,
-                              title: "Please Confirm",
-                              body:
-                                  "Are you sure you want to delete this giftcard range ?",
-                              actionTitle: "I'm Sure",
-                              isDestructive: true);
-
-                          if (_proceed != null && _proceed) {
-                            showLoadingModal(
-                                context: context, title: "Deleting Category");
-                            ProcessError _error =
-                                await adminWorker.deleteCategory(
-                              context: context,
-                              id: widget.category.id,
-                            );
-                            Navigator.pop(context);
-                            if (_error.any) {
-                              showErrorResponse(
-                                  context: context, error: _error);
-                            } else {
-                              setState(() {
-                                // widget.category = _error.data;
-                              });
-                              showInfoModal(
-                                  context: context,
-                                  title: "Success",
-                                  content:
-                                      "Giftcard Category deleted successfully");
-                            }
-                          }
-                        }
-                      },
-                      title: "Delete Rate")
+                          },
+                          title: "Delete Rate"),
+                    ],
+                  ).showOrHide(Provider.of<UserData>(context, listen: false)
+                              .userModel!
+                              .user
+                              .role !=
+                          null &&
+                      Provider.of<UserData>(context, listen: false)
+                              .userModel!
+                              .user
+                              .role! ==
+                          1)
                 ],
               ),
             ),

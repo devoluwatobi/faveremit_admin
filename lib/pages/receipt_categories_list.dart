@@ -1,11 +1,13 @@
 import 'package:faveremit_admin/config/dimensions.dart';
 import 'package:faveremit_admin/config/styles.dart';
+import 'package:faveremit_admin/extensions/show_or_not_extension.dart';
 import 'package:faveremit_admin/pages/create_category_page.dart';
 import 'package:faveremit_admin/widgets/giftcard_category_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_remix/flutter_remix.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
+import 'package:provider/provider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 import '../main.dart';
@@ -102,7 +104,16 @@ class _CategoriesListPageState extends State<CategoriesListPage> {
             );
             _onRefresh();
           },
-        ),
+        ).showOrHide(Provider.of<UserData>(context, listen: false)
+                    .userModel!
+                    .user
+                    .role !=
+                null &&
+            Provider.of<UserData>(context, listen: false)
+                    .userModel!
+                    .user
+                    .role! ==
+                1),
         body: SmartRefresher(
           header: const WaterDropHeader(),
           enablePullDown: true,

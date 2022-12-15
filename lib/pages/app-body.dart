@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:faveremit_admin/extensions/show_or_not_extension.dart';
 import 'package:faveremit_admin/main.dart';
 import 'package:faveremit_admin/pages/create-giftcard-page.dart';
 import 'package:faveremit_admin/pages/create-wallet-page.dart';
@@ -160,7 +161,16 @@ class _AppBodyState extends State<AppBody> {
                         },
                       );
                     },
-                  )
+                  ).showOrHide(Provider.of<UserData>(context, listen: false)
+                            .userModel!
+                            .user
+                            .role !=
+                        null &&
+                    (Provider.of<UserData>(context, listen: false)
+                            .userModel!
+                            .user
+                            .role! ==
+                        1))
                 : pageIndex == 3
                     ? AppFAB(
                         leading: Icon(
@@ -174,7 +184,16 @@ class _AppBodyState extends State<AppBody> {
                               context: context,
                               builder: (context) => const CreateWalletPage());
                         },
-                      )
+                      ).showOrHide(Provider.of<UserData>(context, listen: false)
+                                .userModel!
+                                .user
+                                .role !=
+                            null &&
+                        (Provider.of<UserData>(context, listen: false)
+                                .userModel!
+                                .user
+                                .role! ==
+                            1))
                     : const SizedBox(),
             bottomNavigationBar: BottomNavigationBar(
               type: BottomNavigationBarType.fixed,

@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:faveremit_admin/extensions/show_or_not_extension.dart';
 import 'package:faveremit_admin/select-lists/dx-country-list.dart';
 import 'package:faveremit_admin/services-classes/functions.dart';
 import 'package:faveremit_admin/services-classes/info-modal.dart';
@@ -10,6 +11,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_remix/flutter_remix.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
+import 'package:provider/provider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:shimmer/shimmer.dart';
 
@@ -138,7 +140,16 @@ class _SingleGiftCardPageState extends State<SingleGiftCardPage> {
               icon: Icon(
                 FlutterRemix.more_fill,
                 color: kPrimaryColor,
-              )),
+              )).showOrHide(Provider.of<UserData>(context, listen: false)
+                      .userModel!
+                      .user
+                      .role !=
+                  null &&
+              (Provider.of<UserData>(context, listen: false)
+                      .userModel!
+                      .user
+                      .role! ==
+                  1)),
         ],
       ),
       body: Container(

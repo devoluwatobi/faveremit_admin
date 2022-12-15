@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:faveremit_admin/extensions/show_or_not_extension.dart';
 import 'package:faveremit_admin/extensions/time_string.dart';
 import 'package:faveremit_admin/main.dart';
 import 'package:faveremit_admin/pages/receipt_categories_list.dart';
@@ -259,43 +260,55 @@ class _RangeRateDetailsPageState extends State<RangeRateDetailsPage> {
               height: 80,
             ),
             PrimaryTextButton(
-                onPressed: () async {
-                  if (_formKey.currentState!.validate()) {
-                    bool? _proceed = await showOptionPopup(
-                        context: context,
-                        title: "Please Confirm",
-                        body:
-                            "Are you sure you want to update this giftcard range ?",
-                        actionTitle: "I'm Sure",
-                        isDestructive: true);
-
-                    if (_proceed != null && _proceed) {
-                      showLoadingModal(
-                          context: context, title: "Updating Wallet");
-                      ProcessError error =
-                          await adminWorker.updateGiftcardRange(
-                              id: _range.id,
-                              min: int.parse(_minController.text.trim()),
-                              max: int.parse(_maxController.text.trim()),
-                              gift_cards_country_id: _range.giftCardCountryId,
-                              gift_cards_id: _range.giftCardId,
-                              context: context);
-                      Navigator.pop(context);
-                      if (error.any) {
-                        showErrorResponse(context: context, error: error);
-                      } else {
-                        setState(() {
-                          _range = error.data;
-                        });
-                        showInfoModal(
+                    onPressed: () async {
+                      if (_formKey.currentState!.validate()) {
+                        bool? _proceed = await showOptionPopup(
                             context: context,
-                            title: "Success",
-                            content: "Gift card Range updated successfully");
+                            title: "Please Confirm",
+                            body:
+                                "Are you sure you want to update this giftcard range ?",
+                            actionTitle: "I'm Sure",
+                            isDestructive: true);
+
+                        if (_proceed != null && _proceed) {
+                          showLoadingModal(
+                              context: context, title: "Updating Wallet");
+                          ProcessError error =
+                              await adminWorker.updateGiftcardRange(
+                                  id: _range.id,
+                                  min: int.parse(_minController.text.trim()),
+                                  max: int.parse(_maxController.text.trim()),
+                                  gift_cards_country_id:
+                                      _range.giftCardCountryId,
+                                  gift_cards_id: _range.giftCardId,
+                                  context: context);
+                          Navigator.pop(context);
+                          if (error.any) {
+                            showErrorResponse(context: context, error: error);
+                          } else {
+                            setState(() {
+                              _range = error.data;
+                            });
+                            showInfoModal(
+                                context: context,
+                                title: "Success",
+                                content:
+                                    "Gift card Range updated successfully");
+                          }
+                        }
                       }
-                    }
-                  }
-                },
-                title: "Update Range"),
+                    },
+                    title: "Update Range")
+                .showOrHide(Provider.of<UserData>(context, listen: false)
+                            .userModel!
+                            .user
+                            .role !=
+                        null &&
+                    Provider.of<UserData>(context, listen: false)
+                            .userModel!
+                            .user
+                            .role! ==
+                        1),
             const SizedBox(height: 16),
             SecondaryTextButton(
                 onPressed: () async {

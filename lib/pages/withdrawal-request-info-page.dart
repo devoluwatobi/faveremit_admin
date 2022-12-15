@@ -1,3 +1,4 @@
+import 'package:faveremit_admin/extensions/show_or_not_extension.dart';
 import 'package:faveremit_admin/extensions/time_string.dart';
 import 'package:faveremit_admin/pages/user-details.page.dart';
 import 'package:faveremit_admin/select-lists/review-withdrawal.dart';
@@ -632,7 +633,17 @@ class _WithdrawalReceiptPageState extends State<WithdrawalReceiptPage> {
                           },
                           title: "Review Withdrawal",
                           isActive: false,
-                        )
+                        ).showOrHide(
+                          Provider.of<UserData>(context, listen: false)
+                                      .userModel!
+                                      .user
+                                      .role !=
+                                  null &&
+                              Provider.of<UserData>(context, listen: false)
+                                      .userModel!
+                                      .user
+                                      .role! ==
+                                  1)
                       : const SizedBox(),
                   const SizedBox(
                     height: 20,

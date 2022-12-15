@@ -78,7 +78,7 @@ class UserRoleOptionsList extends StatelessWidget {
                       ? ReviewTrxOption(
                           title: "Admin",
                           description:
-                              "This is role gives this user the permission to view and review paypal transactions..",
+                              "This is role gives this user the permission to view and review all Faveremit transactions..",
                           color: kGreen,
                           id: 1,
                           onPressed: () async {
@@ -110,7 +110,7 @@ class UserRoleOptionsList extends StatelessWidget {
                       ? ReviewTrxOption(
                           title: "Sub Admin Pro",
                           description:
-                              "This is role gives this user view only access to withdrawals Trades and withdrawal transactions on Faveremit.",
+                              "This is role gives this user view only access to Trades and withdrawal transactions on Faveremit.",
                           color: kIndigo,
                           id: 3,
                           onPressed: () async {
