@@ -11,7 +11,6 @@ import '../config/dimensions.dart';
 import '../config/styles.dart';
 import '../main.dart';
 import '../services-classes/app-worker.dart';
-import '../widgets/persistent-slide-control-delegate.dart';
 import '../widgets/transaction-card.dart';
 
 class RevTransactionsPage extends StatefulWidget {
@@ -46,6 +45,7 @@ class _RevTransactionsPageState extends State<RevTransactionsPage> {
 
   @override
   void initState() {
+    _flexTranTab = 0;
     _refreshController = RefreshController(initialRefresh: true);
     super.initState();
   }
@@ -86,61 +86,61 @@ class _RevTransactionsPageState extends State<RevTransactionsPage> {
             physics: BouncingScrollPhysics(),
             slivers: [
               // SliverPersistentHeader(delegate: delegate)
-              SliverPersistentHeader(
-                pinned: true,
-                delegate: AppPersistentSlideControlDelegate(
-                  widget: Container(
-                    padding: EdgeInsets.symmetric(
-                        vertical: screenSize.width < tabletBreakPoint
-                            ? 20
-                            : screenSize.width * 0.04),
-                    width: double.infinity,
-                    child: CupertinoSlidingSegmentedControl(
-                      onValueChanged: (newValue) {
-                        setState(() {
-                          _flexTranTab = int.parse(newValue.toString());
-                          // _tasksController.animateToPage(newValue,
-                          //     duration: Duration(milliseconds: 300),
-                          //     curve: Curves.easeInOut);
-                        });
-                      },
-                      groupValue: _flexTranTab,
-                      children: {
-                        0: Padding(
-                          padding: EdgeInsets.symmetric(
-                              vertical: screenSize.width < tabletBreakPoint
-                                  ? 7.5
-                                  : screenSize.width * 0.015),
-                          child: Text(
-                            "Gift Card",
-                            style: TextStyle(
-                              color:
-                                  _flexTranTab == 0 ? kPrimaryColor : kTextGray,
-                              fontWeight: _flexTranTab == 0
-                                  ? FontWeight.w700
-                                  : FontWeight.w500,
-                              fontSize:
-                                  screenSize.width < tabletBreakPoint ? 16 : 26,
-                            ),
-                          ),
-                        ),
-                        1: Text(
-                          "Bitcoin",
-                          style: TextStyle(
-                            color:
-                                _flexTranTab == 1 ? kPrimaryColor : kTextGray,
-                            fontWeight: _flexTranTab == 1
-                                ? FontWeight.w700
-                                : FontWeight.w500,
-                            fontSize:
-                                screenSize.width < tabletBreakPoint ? 16 : 26,
-                          ),
-                        ),
-                      },
-                    ),
-                  ),
-                ),
-              ),
+              // SliverPersistentHeader(
+              //   pinned: true,
+              //   delegate: AppPersistentSlideControlDelegate(
+              //     widget: Container(
+              //       padding: EdgeInsets.symmetric(
+              //           vertical: screenSize.width < tabletBreakPoint
+              //               ? 20
+              //               : screenSize.width * 0.04),
+              //       width: double.infinity,
+              //       child: CupertinoSlidingSegmentedControl(
+              //         onValueChanged: (newValue) {
+              //           setState(() {
+              //             _flexTranTab = int.parse(newValue.toString());
+              //             // _tasksController.animateToPage(newValue,
+              //             //     duration: Duration(milliseconds: 300),
+              //             //     curve: Curves.easeInOut);
+              //           });
+              //         },
+              //         groupValue: _flexTranTab,
+              //         children: {
+              //           0: Padding(
+              //             padding: EdgeInsets.symmetric(
+              //                 vertical: screenSize.width < tabletBreakPoint
+              //                     ? 7.5
+              //                     : screenSize.width * 0.015),
+              //             child: Text(
+              //               "Gift Card",
+              //               style: TextStyle(
+              //                 color:
+              //                     _flexTranTab == 0 ? kPrimaryColor : kTextGray,
+              //                 fontWeight: _flexTranTab == 0
+              //                     ? FontWeight.w700
+              //                     : FontWeight.w500,
+              //                 fontSize:
+              //                     screenSize.width < tabletBreakPoint ? 16 : 26,
+              //               ),
+              //             ),
+              //           ),
+              //           1: Text(
+              //             "Bitcoin",
+              //             style: TextStyle(
+              //               color:
+              //                   _flexTranTab == 1 ? kPrimaryColor : kTextGray,
+              //               fontWeight: _flexTranTab == 1
+              //                   ? FontWeight.w700
+              //                   : FontWeight.w500,
+              //               fontSize:
+              //                   screenSize.width < tabletBreakPoint ? 16 : 26,
+              //             ),
+              //           ),
+              //         },
+              //       ),
+              //     ),
+              //   ),
+              // ),
               Provider.of<AppData>(context).prevTransactionsListModel != null
                   ? getTrxList(
                       tabID: _flexTranTab,

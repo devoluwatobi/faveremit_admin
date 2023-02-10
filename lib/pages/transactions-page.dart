@@ -128,16 +128,6 @@ class _TransactionsPageState extends State<TransactionsPage> {
                         ),
                       ),
                       1: Text(
-                        "Crypto",
-                        style: TextStyle(
-                          color: _flexTranTab == 1 ? kPrimaryColor : kTextGray,
-                          fontWeight: _flexTranTab == 1
-                              ? FontWeight.w600
-                              : FontWeight.w500,
-                          fontSize: 14,
-                        ),
-                      ),
-                      2: Text(
                         "Withdrawals",
                         style: TextStyle(
                           color: _flexTranTab == 2 ? kPrimaryColor : kTextGray,
@@ -1523,28 +1513,6 @@ Widget getTrxList({required BuildContext context, required int tabID}) {
     case 1:
       if (Provider.of<AppData>(context)
           .transactionsListModel!
-          .bitcoins
-          .isNotEmpty) {
-        return SliverList(
-          delegate: SliverChildBuilderDelegate(
-            (context, index) {
-              return TransactionItem(
-                  transaction: Provider.of<AppData>(context)
-                      .transactionsListModel!
-                      .bitcoins[index]);
-            },
-            childCount: Provider.of<AppData>(context)
-                .transactionsListModel!
-                .bitcoins
-                .length,
-          ),
-        );
-      }
-      break;
-
-    case 2:
-      if (Provider.of<AppData>(context)
-          .transactionsListModel!
           .withdrawals
           .isNotEmpty) {
         return SliverList(
@@ -1562,7 +1530,6 @@ Widget getTrxList({required BuildContext context, required int tabID}) {
           ),
         );
       }
-
       break;
 
     default:

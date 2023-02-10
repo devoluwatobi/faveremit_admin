@@ -3,10 +3,8 @@ import 'dart:async';
 import 'package:faveremit_admin/extensions/show_or_not_extension.dart';
 import 'package:faveremit_admin/main.dart';
 import 'package:faveremit_admin/pages/create-giftcard-page.dart';
-import 'package:faveremit_admin/pages/create-wallet-page.dart';
 import 'package:faveremit_admin/pages/rates-page.dart';
 import 'package:faveremit_admin/pages/transactions-page.dart';
-import 'package:faveremit_admin/pages/wallets-page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -20,7 +18,6 @@ import 'package:provider/provider.dart';
 import '../config/dimensions.dart';
 import '../config/styles.dart';
 import '../services-classes/drawer-navigation.dart';
-import '../services-classes/push-notifications.dart';
 import '../widgets/app-fab.dart';
 import 'drawer.dart';
 import 'home-page.dart';
@@ -45,13 +42,13 @@ class _AppBodyState extends State<AppBody> {
     adminWorker.getTransactionsList(context: context);
     adminWorker.getPrevTransactionsList(context: context);
     adminWorker.getUserList(context: context);
-    adminWorker.getCryptoWallets(context: context);
+    // adminWorker.getCryptoWallets(context: context);
     adminWorker.getGiftCards(context: context);
-    adminWorker.getCryptos(context: context);
-    if (!Provider.of<UserData>(context, listen: false).fcmUpdated) {
-      adminWorker.updateFCM(
-          context: context, token: pushNotificationsManager.token!);
-    }
+    // adminWorker.getCryptos(context: context);
+    // if (!Provider.of<UserData>(context, listen: false).fcmUpdated) {
+    //   // adminWorker.updateFCM(
+    //   //     context: context, token: pushNotificationsManager.token!);
+    // }
   }
 
   @override
@@ -141,7 +138,7 @@ class _AppBodyState extends State<AppBody> {
                 HomePage(),
                 TransactionsPage(),
                 RatesPage(),
-                WalletsPage(),
+                // WalletsPage(),
               ],
             ),
             floatingActionButton: pageIndex == 2
@@ -171,30 +168,30 @@ class _AppBodyState extends State<AppBody> {
                             .user
                             .role! ==
                         1))
-                : pageIndex == 3
-                    ? AppFAB(
-                        leading: Icon(
-                          FlutterRemix.add_fill,
-                          color: kGeneralWhite,
-                        ),
-                        title: "New Wallet",
-                        onTap: () {
-                          showCupertinoModalBottomSheet(
-                              barrierColor: Colors.black.withOpacity(0.8),
-                              context: context,
-                              builder: (context) => const CreateWalletPage());
-                        },
-                      ).showOrHide(Provider.of<UserData>(context, listen: false)
-                                .userModel!
-                                .user
-                                .role !=
-                            null &&
-                        (Provider.of<UserData>(context, listen: false)
-                                .userModel!
-                                .user
-                                .role! ==
-                            1))
-                    : const SizedBox(),
+                // : pageIndex == 3
+                //     ? AppFAB(
+                //         leading: Icon(
+                //           FlutterRemix.add_fill,
+                //           color: kGeneralWhite,
+                //         ),
+                //         title: "New Wallet",
+                //         onTap: () {
+                //           showCupertinoModalBottomSheet(
+                //               barrierColor: Colors.black.withOpacity(0.8),
+                //               context: context,
+                //               builder: (context) => const CreateWalletPage());
+                //         },
+                //       ).showOrHide(Provider.of<UserData>(context, listen: false)
+                //                 .userModel!
+                //                 .user
+                //                 .role !=
+                //             null &&
+                //         (Provider.of<UserData>(context, listen: false)
+                //                 .userModel!
+                //                 .user
+                //                 .role! ==
+                //             1))
+                : const SizedBox(),
             bottomNavigationBar: BottomNavigationBar(
               type: BottomNavigationBarType.fixed,
               elevation: 5,
@@ -233,8 +230,8 @@ class _AppBodyState extends State<AppBody> {
                     label: "Transactions"),
                 BottomNavigationBarItem(
                     icon: Icon(FlutterRemix.swap_fill), label: "Rates"),
-                BottomNavigationBarItem(
-                    icon: Icon(FlutterRemix.wallet_fill), label: "Wallets"),
+                // BottomNavigationBarItem(
+                //     icon: Icon(FlutterRemix.wallet_fill), label: "Wallets"),
               ],
             ),
           ),
