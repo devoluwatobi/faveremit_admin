@@ -1,4 +1,5 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 class PushNotificationsManager {
@@ -24,7 +25,7 @@ class PushNotificationsManager {
           const AndroidInitializationSettings("ic_notification");
 
       //ios local notification initialization
-      var iosInitialize = const IOSInitializationSettings();
+      var iosInitialize = const DarwinInitializationSettings();
 
       //set initialization for local notification
 
@@ -57,10 +58,12 @@ class PushNotificationsManager {
 
     // For testing purposes print the Firebase Messaging token
     token = await _firebaseMessaging.getToken();
-    print("FirebaseMessaging token: $token");
+    if (kDebugMode) {
+      print("FirebaseMessaging token: $token");
+    }
     var notificationToken = token;
 
-    //subscribe to all users
+    // subscribe to all_admins
     await FirebaseMessaging.instance.subscribeToTopic("all_admins");
     _initialized = true;
   }
@@ -97,7 +100,7 @@ class PushNotificationsManager {
         importance: Importance.max,
         playSound: true,
         priority: Priority.max);
-    var iosDetails = const IOSNotificationDetails();
+    var iosDetails = const DarwinNotificationDetails();
     var generalNotificationDetails =
         NotificationDetails(android: androidDetails, iOS: iosDetails);
     await localNotification.show(
@@ -137,7 +140,7 @@ Future showBackgroundNotifications(
       importance: Importance.max,
       playSound: true,
       priority: Priority.max);
-  var iosDetails = const IOSNotificationDetails();
+  var iosDetails = const DarwinNotificationDetails();
   var generalNotificationDetails =
       NotificationDetails(android: androidDetails, iOS: iosDetails);
   print(title);
